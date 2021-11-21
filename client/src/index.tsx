@@ -1,8 +1,15 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+import 'bootswatch/dist/lumen/bootstrap.css';
+import React from "react";
+import ReactDOM from "react-dom"
+import  App  from './App'
+import { HashRouter } from 'react-router-dom';
+import reportWebVitals from './reportWebVitals';
+
 ReactDOM.render(
-<div>
-<h1>Hello, Welcome to React and TypeScript</h1>
-</div>,
+  <HashRouter>
+    <App />
+  </HashRouter>,
   document.getElementById("root")
 );
+
+reportWebVitals();
