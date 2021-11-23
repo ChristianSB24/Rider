@@ -27,7 +27,7 @@ SECRET_KEY = '2j95c6p5cdu)b-vopq8j4!3@j@cyob4db0nej*=tr4h4lr$mfh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -160,3 +160,7 @@ SIMPLE_JWT = {
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:3001",
+]
