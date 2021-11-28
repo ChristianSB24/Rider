@@ -6,9 +6,11 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import axios from 'axios';
 
+import { isDriver, isRider } from './services/AuthService';
 import SignUp from './components/SignUp';
 import LogIn from './components/LogIn';
-
+import Driver from './components/Driver';
+import Rider from './components/Rider';
 import './App.css';
 
 function App() {
@@ -17,7 +19,7 @@ function App() {
   });
 
   const logIn = async (username: string, password: string): Promise<any> => {
-    const url = '/api/log_in/';
+    const url = `${process.env.REACT_APP_BASE_URL}/api/log_in/`;
     try {
       const response = await axios.post(url, { username, password });
       window.localStorage.setItem(
@@ -59,20 +61,36 @@ function App() {
             <div className='middle-center'>
               <h1 className='landing logo'>Taxi</h1>
               {
-                !isLoggedIn &&
-                <Link
-                  id='signUp'
-                  className='btn btn-primary'
-                  to='/sign-up'
-                >Sign up</Link>
+                !isLoggedIn && (
+                  <>
+                    <Link
+                      id='signUp'
+                      className='btn btn-primary'
+                      to='/sign-up'
+                    >Sign up</Link>
+                    <Link
+                      id='logIn'
+                      className='btn btn-primary'
+                      to='/log-in'
+                    >Log in</Link>
+                  </>
+                )
               }
               {
-                !isLoggedIn &&
-                <Link
-                  id='logIn'
-                  className='btn btn-primary'
-                  to='/log-in'
-                >Log in</Link>
+                isRider() && (
+                  <Link
+                    className='btn btn-primary'
+                    to='/rider'
+                  >Dashboard</Link>
+                )
+              }
+              {
+                isDriver() && (
+                  <Link
+                    className='btn btn-primary'
+                    to='/driver'
+                  >Dashboard</Link>
+                )
               }
             </div>
           )} />
@@ -89,6 +107,12 @@ function App() {
             ) : (
               <LogIn logIn={logIn} />
             )
+          )} />
+          <Route path='/driver' render={() => (
+            <Driver />
+          )} />
+          <Route path='/rider' render={() => (
+            <Rider />
           )} />
         </Switch>
       </Container>

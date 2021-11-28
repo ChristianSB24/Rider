@@ -10,7 +10,7 @@ function SignUp (props: any) {
   const [isSubmitted, setSubmitted] = useState(false);
 
   const onSubmit = async (values: any, actions: any) => {
-    const url = '/api/sign_up/';
+    const url = `${process.env.REACT_APP_BASE_URL}/api/sign_up/`;
     const formData = new FormData();
     formData.append('username', values.username);
     formData.append('first_name', values.firstName);
