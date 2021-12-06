@@ -4,19 +4,19 @@ import { webSocket } from 'rxjs/webSocket';
 
 import { getAccessToken } from './AuthService';
 
-let _socket;
-export let messages; 
+let _socket: any;
+export let messages: any; 
 
 export const connect = () => {
   if (!_socket || _socket.closed) {
     const token = getAccessToken();
     _socket = webSocket(`ws://localhost:8003/taxi/?token=${token}`);
     messages = _socket.pipe(share());
-    messages.subscribe((message) => console.log(message));
+    messages.subscribe((message: any) => console.log(message));
   }
 };
 
-export const createTrip = (trip) => {
+export const createTrip = (trip: any) => {
   connect();
   const message = {
     type: 'create.trip',
@@ -25,7 +25,7 @@ export const createTrip = (trip) => {
   _socket.next(message);
 };
 
-export const getTrip = async (id) => {
+export const getTrip = async (id: any) => {
   const url = `${process.env.REACT_APP_BASE_URL}/api/trip/${id}/`;
   const token = getAccessToken();
   const headers = { Authorization: `Bearer ${token}` };
@@ -49,7 +49,7 @@ export const getTrips = async () => {
   }
 };
 
-export const updateTrip = (trip) => {
+export const updateTrip = (trip: any) => {
     connect();
     const message = {
       type: 'update.trip',

@@ -23,9 +23,9 @@ function RiderDashboard(props: any) {
 
     useEffect(() => {
         connect();
-        const subscription = messages.subscribe((message) => {
-            setTrips(prevTrips => [
-                ...prevTrips.filter(trip => trip.id !== message.data.id),
+        const subscription = messages.subscribe((message: any) => {
+            setTrips((prevTrips: any) => [
+                ...prevTrips.filter((trip: any) => trip.id !== message.data.id),
                 message.data
             ]);
         });

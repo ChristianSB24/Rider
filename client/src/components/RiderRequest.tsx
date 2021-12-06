@@ -10,7 +10,7 @@ import Map from './Map'
 import { getUser } from '../services/AuthService';
 import { createTrip } from '../services/TripService';
 
-function RiderRequest(props) {
+function RiderRequest(props: any) {
     const [isSubmitted, setSubmitted] = useState(false);
 
     const [lat, setLat] = useState(38.897957);
@@ -25,7 +25,7 @@ function RiderRequest(props) {
         }
     }, []);
 
-    const onSubmit = (values, actions) => {
+    const onSubmit = (values: {pickUpAddress:string, dropOffAddress: string}) => {
         const rider = getUser();
         createTrip({
             pick_up_address: values.pickUpAddress,

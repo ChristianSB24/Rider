@@ -7,7 +7,15 @@ import {
   Marker
 } from '@react-google-maps/api';
 
-function Map (props) {
+interface MapSelection {
+  lat: number,
+  lng: number,
+  zoom: number,
+  pickUpAddress: string,
+  dropOffAddress: string,
+}
+
+function Map(props: MapSelection) {
   const [response, setResponse] = useState(null);
 
   const hasTwoAddresses = (
@@ -15,7 +23,7 @@ function Map (props) {
     props.dropOffAddress !== ''
   );
 
-  const directionsCallback = (response) => {
+  const directionsCallback = (response: any) => {
     if (response !== null && response.status === 'OK') {
       setResponse(response);
     }

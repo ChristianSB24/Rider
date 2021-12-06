@@ -11,7 +11,7 @@ import { getTrip, updateTrip } from '../services/TripService';
 function DriverDetail({ match }: any) {
     const [trip, setTrip] = useState<any>(null);
 
-    const updateTripStatus = (status) => {
+    const updateTripStatus = (status: any) => {
         const driver = getUser();
         const updatedTrip = {...trip, driver, status};
         updateTrip({
