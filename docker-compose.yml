@@ -50,8 +50,8 @@ services:
       - ./client:/usr/src/app
     environment:  
       - CHOKIDAR_USEPOLLING=true
-      - REACT_APP_BASE_URL=http://localhost:8003
-      - REACT_APP_GOOGLE_MAPS_KEY=<API_KEY>
+      - REACT_APP_BASE_URL=${BASE_URL}
+      - REACT_APP_GOOGLE_MAPS_KEY=${GOOGLE_MAPS_API_KEY}
 
 volumes:
   taxi-database:
