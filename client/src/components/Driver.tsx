@@ -5,7 +5,7 @@ import DriverDashboard from './DriverDashboard';
 import DriverDetail from './DriverDetail';
 import { isDriver } from '../services/AuthService';
 
-function Driver (props: any) {
+function Driver () {
   if (!isDriver()) {
     return <Redirect to='/' />
   }

@@ -6,12 +6,12 @@ import {
 import TripCard from './TripCard';
 import { connect, getTrips, messages } from '../services/TripService'
 
-function DriverDashboard(props: any) {
+function DriverDashboard() {
     const [trips, setTrips] = useState<any>([]);
 
     useEffect(() => {
         const loadTrips = async () => {
-            const { response, isError }: any = await getTrips();
+            const { response, isError } = await getTrips();
             if (isError) {
                 setTrips([]);
             } else {

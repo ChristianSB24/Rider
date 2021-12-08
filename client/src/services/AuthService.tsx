@@ -1,8 +1,9 @@
-export const getUser = () => {
+export const getUser = (): {exp: number, first_name: string, group: string, id: number, jti: string, last_name: string, photo: null, token_type:string, username: string} | undefined=> {
     const auth = JSON.parse(window.localStorage.getItem('taxi.auth') || 'null');
     if (auth) {
         const [, payload,] = auth.access.split('.');
         const decoded = window.atob(payload);
+        console.log(JSON.parse(decoded))
         return JSON.parse(decoded);
     }
     return undefined;

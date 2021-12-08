@@ -23,8 +23,8 @@ function DriverDetail({ match }: any) {
       };
 
     useEffect(() => {
-        const loadTrip = async (id: any) => {
-            const { response, isError }: any = await getTrip(id);
+        const loadTrip = async (id: string) => {
+            const { response, isError } = await getTrip(id);
             if (isError) {
                 setTrip(null);
             } else {
