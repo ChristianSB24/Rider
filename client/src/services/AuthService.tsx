@@ -1,4 +1,4 @@
-export const getUser = (): {exp: number, first_name: string, group: string, id: number, jti: string, last_name: string, photo: null, token_type:string, username: string} | undefined=> {
+export const getUser = (): {exp: number, first_name: string, rider: string, group: string, id: number, jti: string, last_name: string, photo: null, token_type:string, username: string} | undefined=> {
     const auth = JSON.parse(window.localStorage.getItem('taxi.auth') || 'null');
     if (auth) {
         const [, payload,] = auth.access.split('.');
@@ -6,6 +6,7 @@ export const getUser = (): {exp: number, first_name: string, group: string, id: 
         console.log(JSON.parse(decoded))
         return JSON.parse(decoded);
     }
+    //Instead of returning undefined want to logout and send to main page
     return undefined;
 };
 

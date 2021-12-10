@@ -8,14 +8,14 @@ let _socket: any;
 export let messages: any; 
 
 interface Trip {
-  id: string, 
-  driver: number, 
+  // id: string, 
+  driver: number | undefined, 
   rider: number, 
-  created: string, 
-  updated: string, 
+  // created: string, 
+  // updated: string, 
   status: string, 
-  pick_up_address: string, 
-  drop_off_address: string
+  // pick_up_address: string, 
+  // drop_off_address: string
 }
 
 interface newTrip {

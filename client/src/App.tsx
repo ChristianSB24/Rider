@@ -20,6 +20,7 @@ function App() {
 
   const logIn = async (username: string, password: string): Promise<any> => {
     const url = `${process.env.REACT_APP_BASE_URL}/api/log_in/`;
+    console.log(url)
     try {
       const response = await axios.post(url, { username, password });
       window.localStorage.setItem(

@@ -8,25 +8,26 @@ import TripMedia from './TripMedia';
 import { getUser } from '../services/AuthService';
 import { getTrip, updateTrip } from '../services/TripService';
 
-function DriverDetail({ match }: any) {
-    const [trip, setTrip] = useState<any>(null);
+function DriverDetail({ match }: { match: { isExact: boolean, params: {id: string}, path: string, url: string } }) {
+    console.log(match)
+    const [trip, setTrip] = useState<any>({});
 
-    const updateTripStatus = (status: any) => {
+    const updateTripStatus = (status: string) => {
         const driver = getUser();
-        const updatedTrip = {...trip, driver, status};
+        const updatedTrip = { ...trip, driver, status };
         updateTrip({
-          ...updatedTrip,
-          driver: updatedTrip.driver.id,
-          rider: updatedTrip.rider.id
+            ...updatedTrip,
+            driver: updatedTrip?.driver?.id,
+            rider: updatedTrip.rider.id
         });
         setTrip(updatedTrip);
-      };
+    };
 
     useEffect(() => {
         const loadTrip = async (id: string) => {
             const { response, isError } = await getTrip(id);
             if (isError) {
-                setTrip(null);
+                setTrip({});
             } else {
                 setTrip(response.data);
             }
