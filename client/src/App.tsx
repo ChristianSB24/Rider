@@ -5,6 +5,7 @@ import {
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import axios from 'axios';
+import { Ok, Err, Result } from 'ts-results';
 
 import { isDriver, isRider } from './services/AuthService';
 import SignUp from './components/SignUp';
@@ -12,26 +13,28 @@ import LogIn from './components/LogIn';
 import Driver from './components/Driver';
 import Rider from './components/Rider';
 import './App.css';
+import { AnyAaaaRecord } from 'dns';
+
+type Errors = "CANNOT_AUTHORIZE";
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(() => {
     return window.localStorage.getItem('taxi.auth') !== null;
   });
 
-  const logIn = async (username: string, password: string): Promise<any> => {
+  const logIn = async (username: string, password: string): Promise<Result<object, Errors>> => {
     const url = `${process.env.REACT_APP_BASE_URL}/api/log_in/`;
-    console.log(url)
     try {
       const response = await axios.post(url, { username, password });
       window.localStorage.setItem(
         'taxi.auth', JSON.stringify(response.data)
       );
       setLoggedIn(true);
-      return { response, isError: false };
+      return Ok({ response });
     }
     catch (error) {
       console.error(error);
-      return { response: error, isError: true };
+      return Err("CANNOT_AUTHORIZE");
     }
   };
 
@@ -39,6 +42,7 @@ function App() {
     window.localStorage.removeItem('taxi.auth');
     setLoggedIn(false);
   };
+  
   return (
     <div>
       <Navbar bg='light' expand='lg' variant='light'>
