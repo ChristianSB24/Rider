@@ -36,7 +36,9 @@ function LogIn({ logIn }: logIn) {
                 <Form className="d-flex flex-column align-items-center">
                     <TextField name="username" type="text" label="User Name" placeholder="username" />
                     <TextField name="password" type="password" label="Password" placeholder="password" />
-                    <button type="submit" className="btn btn-info w-50">Submit</button>
+                    <button type="submit" className="btn btn-primary w-50">Submit</button>
+                    <button type="submit" className="btn btn-purple w-50">Submit</button>
+
                 </Form>
             )}
         </Formik>
