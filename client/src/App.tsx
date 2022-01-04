@@ -13,7 +13,6 @@ import LogIn from './components/LogIn';
 import Driver from './components/Driver';
 import Rider from './components/Rider';
 import './App.css';
-import { AnyAaaaRecord } from 'dns';
 
 type Errors = "CANNOT_AUTHORIZE";
 
