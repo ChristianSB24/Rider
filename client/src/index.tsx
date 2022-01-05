@@ -1,8 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom"
 import axios from 'axios';
-import "bootstrap/dist/css/bootstrap.min.css"
-import "bootstrap"
+import './custom.scss'
 import  App  from './App'
 import { HashRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';

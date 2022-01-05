@@ -3,6 +3,7 @@ import { Formik, Form } from 'formik';
 import * as yup from 'yup'
 
 import { TextField } from './FormComponents/TextField'
+import logo from '../logo.png'
 
 interface logIn {
     logIn(username: string, password: string): Promise<any>
@@ -32,15 +33,15 @@ function LogIn({ logIn }: logIn) {
                 }
             }}
         >
-            {() => (
-                <Form className="d-flex flex-column align-items-center">
-                    <TextField name="username" type="text" label="User Name" placeholder="username" />
-                    <TextField name="password" type="password" label="Password" placeholder="password" />
-                    <button type="submit" className="btn btn-primary w-50">Submit</button>
-                    <button type="submit" className="btn btn-purple w-50">Submit</button>
-
-                </Form>
-            )}
+            {
+                <div className="d-flex flex-column justify-content-center w-100">
+                    <img src={logo} className="logo align-self-center mb-4" />
+                    <Form className="align-self-center w-100">
+                        <TextField name="username" type="text" placeholder="Username" />
+                        <TextField name="password" type="password" placeholder="Password" />
+                        <button type="submit" className="btn-lg btn-primary w-100">Submit</button>
+                    </Form>
+                </div>}
         </Formik>
     )
 }

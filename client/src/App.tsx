@@ -12,7 +12,6 @@ import SignUp from './components/SignUp';
 import LogIn from './components/LogIn';
 import Driver from './components/Driver';
 import Rider from './components/Rider';
-import './App.css';
 
 type Errors = "CANNOT_AUTHORIZE";
 
@@ -43,10 +42,10 @@ function App() {
   };
   
   return (
-    <div>
+    <div className="login-content">
       <Navbar bg='light' expand='lg' variant='light'>
         <LinkContainer to='/'>
-          <Navbar.Brand className='logo'>Taxi</Navbar.Brand>
+          <Navbar.Brand >Taxi</Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle />
         <Navbar.Collapse>
@@ -71,7 +70,7 @@ function App() {
           }
         </Navbar.Collapse>
       </Navbar>
-      <Container className='pt-3'>
+      <Container className="d-flex max-width justify-content-center">
         <Switch>
           <Route exact path='/' render={() => (
             <div className='middle-center'>
