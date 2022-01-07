@@ -40,7 +40,7 @@ function App() {
     window.localStorage.removeItem('taxi.auth');
     setLoggedIn(false);
   };
-  
+
   return (
     <div className="login-content">
       <Navbar bg='light' expand='lg' variant='light'>
@@ -70,7 +70,7 @@ function App() {
           }
         </Navbar.Collapse>
       </Navbar>
-      <Container className="d-flex max-width justify-content-center">
+      <div className="d-flex max-width flex-column justify-content-center align-items-center px-2">
         <Switch>
           <Route exact path='/' render={() => (
             <div className='middle-center'>
@@ -130,7 +130,7 @@ function App() {
             <Rider />
           )} />
         </Switch>
-      </Container>
+      </div>
     </div>
   );
 }

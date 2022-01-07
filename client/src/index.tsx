@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom"
 import axios from 'axios';
-import './custom.scss'
+import './scss/custom.scss'
 import  App  from './App'
 import { HashRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';

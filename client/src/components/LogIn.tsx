@@ -12,10 +12,10 @@ interface logIn {
 function LogIn({ logIn }: logIn) {
     let validation = yup.object({
         username: yup.string()
-            .required('Required'),
+            .required('Username is required.'),
         password: yup.string()
-            .min(5, 'Password is too short')
-            .required('Required')
+            .min(5, 'Password is too short.')
+            .required('Password is required.')
     })
     return (
         <Formik
@@ -33,15 +33,15 @@ function LogIn({ logIn }: logIn) {
                 }
             }}
         >
-            {
-                <div className="d-flex flex-column justify-content-center w-100">
-                    <img src={logo} className="logo align-self-center mb-4" />
-                    <Form className="align-self-center w-100">
-                        <TextField name="username" type="text" placeholder="Username" />
-                        <TextField name="password" type="password" placeholder="Password" />
-                        <button type="submit" className="btn-lg btn-primary w-100">Submit</button>
-                    </Form>
-                </div>}
+            <>
+                <img src={logo} className="pb-4 logos"/>
+                <Form className="w-100">
+                    <TextField name="username" type="text" placeholder="Username" />
+                    <TextField name="password" type="password" placeholder="Password" />
+                    <button type="submit" className="btn-lg btn-primary w-100 fs-5">Submit</button>
+                </Form>
+                <a href="/account/forgotpassword" className="align-self-start py-2 text-decoration-none link-info fs-6">Forgot Password?</a>
+            </>
         </Formik>
     )
 }
