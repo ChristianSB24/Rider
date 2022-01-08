@@ -1,0 +1,23 @@
+@mixin button-variant(
+    $background,
+    $color: color-contrast($background),
+    $active-background: if($color != $color-contrast-light, shade-color($background, $btn-active-bg-shade-amount), tint-color($background, $btn-active-bg-tint-amount)),
+    $active-color: color-contrast($active-background),
+    ) {
+  border-style: none;
+
+  .btn-check:checked + &,
+  .btn-check:active + &,
+  &:active,
+  &.active,
+  .show > &.dropdown-toggle {
+    color: $active-color;
+    background-color: $active-background;
+  }
+}
+
+@each $color, $value in $theme-colors {
+    .btn-#{$color} {
+      @include button-variant($value);
+    }
+  }

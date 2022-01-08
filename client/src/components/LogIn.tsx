@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Form } from 'formik';
+import { Formik, Form, ErrorMessage} from 'formik';
 import * as yup from 'yup'
 
 import { TextField } from './FormComponents/TextField'
@@ -34,7 +34,13 @@ function LogIn({ logIn }: logIn) {
             }}
         >
             <>
-                <img src={logo} className="pb-4 logos"/>
+                <div className="alert alert-danger d-flex align-items-center w-100" role="alert">
+                <i className="bi bi-info-circle"></i> &nbsp;&nbsp;
+                    <div>
+                    Your password and email do not match. Please try again or Reset Your Password.
+                    </div>
+                </div>
+                <img src={logo} alt="rider logo" className="pb-4 logos" />
                 <Form className="w-100">
                     <TextField name="username" type="text" placeholder="Username" />
                     <TextField name="password" type="password" placeholder="Password" />

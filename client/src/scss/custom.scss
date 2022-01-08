@@ -1,7 +1,9 @@
+@import "../../node_modules/bootstrap-icons/font/bootstrap-icons";
 @import "../../node_modules/bootstrap/scss/functions";
 @import "./variables";
 @import "../../node_modules/bootstrap/scss/bootstrap";
 @import "./_forms";
+@import "./_buttons";
 
 .logo {
   min-width: 200px;
@@ -29,9 +31,4 @@
   background: url(../logo.png) no-repeat scroll center top transparent;
   width: 100px;
   height: 100px;
-}
-
-// Need to keep working on btn focus background color
-.btn-primary:focus {
-  background-color: #f6f6f6;
 }
