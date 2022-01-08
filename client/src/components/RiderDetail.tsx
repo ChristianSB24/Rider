@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import {
     Breadcrumb, Card, Col, Row
 } from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 
 import TripMedia from './TripMedia';
 import { getTrip } from '../services/TripService';
@@ -39,9 +39,9 @@ function RiderDetail({ match }: any) {
         <Row>
             <Col lg={12}>
                 <Breadcrumb>
-                    <LinkContainer to='/rider'>
+                    <Link to='/rider'>
                         <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
-                    </LinkContainer>
+                    </Link>
                     <Breadcrumb.Item active>Trip</Breadcrumb.Item>
                 </Breadcrumb>
                 <Card className='mb-3' data-cy='trip-card'>

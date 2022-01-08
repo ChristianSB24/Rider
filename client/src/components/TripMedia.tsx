@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Media } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 
 function TripMedia ({ trip, group, otherGroup }: any) {
   const user = trip[otherGroup];
@@ -22,9 +22,9 @@ function TripMedia ({ trip, group, otherGroup }: any) {
         {trip.status}
         {
           href &&
-          <LinkContainer to={href}>
+          <Link to={href}>
             <Button variant='primary' block>Detail</Button>
-          </LinkContainer>
+          </Link>
         }
       </Media.Body>
     </Media>

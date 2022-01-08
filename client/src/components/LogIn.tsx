@@ -1,5 +1,6 @@
-import React from 'react';
-import { Formik, Form, ErrorMessage} from 'formik';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom'
+import { Formik, Form } from 'formik';
 import * as yup from 'yup'
 
 import { TextField } from './FormComponents/TextField'
@@ -10,6 +11,8 @@ interface logIn {
 }
 
 function LogIn({ logIn }: logIn) {
+    let [open, setOpen] = useState(false)
+
     let validation = yup.object({
         username: yup.string()
             .required('Username is required.'),
@@ -25,28 +28,24 @@ function LogIn({ logIn }: logIn) {
             validateOnBlur={false}
             validationSchema={validation}
             onSubmit={({ username, password }) => {
-                try {
-                    logIn(username, password);
-                }
-                catch (error) {
-                    console.error(error);
-                }
+                    logIn(username, password)
+                        .then(response => {response.err === true && setOpen(true)})
             }}
         >
             <>
-                <div className="alert alert-danger d-flex align-items-center w-100" role="alert">
-                <i className="bi bi-info-circle"></i> &nbsp;&nbsp;
+                {open && <div className="alert alert-danger d-flex align-items-center w-100" role="alert">
+                    <i className="bi bi-info-circle"></i> &nbsp;&nbsp;
                     <div>
-                    Your password and email do not match. Please try again or Reset Your Password.
+                        Your password and email do not match. Please try again or Reset Your Password.
                     </div>
-                </div>
+                </div>}
                 <img src={logo} alt="rider logo" className="pb-4 logos" />
                 <Form className="w-100">
-                    <TextField name="username" type="text" placeholder="Username" />
-                    <TextField name="password" type="password" placeholder="Password" />
+                    <TextField name="username" type="text" placeholder="Username" login/>
+                    <TextField name="password" type="password" placeholder="Password" login/>
                     <button type="submit" className="btn-lg btn-primary w-100 fs-5">Submit</button>
                 </Form>
-                <a href="/account/forgotpassword" className="align-self-start py-2 text-decoration-none link-info fs-6">Forgot Password?</a>
+                <Link to="/account/forgotpassword" className="align-self-start py-2 text-decoration-none link-info fs-6">Forgot Password?</Link>
             </>
         </Formik>
     )

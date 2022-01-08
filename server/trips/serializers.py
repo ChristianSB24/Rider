@@ -44,6 +44,7 @@ class LogInSerializer(TokenObtainPairSerializer):
         for key, value in user_data.items():
             if key != 'id':
                 token[key] = value
+        print(token)
         return token
 
 class TripSerializer(serializers.ModelSerializer):

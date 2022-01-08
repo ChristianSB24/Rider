@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import {
   Breadcrumb, Button, Card, Col, Form, Row
 } from 'react-bootstrap';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 function SignUp (props: any) {
   const [isSubmitted, setSubmitted] = useState(false);
@@ -32,7 +32,7 @@ function SignUp (props: any) {
   };
 
   if (isSubmitted) {
-    return <Redirect to='/log-in' />
+    return <Navigate replace to='/log-in' />
   }
 
   return (

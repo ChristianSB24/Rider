@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
     Breadcrumb, Button, Card, Col, Row
 } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom'
 
 import TripMedia from './TripMedia';
 import { getUser } from '../services/AuthService';
@@ -52,9 +52,9 @@ function DriverDetail({ match }: { match: { isExact: boolean, params: {id: strin
         <Row>
             <Col lg={12}>
                 <Breadcrumb>
-                    <LinkContainer to='/driver'>
+                    <Link to='/driver'>
                         <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
-                    </LinkContainer>
+                    </Link>
                     <Breadcrumb.Item active>Trip</Breadcrumb.Item>
                 </Breadcrumb>
                 <Card className='mb-3' data-cy='trip-card'>

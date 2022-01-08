@@ -3,8 +3,7 @@ import { Formik } from 'formik';
 import {
     Breadcrumb, Button, Card, Col, Form, Row
 } from 'react-bootstrap';
-import { Redirect } from 'react-router-dom';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Navigate, Link } from 'react-router-dom';
 import Map from './Map'
 
 import { getUser } from '../services/AuthService';
@@ -38,16 +37,16 @@ function RiderRequest() {
     };
 
     if (isSubmitted) {
-        return <Redirect to='/rider' />
+        return <Navigate to='/rider' />
     }
 
     return (
         <Row>
             <Col lg={12}>
                 <Breadcrumb>
-                    <LinkContainer to='/rider'>
+                    <Link to='/rider'>
                         <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
-                    </LinkContainer>
+                    </Link>
                     <Breadcrumb.Item active>Request</Breadcrumb.Item>
                 </Breadcrumb>
                 <Card className='mb-3'>

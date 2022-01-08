@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom'; 
+import { Navigate, Route, Routes } from 'react-router-dom'; 
 
 import DriverDashboard from './DriverDashboard'; 
 import DriverDetail from './DriverDetail';
@@ -7,14 +7,14 @@ import { isDriver } from '../services/AuthService';
 
 function Driver () {
   if (!isDriver()) {
-    return <Redirect to='/' />
+    return <Navigate to='/' />
   }
 
   return (
-    <Switch>
-      <Route path='/driver/:id' component={DriverDetail} />
-      <Route component={DriverDashboard} />
-    </Switch>
+    <Routes>
+      <Route path='/driver/:id' element={DriverDetail} />
+      <Route element={DriverDashboard} />
+    </Routes>
   );
 }
 
