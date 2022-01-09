@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
     Breadcrumb, Col, Row
 } from 'react-bootstrap';
+import { Outlet } from 'react-router-dom'
 
 import TripCard from './TripCard';
 import { connect, getTrips, messages } from '../services/TripService';;
@@ -52,6 +53,7 @@ function RiderDashboard(props: any) {
     };
 
     return (
+        <>
         <Row>
             <Col lg={12}>
                 <Breadcrumb>
@@ -75,6 +77,8 @@ function RiderDashboard(props: any) {
 
             </Col>
         </Row>
+        <div><Outlet/></div>
+        </>
     );
 }
 

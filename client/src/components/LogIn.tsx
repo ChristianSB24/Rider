@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom'
 import { Formik, Form } from 'formik';
 import * as yup from 'yup'
 
+
+import { AccountContext } from '../auth/Authorization'
 import { TextField } from './FormComponents/TextField'
 import logo from '../logo.png'
 
-interface logIn {
-    logIn(username: string, password: string): Promise<any>
-}
-
-function LogIn({ logIn }: logIn) {
+function LogIn() {
     let [open, setOpen] = useState(false)
+    const accountData: any = useContext(AccountContext)
 
     let validation = yup.object({
         username: yup.string()
@@ -28,9 +27,7 @@ function LogIn({ logIn }: logIn) {
             validateOnBlur={false}
             validationSchema={validation}
             onSubmit={({ username, password }) => {
-                    logIn(username, password)
-                        .then(response => {response.err === true && setOpen(true)})
-            }}
+                accountData.logIn({ username, password }).then((res:any) => res.err === true && setOpen(true))}}
         >
             <>
                 {open && <div className="alert alert-danger d-flex align-items-center w-100" role="alert">

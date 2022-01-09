@@ -1,48 +1,23 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import {
   Button, Form, Navbar, Nav
 } from 'react-bootstrap';
-import { Link, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { Ok, Err, Result } from 'ts-results';
+import { Link, Route, Routes, Navigate } from 'react-router-dom';
+import _ from 'lodash'
 
 import { isDriver, isRider } from './services/AuthService';
-import { RequireAuth, getIsAuthorized } from './auth/Authorization'
+import { RequireAuth, getIsAuthorized, AccountContext } from './auth/Authorization'
 import SignUp from './components/SignUp';
 import LogIn from './components/LogIn';
 import Driver from './components/Driver';
 import { Rider } from './components/Rider';
-
-type Errors = "CANNOT_AUTHORIZE";
+import { NotFound } from './components/NotFound'
+import RiderDashboard from './components/RiderDashboard'
+import RiderDetail from './components/RiderDetail'
+import RiderRequest from './components/RiderRequest';
 
 function App() {
-  const [isLoggedIn, setLoggedIn] = useState(() => {
-    return window.localStorage.getItem('taxi.auth') !== null;
-  });
-
-  const navigate = useNavigate()
-
-  const logIn = async (username: string, password: string): Promise<Result<object, Errors>> => {
-    const url = `${process.env.REACT_APP_BASE_URL}/api/log_in/`;
-    try {
-      const response = await axios.post(url, { username, password });
-      window.localStorage.setItem(
-        'taxi.auth', JSON.stringify(response.data)
-      );
-      setLoggedIn(true);
-      return Ok({ response });
-    }
-    catch (error) {
-      console.error(error);
-      return Err("CANNOT_AUTHORIZE");
-    }
-  };
-
-  const logOut = () => {
-    window.localStorage.removeItem('taxi.auth');
-    navigate('/')
-    setLoggedIn(false);
-  };
+  const accountData = useContext(AccountContext)
 
   return (
     <div className="login-content">
@@ -60,11 +35,11 @@ function App() {
             )
           }
           {
-             getIsAuthorized() && 
+             !_.isEmpty(accountData.accountData) && 
                 <Form inline className='ml-auto'>
                   <Button
                     type='button'
-                    onClick={() => logOut()}
+                    onClick={() => accountData.logOut()}
                   >Log out</Button>
               </Form>
           }
@@ -76,7 +51,7 @@ function App() {
             <div className='middle-center'>
               <h1 className='landing logo'>Taxi</h1>
               {
-                !getIsAuthorized() && (
+                _.isEmpty(accountData.accountData) && (
                   <>
                     <Link
                       id='signUp'
@@ -95,7 +70,7 @@ function App() {
                 isRider() && (
                   <Link
                     className='btn btn-primary'
-                    to='/rider'
+                    to='/rider/dashboard'
                   >Dashboard</Link>
                 )
               }
@@ -109,10 +84,15 @@ function App() {
               }
             </div>
           } />
-          <Route path='/sign-up' element={getIsAuthorized() ? <Navigate replace to={'/'}/> : <SignUp/>}/>
-          <Route path='/log-in' element={getIsAuthorized() ? <Navigate replace to={'/'} /> : <LogIn logIn={logIn}/>} />
+          <Route path='/sign-up' element={!_.isEmpty(accountData.accountData) ? <Navigate replace to={'/'}/> : <SignUp/>}/>
+          <Route path='/log-in' element={!_.isEmpty(accountData.accountData) ? <Navigate replace to={'/'} /> : <LogIn />} />
           <Route path='/driver' element={<Driver />}/>
-          <Route path='/rider' element={<RequireAuth> <Rider /></RequireAuth>} />
+          <Route path='/rider' element={<RequireAuth> <Rider /></RequireAuth>}>
+            <Route path='dashboard' element={<RiderDashboard />} />
+            <Route path='request' element={<RiderRequest />} />
+            <Route path=':id' element={<RiderDetail />} />
+          </Route>
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </div>
     </div>

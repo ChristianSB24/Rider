@@ -5,7 +5,7 @@ export const getUser = (): {exp: number, first_name: string, rider: string, grou
         const [, payload,] = auth.access.split('.');
         // console.log('payload', payload)
         const decoded = window.atob(payload);
-        console.log('decoded', JSON.parse(decoded))
+        // console.log('decoded', JSON.parse(decoded))
         return JSON.parse(decoded);
     }
     //Instead of returning undefined want to logout and send to main page
