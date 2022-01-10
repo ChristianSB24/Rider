@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 import {
     Breadcrumb, Col, Row
 } from 'react-bootstrap';
-import { Outlet } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 
 import TripCard from './TripCard';
-import { connect, getTrips, messages } from '../services/TripService';;
+import { connect, getTrips, messages } from '../services/TripService';
+import RiderDetail from './RiderDetail';
+import RiderRequest from './RiderRequest';
 
 function RiderDashboard(props: any) {
     const [trips, setTrips] = useState<any>([]);
+    console.log('rider dashboard')
 
     useEffect(() => {
         const loadTrips = async () => {
@@ -77,7 +80,10 @@ function RiderDashboard(props: any) {
 
             </Col>
         </Row>
-        <div><Outlet/></div>
+        <Routes>
+            <Route path='request' element={<RiderRequest />} />
+            <Route path=':id' element={<RiderDetail />} />
+        </Routes>
         </>
     );
 }

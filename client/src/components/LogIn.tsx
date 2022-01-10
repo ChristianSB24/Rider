@@ -10,7 +10,7 @@ import logo from '../logo.png'
 
 function LogIn() {
     let [open, setOpen] = useState(false)
-    const accountData: any = useContext(AccountContext)
+    const auth: any = useContext(AccountContext)
 
     let validation = yup.object({
         username: yup.string()
@@ -27,7 +27,7 @@ function LogIn() {
             validateOnBlur={false}
             validationSchema={validation}
             onSubmit={({ username, password }) => {
-                accountData.logIn({ username, password }).then((res:any) => res.err === true && setOpen(true))}}
+                auth.logIn({ username, password }).then((res:any) => res.err === true && setOpen(true))}}
         >
             <>
                 {open && <div className="alert alert-danger d-flex align-items-center w-100" role="alert">

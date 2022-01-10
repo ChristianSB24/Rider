@@ -6,18 +6,15 @@ import { Link, Route, Routes, Navigate } from 'react-router-dom';
 import _ from 'lodash'
 
 import { isDriver, isRider } from './services/AuthService';
-import { RequireAuth, getIsAuthorized, AccountContext } from './auth/Authorization'
+import { RequireAuth, AccountContext } from './auth/Authorization'
 import SignUp from './components/SignUp';
 import LogIn from './components/LogIn';
 import Driver from './components/Driver';
-import { Rider } from './components/Rider';
 import { NotFound } from './components/NotFound'
 import RiderDashboard from './components/RiderDashboard'
-import RiderDetail from './components/RiderDetail'
-import RiderRequest from './components/RiderRequest';
 
 function App() {
-  const accountData = useContext(AccountContext)
+  const auth = useContext(AccountContext)
 
   return (
     <div className="login-content">
@@ -35,13 +32,13 @@ function App() {
             )
           }
           {
-             !_.isEmpty(accountData.accountData) && 
-                <Form inline className='ml-auto'>
-                  <Button
-                    type='button'
-                    onClick={() => accountData.logOut()}
-                  >Log out</Button>
-              </Form>
+            !_.isEmpty(auth.userInfo) &&
+            <Form inline className='ml-auto'>
+              <Button
+                type='button'
+                onClick={() => auth.logOut()}
+              >Log out</Button>
+            </Form>
           }
         </Navbar.Collapse>
       </Navbar>
@@ -51,7 +48,7 @@ function App() {
             <div className='middle-center'>
               <h1 className='landing logo'>Taxi</h1>
               {
-                _.isEmpty(accountData.accountData) && (
+                _.isEmpty(auth.userInfo) && (
                   <>
                     <Link
                       id='signUp'
@@ -70,7 +67,7 @@ function App() {
                 isRider() && (
                   <Link
                     className='btn btn-primary'
-                    to='/rider/dashboard'
+                    to='/rider'
                   >Dashboard</Link>
                 )
               }
@@ -84,14 +81,10 @@ function App() {
               }
             </div>
           } />
-          <Route path='/sign-up' element={!_.isEmpty(accountData.accountData) ? <Navigate replace to={'/'}/> : <SignUp/>}/>
-          <Route path='/log-in' element={!_.isEmpty(accountData.accountData) ? <Navigate replace to={'/'} /> : <LogIn />} />
-          <Route path='/driver' element={<Driver />}/>
-          <Route path='/rider' element={<RequireAuth> <Rider /></RequireAuth>}>
-            <Route path='dashboard' element={<RiderDashboard />} />
-            <Route path='request' element={<RiderRequest />} />
-            <Route path=':id' element={<RiderDetail />} />
-          </Route>
+          <Route path='/sign-up' element={!_.isEmpty(auth.userInfo) ? <Navigate replace to={'/'} /> : <SignUp />} />
+          <Route path='/log-in' element={!_.isEmpty(auth.userInfo) ? <Navigate replace to={'/'} /> : <LogIn />} />
+          <Route path='/driver' element={<RequireAuth userInfo={auth.userInfo} group='driver' ><Driver /></RequireAuth>} />
+          <Route path='/rider/*' element={<RequireAuth userInfo={auth.userInfo} group='rider' > <RiderDashboard /></RequireAuth>}/>
           <Route path='*' element={<NotFound />} />
         </Routes>
       </div>
