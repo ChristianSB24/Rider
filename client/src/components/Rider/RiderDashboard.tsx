@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import TripCard from '../TripCard';
+import { Link } from 'react-router-dom';
 import { connect, getTrips, messages } from '../../services/TripService';
 
 function RiderDashboard(props: any) {
@@ -49,6 +50,12 @@ function RiderDashboard(props: any) {
 
     return (
         <>
+            <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+                    <li className="breadcrumb-item active" aria-current="page">Dashboard</li>
+                </ol>
+            </nav>
             <TripCard
                 title='Current Trip'
                 trips={getCurrentTrips()}

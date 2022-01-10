@@ -1,6 +1,6 @@
 import React from 'react';
-import { Breadcrumb, Col, Row} from 'react-bootstrap';
-import { Routes, Route } from 'react-router-dom'
+import { Col, Row } from 'react-bootstrap';
+import { Routes, Route, Link } from 'react-router-dom'
 
 import RiderDetail from './RiderDetail';
 import RiderRequest from './RiderRequest';
@@ -11,17 +11,13 @@ export const RiderLayout = () => {
         <>
             <Row>
                 <Col lg={12}>
-                    <Breadcrumb>
-                        <Breadcrumb.Item href='/'>Home</Breadcrumb.Item>
-                        <Breadcrumb.Item active>Dashboard</Breadcrumb.Item>
-                    </Breadcrumb>
+                    <Routes>
+                        <Route index element={<RiderDashboard />} />
+                        <Route path='request' element={<RiderRequest />} />
+                        <Route path=':id' element={<RiderDetail />} />
+                    </Routes>
                 </Col>
             </Row>
-            <Routes>
-                <Route index element={<RiderDashboard />}/>
-                <Route path='request' element={<RiderRequest />} />
-                <Route path=':id' element={<RiderDetail />} />
-            </Routes>
         </>
     )
 }

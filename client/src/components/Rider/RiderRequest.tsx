@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Formik } from 'formik';
-import {
-    Breadcrumb, Button, Card, Col, Form, Row
-} from 'react-bootstrap';
-import { Navigate } from 'react-router-dom';
+import { Button, Card, Col, Form, Row } from 'react-bootstrap';
+import { Navigate, Link } from 'react-router-dom';
 import Map from '../Map'
 
 import { getUser } from '../../services/AuthService';
@@ -24,7 +22,7 @@ function RiderRequest() {
         }
     }, []);
 
-    const onSubmit = (values: {pickUpAddress:string, dropOffAddress: string}) => {
+    const onSubmit = (values: { pickUpAddress: string, dropOffAddress: string }) => {
         const rider = getUser();
         if (typeof rider !== 'undefined') {
             createTrip({
@@ -41,69 +39,70 @@ function RiderRequest() {
     }
 
     return (
-        <Row>
-            <Col lg={12}>
-                <Breadcrumb>
-                    <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
-                    <Breadcrumb.Item active>Request</Breadcrumb.Item>
-                </Breadcrumb>
-                <Card className='mb-3'>
-                    <Card.Header>Request Trip</Card.Header>
-                    <Card.Body>
-                        <Formik
-                            initialValues={{
-                                pickUpAddress: '',
-                                dropOffAddress: ''
-                            }}
-                            onSubmit={onSubmit}
-                        >
-                            {({
-                                handleChange,
-                                handleSubmit,
-                                isSubmitting,
-                                values
-                            }) => (
-                                <Form noValidate onSubmit={handleSubmit}>
-                                    <Form.Group controlId='pickUpAddress'>
-                                        <Form.Label>Pick up address:</Form.Label>
-                                        <Form.Control
-                                            data-cy='pick-up-address'
-                                            name='pickUpAddress'
-                                            onChange={handleChange}
-                                            value={values.pickUpAddress}
-                                            required
-                                        />
-                                    </Form.Group>
-                                    <Map
-                                        lat={lat}
-                                        lng={lng}
-                                        zoom={13}
-                                        pickUpAddress={values.pickUpAddress}
-                                        dropOffAddress={values.dropOffAddress}
+        <>
+            <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+                    <li className="breadcrumb-item"><Link to="/rider">Dashboard</Link></li>
+                    <li className="breadcrumb-item active" aria-current="page">Request</li>
+                </ol>
+            </nav>
+            <Card className='mb-3'>
+                <Card.Header>Request Trip</Card.Header>
+                <Card.Body>
+                    <Formik
+                        initialValues={{
+                            pickUpAddress: '',
+                            dropOffAddress: ''
+                        }}
+                        onSubmit={onSubmit}
+                    >
+                        {({
+                            handleChange,
+                            handleSubmit,
+                            isSubmitting,
+                            values
+                        }) => (
+                            <Form noValidate onSubmit={handleSubmit}>
+                                <Form.Group controlId='pickUpAddress'>
+                                    <Form.Label>Pick up address:</Form.Label>
+                                    <Form.Control
+                                        data-cy='pick-up-address'
+                                        name='pickUpAddress'
+                                        onChange={handleChange}
+                                        value={values.pickUpAddress}
+                                        required
                                     />
-                                    <Form.Group controlId='dropOffAddress'>
-                                        <Form.Label>Drop off address:</Form.Label>
-                                        <Form.Control
-                                            data-cy='drop-off-address'
-                                            name='dropOffAddress'
-                                            onChange={handleChange}
-                                            value={values.dropOffAddress}
-                                        />
-                                    </Form.Group>
-                                    <Button
-                                        block
-                                        data-cy='submit'
-                                        disabled={isSubmitting}
-                                        type='submit'
-                                        variant='primary'
-                                    >Submit</Button>
-                                </Form>
-                            )}
-                        </Formik>
-                    </Card.Body>
-                </Card>
-            </Col>
-        </Row>
+                                </Form.Group>
+                                <Map
+                                    lat={lat}
+                                    lng={lng}
+                                    zoom={13}
+                                    pickUpAddress={values.pickUpAddress}
+                                    dropOffAddress={values.dropOffAddress}
+                                />
+                                <Form.Group controlId='dropOffAddress'>
+                                    <Form.Label>Drop off address:</Form.Label>
+                                    <Form.Control
+                                        data-cy='drop-off-address'
+                                        name='dropOffAddress'
+                                        onChange={handleChange}
+                                        value={values.dropOffAddress}
+                                    />
+                                </Form.Group>
+                                <Button
+                                    block
+                                    data-cy='submit'
+                                    disabled={isSubmitting}
+                                    type='submit'
+                                    variant='primary'
+                                >Submit</Button>
+                            </Form>
+                        )}
+                    </Formik>
+                </Card.Body>
+            </Card>
+        </>
     )
 }
 
