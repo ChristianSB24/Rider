@@ -4,9 +4,9 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 
-import TripMedia from './TripMedia';
-import { getUser } from '../services/AuthService';
-import { getTrip, updateTrip } from '../services/TripService';
+import TripMedia from '../TripMedia';
+import { getUser } from '../../services/AuthService';
+import { getTrip, updateTrip } from '../../services/TripService';
 
 function DriverDetail({ match }: { match: { isExact: boolean, params: {id: string}, path: string, url: string } }) {
     console.log(match)

@@ -4,9 +4,9 @@ import { Formik, Form } from 'formik';
 import * as yup from 'yup'
 
 
-import { AccountContext } from '../auth/Authorization'
-import { TextField } from './FormComponents/TextField'
-import logo from '../logo.png'
+import { AccountContext } from '../../auth/Authorization'
+import { TextField } from './TextField'
+import logo from '../../logo.png'
 
 function LogIn() {
     let [open, setOpen] = useState(false)

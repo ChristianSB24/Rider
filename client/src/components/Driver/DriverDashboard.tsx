@@ -2,20 +2,19 @@ import React, { useEffect, useState } from 'react';
 import {
     Breadcrumb, Col, Row
 } from 'react-bootstrap';
-import { Routes, Route } from 'react-router-dom'
 
-import TripCard from './TripCard';
-import { connect, getTrips, messages } from '../services/TripService';
-import RiderDetail from './RiderDetail';
-import RiderRequest from './RiderRequest';
+import { Routes, Route } from 'react-router-dom';
 
-function RiderDashboard(props: any) {
+import TripCard from '../TripCard';
+import { connect, getTrips, messages } from '../../services/TripService';
+import DriverDetail from './DriverDetail';
+
+function DriverDashboard() {
     const [trips, setTrips] = useState<any>([]);
-    console.log('rider dashboard')
 
     useEffect(() => {
         const loadTrips = async () => {
-            const { response, isError }: any = await getTrips();
+            const { response, isError } = await getTrips();
             if (isError) {
                 setTrips([]);
             } else {
@@ -42,18 +41,21 @@ function RiderDashboard(props: any) {
 
     const getCurrentTrips = () => {
         return trips.filter((trip: any) => {
-            return (
-                trip.driver !== null &&
-                trip.status !== 'REQUESTED' &&
-                trip.status !== 'COMPLETED'
-            );
+            return trip.driver !== null && trip.status !== 'COMPLETED';
         });
-    };
+    }
+
+    const getRequestedTrips = () => {
+        return trips.filter((trip: any) => {
+            return trip.status === 'REQUESTED';
+        });
+    }
+
     const getCompletedTrips = () => {
         return trips.filter((trip: any) => {
             return trip.status === 'COMPLETED';
         });
-    };
+    }
 
     return (
         <>
@@ -67,25 +69,31 @@ function RiderDashboard(props: any) {
                 <TripCard
                     title='Current Trip'
                     trips={getCurrentTrips()}
-                    group='rider'
-                    otherGroup='driver'
+                    group='driver'
+                    otherGroup='rider'
+                />
+
+                <TripCard
+                    title='Requested Trips'
+                    trips={getRequestedTrips()}
+                    group='driver'
+                    otherGroup='rider'
                 />
 
                 <TripCard
                     title='Recent Trips'
                     trips={getCompletedTrips()}
-                    group='rider'
-                    otherGroup='driver'
+                    group='driver'
+                    otherGroup='rider'
                 />
 
             </Col>
         </Row>
-        <Routes>
-            <Route path='request' element={<RiderRequest />} />
-            <Route path=':id' element={<RiderDetail />} />
+        <Routes >
+            <Route path='/driver/:id' element={DriverDetail} />
         </Routes>
-        </>
+    </>
     );
 }
 
-export default RiderDashboard;
+export default DriverDashboard;

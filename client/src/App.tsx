@@ -1,90 +1,28 @@
 import React, { useContext } from 'react';
-import {
-  Button, Form, Navbar, Nav
-} from 'react-bootstrap';
-import { Link, Route, Routes, Navigate } from 'react-router-dom';
 import _ from 'lodash'
+import { Route, Routes, Navigate } from 'react-router-dom';
 
-import { isDriver, isRider } from './services/AuthService';
 import { RequireAuth, AccountContext } from './auth/Authorization'
-import SignUp from './components/SignUp';
-import LogIn from './components/LogIn';
-import Driver from './components/Driver';
-import { NotFound } from './components/NotFound'
-import RiderDashboard from './components/RiderDashboard'
+import SignUp from './components/FormComponents/SignUp';
+import LogIn from './components/FormComponents/LogIn';
+import DriverDashboard from './components/Driver/DriverDashboard';
+import { NotFound } from './components/NotFound';
+import { RiderLayout } from './components/Rider/RiderLayout';
+import { LandingPage } from './components/LandingPage';
+import { Header } from './components/Header';
 
 function App() {
   const auth = useContext(AccountContext)
-
   return (
     <div className="login-content">
-      <Navbar bg='light' expand='lg' variant='light'>
-        <Link to='/'>
-          <Navbar.Brand >Taxi</Navbar.Brand>
-        </Link>
-        <Navbar.Toggle />
-        <Navbar.Collapse>
-          {
-            isRider() && (
-              <Nav className='mr-auto'>
-                <Link to='/rider/request'>Request a trip</Link>
-              </Nav>
-            )
-          }
-          {
-            !_.isEmpty(auth.userInfo) &&
-            <Form inline className='ml-auto'>
-              <Button
-                type='button'
-                onClick={() => auth.logOut()}
-              >Log out</Button>
-            </Form>
-          }
-        </Navbar.Collapse>
-      </Navbar>
+      <Header auth={auth}/>
       <div className="d-flex max-width flex-column justify-content-center align-items-center px-2">
         <Routes>
-          <Route path='/' element={
-            <div className='middle-center'>
-              <h1 className='landing logo'>Taxi</h1>
-              {
-                _.isEmpty(auth.userInfo) && (
-                  <>
-                    <Link
-                      id='signUp'
-                      className='btn btn-primary'
-                      to='/sign-up'
-                    >Sign up</Link>
-                    <Link
-                      id='logIn'
-                      className='btn btn-primary'
-                      to='/log-in'
-                    >Log in</Link>
-                  </>
-                )
-              }
-              {
-                isRider() && (
-                  <Link
-                    className='btn btn-primary'
-                    to='/rider'
-                  >Dashboard</Link>
-                )
-              }
-              {
-                isDriver() && (
-                  <Link
-                    className='btn btn-primary'
-                    to='/driver'
-                  >Dashboard</Link>
-                )
-              }
-            </div>
-          } />
+          <Route path='/' element={<LandingPage userInfo={auth.userInfo} />} />
           <Route path='/sign-up' element={!_.isEmpty(auth.userInfo) ? <Navigate replace to={'/'} /> : <SignUp />} />
           <Route path='/log-in' element={!_.isEmpty(auth.userInfo) ? <Navigate replace to={'/'} /> : <LogIn />} />
-          <Route path='/driver' element={<RequireAuth userInfo={auth.userInfo} group='driver' ><Driver /></RequireAuth>} />
-          <Route path='/rider/*' element={<RequireAuth userInfo={auth.userInfo} group='rider' > <RiderDashboard /></RequireAuth>}/>
+          <Route path='/driver/*' element={<RequireAuth userInfo={auth.userInfo} group='driver' ><DriverDashboard /></RequireAuth>} />
+          <Route path='/rider/*' element={<RequireAuth userInfo={auth.userInfo} group='rider' > <RiderLayout /></RequireAuth>}/>
           <Route path='*' element={<NotFound />} />
         </Routes>
       </div>

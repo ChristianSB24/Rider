@@ -3,11 +3,11 @@ import { Formik } from 'formik';
 import {
     Breadcrumb, Button, Card, Col, Form, Row
 } from 'react-bootstrap';
-import { Navigate, Link } from 'react-router-dom';
-import Map from './Map'
+import { Navigate } from 'react-router-dom';
+import Map from '../Map'
 
-import { getUser } from '../services/AuthService';
-import { createTrip } from '../services/TripService';
+import { getUser } from '../../services/AuthService';
+import { createTrip } from '../../services/TripService';
 
 function RiderRequest() {
     const [isSubmitted, setSubmitted] = useState(false);
@@ -44,9 +44,7 @@ function RiderRequest() {
         <Row>
             <Col lg={12}>
                 <Breadcrumb>
-                    <Link to='/rider'>
-                        <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
-                    </Link>
+                    <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
                     <Breadcrumb.Item active>Request</Breadcrumb.Item>
                 </Breadcrumb>
                 <Card className='mb-3'>

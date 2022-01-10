@@ -13,7 +13,7 @@ interface loginInfo {
 type Errors = "CANNOT_AUTHORIZE";
 
 
-const AccountContext = createContext({ userInfo: {}, logIn: ({ username, password }: loginInfo) => { }, logOut: () => { } })
+const AccountContext = createContext({ userInfo: {id: 0, first_name: '', last_name: '', group: '', username: ''}, logIn: ({ username, password }: loginInfo) => { }, logOut: () => { } })
 
 export const AccountProvider = ({ children }: any) => {
   const [userInfo, setUserInfo]: any = useState(() => {
@@ -21,6 +21,7 @@ export const AccountProvider = ({ children }: any) => {
     if (auth) {
       const [, payload,] = auth.access.split('.');
       const decoded = window.atob(payload);
+      console.log(JSON.parse(decoded))
       return JSON.parse(decoded)
     } else {
       return {}
