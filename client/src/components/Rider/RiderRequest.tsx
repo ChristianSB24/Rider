@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Formik } from 'formik';
-import { Button, Card, Col, Form, Row } from 'react-bootstrap';
+import { Button, Card, Form } from 'react-bootstrap';
 import { Navigate, Link } from 'react-router-dom';
 import Map from '../Map'
 
