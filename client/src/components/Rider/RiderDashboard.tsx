@@ -62,7 +62,6 @@ function RiderDashboard(props: any) {
                 group='rider'
                 otherGroup='driver'
             />
-
             <TripCard
                 title='Recent Trips'
                 trips={getCompletedTrips()}

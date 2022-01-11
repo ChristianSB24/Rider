@@ -5,8 +5,8 @@ import { DashboardButton } from './DashboardButton';
 
 export const LandingPage = ({ userInfo }: any) => {
     return (
-        <div className='middle-center'>
-            <h1 className='landing logo'>Taxi</h1>
+        <>
+            <h1>Taxi</h1>
             {_.isEmpty(userInfo) && (
                 <>
                     <Link id='signUp' className='btn btn-primary' to='/sign-up'>Sign up</Link>
@@ -14,6 +14,6 @@ export const LandingPage = ({ userInfo }: any) => {
                 </>
             )}
             {!_.isEmpty(userInfo) && (<DashboardButton userInfo={userInfo} />)}
-        </div>
+        </>
     )
 }

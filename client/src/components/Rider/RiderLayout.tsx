@@ -8,16 +8,14 @@ import RiderDashboard from './RiderDashboard'
 
 export const RiderLayout = () => {
     return (
-        <>
-            <Row>
-                <Col lg={12}>
-                    <Routes>
-                        <Route index element={<RiderDashboard />} />
-                        <Route path='request' element={<RiderRequest />} />
-                        <Route path=':id' element={<RiderDetail />} />
-                    </Routes>
-                </Col>
-            </Row>
-        </>
+        <Row>
+            <Col lg={12}>
+                <Routes>
+                    <Route index element={<RiderDashboard />} />
+                    <Route path='request' element={<RiderRequest />} />
+                    <Route path=':id' element={<RiderDetail />} />
+                </Routes>
+            </Col>
+        </Row>
     )
 }
