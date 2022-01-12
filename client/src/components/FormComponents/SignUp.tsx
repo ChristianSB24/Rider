@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Formik } from 'formik';
-import { Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { Link, Navigate } from 'react-router-dom';
 import * as yup from 'yup'
 
 import { TextField } from './TextField'
+import { FileField } from './FileField'
+import { Select } from './Select'
 
 function SignUp(props: any) {
   const [isSubmitted, setSubmitted] = useState(false);
@@ -21,17 +23,13 @@ function SignUp(props: any) {
   const onSubmit = async (values: any, actions: any) => {
     const url = `${process.env.REACT_APP_BASE_URL}/api/sign_up/`;
     const formData = new FormData();
-    console.log(values.photo)
     formData.append('photo', values.photo[0])
-    console.log('username', values.username)
-    console.log('photo', values.photo)
     formData.append('username', values.username);
     formData.append('first_name', values.firstName);
     formData.append('last_name', values.lastName);
     formData.append('password1', values.password);
     formData.append('password2', values.password);
     formData.append('group', values.group);
-    // formData.append('photo', values.photo);
     try {
       await axios.post(url, formData);
       setSubmitted(true);
@@ -82,7 +80,7 @@ function SignUp(props: any) {
                     <TextField name="firstName" type="text" placeholder="First Name" login={false} />
                     <TextField name="lastName" type="text" placeholder="Last Name" login={false} />
                     <TextField name="password" type="text" placeholder="Password" login={false} />
-                    <Form.Group controlId='group'>
+                    {/* <Form.Group controlId='group'>
                       <Form.Label>Group:</Form.Label>
                       <Form.Control
                         as='select'
@@ -94,28 +92,15 @@ function SignUp(props: any) {
                         <option value='rider'>Rider</option>
                         <option value='driver'>Driver</option>
                       </Form.Control>
-                      {
-                        'group' in errors &&
-                        <Form.Control.Feedback type='invalid'>{errors.group}</Form.Control.Feedback>
-                      }
-                    </Form.Group>
-                    <Form.Group controlId='photo'>
-                      <Form.Label>Photo:</Form.Label>
-                      <Form.Control
-                        className={'photo' in errors ? 'is-invalid' : ''}
-                        name='photo'
-                        onChange={(event: any) => {
-                          setFieldValue("photo", event.target.files);
-                        }}
-                        multiple
-                        type='file'
-                      />
-                      {
-                        'photo' in errors &&
-                        <Form.Control.Feedback type='invalid'>{errors.photo}</Form.Control.Feedback>
-                      }
-                    </Form.Group>
-                    <Button block type='submit' variant='primary'>Sign up</Button>
+                      {'group' in errors && <Form.Control.Feedback type='invalid'>{errors.group}</Form.Control.Feedback>}
+                    </Form.Group> */}
+                    <Select label="group" name="group">
+                      <option value="">Select a job type</option>
+                      <option value="driver">Driver</option>
+                      <option value="rider">Rider</option>
+                    </Select>
+                    <FileField name="photo" type="file" setFieldValue={setFieldValue} errors={errors} />
+                    <button type="submit" className="btn-lg btn-primary w-100 fs-5">Sign Up</button>
                   </Form>
                 )}
               </Formik>
