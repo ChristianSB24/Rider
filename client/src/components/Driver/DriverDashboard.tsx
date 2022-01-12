@@ -3,7 +3,7 @@ import {
     Breadcrumb, Col, Row
 } from 'react-bootstrap';
 
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 
 import TripCard from '../TripCard';
 import { connect, getTrips, messages } from '../../services/TripService';
@@ -59,40 +59,33 @@ function DriverDashboard() {
 
     return (
         <>
-        <Row>
-            <Col lg={12}>
-                <Breadcrumb>
-                    <Breadcrumb.Item href='/'>Home</Breadcrumb.Item>
-                    <Breadcrumb.Item active>Dashboard</Breadcrumb.Item>
-                </Breadcrumb>
+            <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+                    <li className="breadcrumb-item active" aria-current="page">Dashboard</li>
+                </ol>
+            </nav>
+            <TripCard
+                title='Current Trip'
+                trips={getCurrentTrips()}
+                group='driver'
+                otherGroup='rider'
+            />
 
-                <TripCard
-                    title='Current Trip'
-                    trips={getCurrentTrips()}
-                    group='driver'
-                    otherGroup='rider'
-                />
+            <TripCard
+                title='Requested Trips'
+                trips={getRequestedTrips()}
+                group='driver'
+                otherGroup='rider'
+            />
 
-                <TripCard
-                    title='Requested Trips'
-                    trips={getRequestedTrips()}
-                    group='driver'
-                    otherGroup='rider'
-                />
-
-                <TripCard
-                    title='Recent Trips'
-                    trips={getCompletedTrips()}
-                    group='driver'
-                    otherGroup='rider'
-                />
-
-            </Col>
-        </Row>
-        <Routes >
-            <Route path='/driver/:id' element={DriverDetail} />
-        </Routes>
-    </>
+            <TripCard
+                title='Recent Trips'
+                trips={getCompletedTrips()}
+                group='driver'
+                otherGroup='rider'
+            />
+        </>
     );
 }
 

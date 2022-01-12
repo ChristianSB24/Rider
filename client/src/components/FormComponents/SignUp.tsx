@@ -21,6 +21,8 @@ function SignUp(props: any) {
   const onSubmit = async (values: any, actions: any) => {
     const url = `${process.env.REACT_APP_BASE_URL}/api/sign_up/`;
     const formData = new FormData();
+    console.log(values.photo)
+    formData.append('photo', values.photo[0])
     console.log('username', values.username)
     console.log('photo', values.photo)
     formData.append('username', values.username);
@@ -29,7 +31,7 @@ function SignUp(props: any) {
     formData.append('password1', values.password);
     formData.append('password2', values.password);
     formData.append('group', values.group);
-    formData.append('photo', values.photo);
+    // formData.append('photo', values.photo);
     try {
       await axios.post(url, formData);
       setSubmitted(true);
@@ -76,10 +78,10 @@ function SignUp(props: any) {
                   values
                 }) => (
                   <Form noValidate onSubmit={handleSubmit}>
-                      <TextField name="username" type="text" placeholder="Username" login={false}/>
-                      <TextField name="firstName" type="text" placeholder="First Name" login={false}/>
-                      <TextField name="lastName" type="text" placeholder="Last Name" login={false}/>
-                      <TextField name="password" type="text" placeholder="Password" login={false}/>
+                    <TextField name="username" type="text" placeholder="Username" login={false} />
+                    <TextField name="firstName" type="text" placeholder="First Name" login={false} />
+                    <TextField name="lastName" type="text" placeholder="Last Name" login={false} />
+                    <TextField name="password" type="text" placeholder="Password" login={false} />
                     <Form.Group controlId='group'>
                       <Form.Label>Group:</Form.Label>
                       <Form.Control
@@ -102,10 +104,10 @@ function SignUp(props: any) {
                       <Form.Control
                         className={'photo' in errors ? 'is-invalid' : ''}
                         name='photo'
-                        onChange={event => {
-                          console.log(event)
-                          setFieldValue('photo', [event.target.value]);
+                        onChange={(event: any) => {
+                          setFieldValue("photo", event.target.files);
                         }}
+                        multiple
                         type='file'
                       />
                       {

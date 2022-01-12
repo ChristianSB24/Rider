@@ -3,7 +3,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import _ from 'lodash';
 
 import { RequireAuth } from '../auth/Authorization'
-import DriverDashboard from './Driver/DriverDashboard';
+import { DriverLayout } from './Driver/DriverLayout';
 import { RiderLayout } from './Rider/RiderLayout';
 import { LandingPage } from './LandingPage';
 
@@ -32,7 +32,7 @@ const PageLayout = ({ auth }: any) => {
             <div className="d-flex center-alignment flex-column justify-content-center align-items-center px-2">
                 <Routes>
                     <Route index element={<LandingPage userInfo={auth.userInfo} />} />
-                    <Route path='/driver/*' element={<RequireAuth userInfo={auth.userInfo} group='driver' ><DriverDashboard /></RequireAuth>} />
+                    <Route path='/driver/*' element={<RequireAuth userInfo={auth.userInfo} group='driver' ><DriverLayout /></RequireAuth>} />
                     <Route path='/rider/*' element={<RequireAuth userInfo={auth.userInfo} group='rider' > <RiderLayout /></RequireAuth>} />
                 </Routes>
             </div>

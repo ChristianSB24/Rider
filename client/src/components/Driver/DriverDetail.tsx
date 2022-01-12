@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react';
 import {
     Breadcrumb, Button, Card, Col, Row
 } from 'react-bootstrap';
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import TripMedia from '../TripMedia';
 import { getUser } from '../../services/AuthService';
 import { getTrip, updateTrip } from '../../services/TripService';
 
-function DriverDetail({ match }: { match: { isExact: boolean, params: {id: string}, path: string, url: string } }) {
-    console.log(match)
+// function DriverDetail({ match }: { match: { isExact: boolean, params: {id: string}, path: string, url: string } }) {
+function DriverDetail() {
     const [trip, setTrip] = useState<any>({});
+    const { id } = useParams()
 
     const updateTripStatus = (status: string) => {
         const driver = getUser();
@@ -24,7 +25,7 @@ function DriverDetail({ match }: { match: { isExact: boolean, params: {id: strin
     };
 
     useEffect(() => {
-        const loadTrip = async (id: string) => {
+        const loadTrip = async (id: string | undefined) => {
             const { response, isError } = await getTrip(id);
             if (isError) {
                 setTrip({});
@@ -32,8 +33,8 @@ function DriverDetail({ match }: { match: { isExact: boolean, params: {id: strin
                 setTrip(response.data);
             }
         }
-        loadTrip(match.params.id);
-    }, [match]);
+        loadTrip(id);
+    }, [id]);
 
     let tripMedia;
 
@@ -51,12 +52,12 @@ function DriverDetail({ match }: { match: { isExact: boolean, params: {id: strin
     return (
         <Row>
             <Col lg={12}>
-                <Breadcrumb>
-                    <Link to='/driver'>
-                        <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
-                    </Link>
-                    <Breadcrumb.Item active>Trip</Breadcrumb.Item>
-                </Breadcrumb>
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item"><Link to="/driver">Dashboard</Link></li>
+                        <li className="breadcrumb-item active" aria-current="page">Trip</li>
+                    </ol>
+                </nav>
                 <Card className='mb-3' data-cy='trip-card'>
                     <Card.Header>Trip</Card.Header>
                     <Card.Body>{tripMedia}</Card.Body>

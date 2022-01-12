@@ -3,13 +3,14 @@ import React, { useEffect, useState } from 'react';
 import {
     Breadcrumb, Card, Col, Row
 } from 'react-bootstrap'
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import TripMedia from '../TripMedia';
 import { getTrip } from '../../services/TripService';
 
 function RiderDetail({ match }: any) {
     const [trip, setTrip] = useState(null);
+    const { id } = useParams()
 
     useEffect(() => {
         const loadTrip = async (id: any) => {
@@ -20,8 +21,8 @@ function RiderDetail({ match }: any) {
                 setTrip(response.data);
             }
         }
-        loadTrip(match.params.id);
-    }, [match]);
+        loadTrip(id);
+    }, [id]);
     let tripMedia;
 
     if (trip === null) {
@@ -38,12 +39,12 @@ function RiderDetail({ match }: any) {
     return (
         <Row>
             <Col lg={12}>
-                <Breadcrumb>
-                    <Link to='/rider'>
-                        <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
-                    </Link>
-                    <Breadcrumb.Item active>Trip</Breadcrumb.Item>
-                </Breadcrumb>
+                <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><Link to="/rider">Dashboard</Link></li>
+                    <li className="breadcrumb-item active" aria-current="page">Trip</li>
+                </ol>
+            </nav>
                 <Card className='mb-3' data-cy='trip-card'>
                     <Card.Header>Trip</Card.Header>
                     <Card.Body>{tripMedia}</Card.Body>

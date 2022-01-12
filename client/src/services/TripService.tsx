@@ -42,7 +42,7 @@ export const createTrip = (trip: newTrip) => {
   _socket.next(message);
 };
 
-export const getTrip = async (id: string): Promise<{response: AxiosResponse<object>, isError: boolean}> => {
+export const getTrip = async (id: string | undefined): Promise<{response: AxiosResponse<object>, isError: boolean}> => {
   const url = `${process.env.REACT_APP_BASE_URL}/api/trip/${id}/`;
   const token = getAccessToken();
   const headers = { Authorization: `Bearer ${token}` };
