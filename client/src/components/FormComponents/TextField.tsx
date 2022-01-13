@@ -18,7 +18,7 @@ interface validationValues {
 const validationClass = ({error, touched, value, login}: validationValues) => {
   if (!login && !error && touched && value.length > 0) {
     return "form-control is-valid"
-  } else if (error && touched) {
+  } else if (error && touched && value.length !== 0) {
     return "form-control is-invalid"
   } else {
     return "form-control"
