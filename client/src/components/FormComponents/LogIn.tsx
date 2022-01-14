@@ -5,7 +5,7 @@ import * as yup from 'yup'
 
 
 import { AccountContext } from '../../auth/Authorization'
-import TextField from './TextField'
+import ValidatedTextField from './ValidatedTextField';
 import logo from '../../logo.png'
 
 function LogIn() {
@@ -29,7 +29,6 @@ function LogIn() {
             </nav>
             <Formik
                 initialValues={{ username: '', password: '' }}
-                initialTouched={{ username: false, password: false }}
                 validateOnChange={false}
                 validateOnBlur={false}
                 validationSchema={validation}
@@ -37,6 +36,7 @@ function LogIn() {
                     auth.logIn({ username, password }).then((res: any) => res.err === true && setOpen(true))
                 }}
             >
+                {({ setFieldValue, setFieldError }) => (
                 <>
                 {open && <div className="alert alert-danger d-flex align-items-center w-100" role="alert">
                     <i className="bi bi-info-circle"></i> &nbsp;&nbsp;
@@ -46,12 +46,19 @@ function LogIn() {
                 </div>}
                 <img src={logo} alt="rider logo" className="pb-4 logos" />
                 <Form className="w-100">
-                    <TextField name="username" type="text" placeholder="Username" />
-                    <TextField name="password" type="password" placeholder="Password" />
+                    <ValidatedTextField name="username" type="text" placeholder="Username" onChange={(event: any) => {
+                      setFieldError("username", '')
+                      setFieldValue("username", event.target.value)
+                    }}/>
+                    <ValidatedTextField name="password" type="password" placeholder="Password" onChange={(event: any) => {
+                      setFieldError("password", '')
+                      setFieldValue("password", event.target.value)
+                    }}/>
                     <button type="submit" className="btn-lg btn-primary w-100 fs-5">Submit</button>
                 </Form>
                 <Link to="/account/forgotpassword" className="align-self-start py-2 text-decoration-none link-info fs-6">Forgot Password?</Link>
                 </>
+                )}
             </Formik>
         </div>
     )

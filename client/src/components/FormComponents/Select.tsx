@@ -1,13 +1,12 @@
 import React from 'react';
-import { useField, ErrorMessage } from 'formik'
+import { useField } from 'formik'
 
-const Select = ({ label, ...props }: any) => {
-  const [field, meta] = useField(props);
+const Select = ({ ...props }: any) => {
+  const [field] = useField(props);
   return (
     <div className="mb-3">
-      <label htmlFor={props.id || props.name}>{label}</label>
+      <label htmlFor={props.name}>{props.label}:&nbsp;</label>
       <select {...field} {...props} />
-      <ErrorMessage name={props.name} render={msg => <div className="invalid-feedback">{msg}</div>} />
     </div>
   );
 };

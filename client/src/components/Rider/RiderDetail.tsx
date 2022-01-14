@@ -1,8 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import {
-    Breadcrumb, Card, Col, Row
-} from 'react-bootstrap'
+import {Card, Col, Row} from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom';
 
 import TripMedia from '../TripMedia';

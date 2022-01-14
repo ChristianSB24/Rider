@@ -1,5 +1,3 @@
-import React from 'react'
-
 interface validationValues {
     error: string | undefined,
     touched: boolean | undefined
