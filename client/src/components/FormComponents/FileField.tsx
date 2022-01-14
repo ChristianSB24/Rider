@@ -1,37 +1,21 @@
 import React from 'react';
+import validationClassName from './validationClassName'
 import { ErrorMessage, useField } from 'formik'
 
 interface textValues {
-    name: string,
-    type: string,
-    showValid: boolean,
-    onChange: any,
+  name: string,
+  type: string,
+  onChange: any,
 }
 
-interface validationValues {
-    error: string | undefined,
-    touched: boolean | undefined,
-    value: string,
-    showValid: boolean,
-  }
+const FileField = ({ ...props }: textValues) => {
+  const [{ onChange, value, ...rest }, meta] = useField({ ...props });
+  return (
+    <div className="mb-3">
+      <input {...props} {...rest} className={validationClassName({ error: meta.error, touched: meta.touched })} />
+      <ErrorMessage name={props.name} render={msg => <div className="invalid-feedback">{msg}</div>} />
+    </div>
+  );
+};
 
-const validationClass = ({error, touched, value, showValid}: validationValues) => {
-    if (!showValid && !error && touched && value.length > 0) {
-      return "form-control is-valid"
-    } else if (error && touched && value.length !== 0) {
-      return "form-control is-invalid"
-    } else {
-      return "form-control"
-    }
-  }
-
-
-export const FileField = ({ showValid, ...props }: textValues) => {
-    const [field, meta] = useField({ ...props});
-    return (
-      <div>
-          <input {...props} onChange={props.onChange} className={validationClass({error: meta.error, touched: meta.touched, value: meta.value, showValid: showValid})}/>
-          <ErrorMessage name={props.name} render={msg => <div className="invalid-feedback">{msg}</div>} />
-      </div>
-    );
-  };
+export default FileField

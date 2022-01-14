@@ -1,8 +1,10 @@
-@import "../../node_modules/bootstrap-icons/font/bootstrap-icons";
 @import "../../node_modules/bootstrap/scss/functions";
 @import "./variables";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "./maps";
+@import "../../node_modules/bootstrap/scss/mixins";
 @import "../../node_modules/bootstrap/scss/bootstrap";
-@import "./_forms";
+@import "./form-control";
 @import "./_buttons";
 
 .logo {

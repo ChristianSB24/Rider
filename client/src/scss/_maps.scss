@@ -1,0 +1,11 @@
+$custom-colors: (
+  "danger-light": $danger-light,
+  "danger-lightest": $danger-lightest,
+);
+
+$theme-colors: map-merge($theme-colors, $custom-colors);
+//Normally only need to merge theme-colors and custom-colors but recent bootstrap 5 change requires these additional loops.
+$theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+$utilities-colors: map-merge($utilities-colors, $theme-colors-rgb);
+$utilities-text-colors: map-loop($utilities-colors, rgba-css-var, "$key", "text");
+$utilities-bg-colors: map-loop($utilities-colors, rgba-css-var, "$key", "bg");

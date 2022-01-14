@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import {
-    Breadcrumb, Col, Row
-} from 'react-bootstrap';
-
-import { Routes, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import TripCard from '../TripCard';
 import { connect, getTrips, messages } from '../../services/TripService';
-import DriverDetail from './DriverDetail';
 
 function DriverDashboard() {
     const [trips, setTrips] = useState<any>([]);

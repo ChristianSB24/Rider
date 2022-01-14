@@ -1,16 +1,15 @@
 import React from 'react';
-import { ErrorMessage, useField} from 'formik'
-import _ from 'lodash';
+import { useField, ErrorMessage } from 'formik'
 
-export const Select = ({ label, ...props }: any) => {
-    const [field, meta] = useField(props);
-    return (
-      <div>
-        <label htmlFor={props.id || props.name}>{label}</label>
-        <select {...field} {...props} />
-        {meta.touched && meta.error ? (
-          <div className="error">{meta.error}</div>
-        ) : null}
-      </div>
-    );
-  };
+const Select = ({ label, ...props }: any) => {
+  const [field, meta] = useField(props);
+  return (
+    <div className="mb-3">
+      <label htmlFor={props.id || props.name}>{label}</label>
+      <select {...field} {...props} />
+      <ErrorMessage name={props.name} render={msg => <div className="invalid-feedback">{msg}</div>} />
+    </div>
+  );
+};
+
+export default Select

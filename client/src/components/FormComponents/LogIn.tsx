@@ -5,7 +5,7 @@ import * as yup from 'yup'
 
 
 import { AccountContext } from '../../auth/Authorization'
-import { TextField } from './TextField'
+import TextField from './TextField'
 import logo from '../../logo.png'
 
 function LogIn() {
@@ -30,7 +30,7 @@ function LogIn() {
             <Formik
                 initialValues={{ username: '', password: '' }}
                 initialTouched={{ username: false, password: false }}
-                validateOnChange={true}
+                validateOnChange={false}
                 validateOnBlur={false}
                 validationSchema={validation}
                 onSubmit={({ username, password }) => {
@@ -46,8 +46,8 @@ function LogIn() {
                 </div>}
                 <img src={logo} alt="rider logo" className="pb-4 logos" />
                 <Form className="w-100">
-                    <TextField name="username" type="text" placeholder="Username" login />
-                    <TextField name="password" type="password" placeholder="Password" login />
+                    <TextField name="username" type="text" placeholder="Username" />
+                    <TextField name="password" type="password" placeholder="Password" />
                     <button type="submit" className="btn-lg btn-primary w-100 fs-5">Submit</button>
                 </Form>
                 <Link to="/account/forgotpassword" className="align-self-start py-2 text-decoration-none link-info fs-6">Forgot Password?</Link>
