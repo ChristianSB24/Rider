@@ -4,10 +4,10 @@ import { Formik, Form } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup'
 
-import ValidatedTextField from './ValidatedTextField'
-import TextField from './TextField'
-import FileField from './FileField'
-import Select from './Select'
+import ValidatedTextField from './FormComponents/ValidatedTextField'
+import TextField from './FormComponents/TextField'
+import FileField from './FormComponents/FileField'
+import Select from './FormComponents/Select'
 
 
 const SignUp = () => {
@@ -17,10 +17,12 @@ const SignUp = () => {
     username: yup.string()
       .required('Username is required.'),
     password1: yup.string()
-      .min(5, 'Password is too short.')
-      .required('Password is required.'),
+      .required('Password is required.')
+      .matches(
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+        "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+      ),
     password2: yup.string()
-      .min(5, 'Password is too short.')
       .required('Please confirm password.')
   })
 

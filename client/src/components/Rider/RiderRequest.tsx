@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Formik } from 'formik';
-import { Button, Card, Form } from 'react-bootstrap';
+import { Formik, Form } from 'formik';
 import { Navigate, Link } from 'react-router-dom';
-import Map from '../Map'
+import * as yup from 'yup'
 
+import Map from '../Map'
 import { getUser } from '../../services/AuthService';
 import { createTrip } from '../../services/TripService';
+import ValidatedTextField from '../FormComponents/ValidatedTextField';
 
 function RiderRequest() {
     const [isSubmitted, setSubmitted] = useState(false);
@@ -21,6 +22,13 @@ function RiderRequest() {
             });
         }
     }, []);
+
+    let validationSchema = yup.object({
+        pickUpAddress: yup.string()
+            .required('Pick up address is required.'),
+        dropOffAddress: yup.string()
+            .required('Drop off address is required.')
+    })
 
     const onSubmit = (values: { pickUpAddress: string, dropOffAddress: string }) => {
         const rider = getUser();
@@ -47,33 +55,32 @@ function RiderRequest() {
                     <li className="breadcrumb-item active" aria-current="page">Request</li>
                 </ol>
             </nav>
-            <Card className='mb-3'>
-                <Card.Header>Request Trip</Card.Header>
-                <Card.Body>
+            <div className="card mb-3">
+                <div className="card-header">Request Trip</div>
+                <div className="card-body">
                     <Formik
-                        initialValues={{
-                            pickUpAddress: '',
-                            dropOffAddress: ''
-                        }}
+                        initialValues={{pickUpAddress: '', dropOffAddress: ''}}
+                        validateOnChange={false}
+                        validateOnBlur={false}
+                        validationSchema={validationSchema}
                         onSubmit={onSubmit}
                     >
                         {({
-                            handleChange,
-                            handleSubmit,
                             isSubmitting,
-                            values
+                            values,
+                            setFieldValue,
+                            setFieldError
                         }) => (
-                            <Form noValidate onSubmit={handleSubmit}>
-                                <Form.Group controlId='pickUpAddress'>
-                                    <Form.Label>Pick up address:</Form.Label>
-                                    <Form.Control
-                                        data-cy='pick-up-address'
-                                        name='pickUpAddress'
-                                        onChange={handleChange}
-                                        value={values.pickUpAddress}
-                                        required
-                                    />
-                                </Form.Group>
+                            <Form>
+                                <ValidatedTextField
+                                    name='pickUpAddress'
+                                    type="text"
+                                    placeholder='Pick Up Address'
+                                    data-cy='pick-up-address'
+                                    onChange={(event: any) => {
+                                        setFieldError("pickUpAddress", '')
+                                        setFieldValue("pickUpAddress", event.target.value)
+                                    }} />
                                 <Map
                                     lat={lat}
                                     lng={lng}
@@ -81,27 +88,26 @@ function RiderRequest() {
                                     pickUpAddress={values.pickUpAddress}
                                     dropOffAddress={values.dropOffAddress}
                                 />
-                                <Form.Group controlId='dropOffAddress'>
-                                    <Form.Label>Drop off address:</Form.Label>
-                                    <Form.Control
-                                        data-cy='drop-off-address'
-                                        name='dropOffAddress'
-                                        onChange={handleChange}
-                                        value={values.dropOffAddress}
-                                    />
-                                </Form.Group>
-                                <Button
-                                    block
+                                <ValidatedTextField
+                                    name="dropOffAddress"
+                                    type="text"
+                                    placeholder="Drop Off Address"
+                                    data-cy="drop-off-address"
+                                    onChange={(event: any) => {
+                                        setFieldError("dropOffAddress", '')
+                                        setFieldValue("dropOffAddress", event.target.value)
+                                    }} />
+                                <button
+                                    className="btn-lg btn-primary w-100 fs-5"
                                     data-cy='submit'
                                     disabled={isSubmitting}
                                     type='submit'
-                                    variant='primary'
-                                >Submit</Button>
+                                >Submit</button>
                             </Form>
                         )}
                     </Formik>
-                </Card.Body>
-            </Card>
+                </div>
+            </div>
         </>
     )
 }

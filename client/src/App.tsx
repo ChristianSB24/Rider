@@ -3,8 +3,8 @@ import _ from 'lodash'
 import { Route, Routes, Navigate } from 'react-router-dom';
 
 import { AccountContext } from './auth/Authorization'
-import SignUp from './components/FormComponents/SignUp';
-import LogIn from './components/FormComponents/LogIn';
+import SignUp from './components/SignUp';
+import LogIn from './components/LogIn';
 import { NotFound } from './components/NotFound';
 import PageLayout from './components/PageLayout';
 

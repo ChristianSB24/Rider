@@ -4,9 +4,9 @@ import { Formik, Form } from 'formik';
 import * as yup from 'yup'
 
 
-import { AccountContext } from '../../auth/Authorization'
-import ValidatedTextField from './ValidatedTextField';
-import logo from '../../logo.png'
+import { AccountContext } from '../auth/Authorization'
+import ValidatedTextField from './FormComponents/ValidatedTextField';
+import logo from '../logo.png'
 
 function LogIn() {
     let [open, setOpen] = useState(false)
@@ -16,7 +16,6 @@ function LogIn() {
         username: yup.string()
             .required('Username is required.'),
         password: yup.string()
-            .min(5, 'Password is too short.')
             .required('Password is required.')
     })
     return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import validationClassName from './validationClassName'
+import validationClassName from '../../utils/validationClassName'
 import { ErrorMessage, useField } from 'formik'
 
 interface textValues {
@@ -15,7 +15,7 @@ const FileField = ({ ...props }: textValues) => {
     <div className="mb-3">
       <label htmlFor={props.name}>{props.label}:&nbsp;</label>
       <input {...props} {...rest} className={validationClassName({ error: meta.error, touched: meta.touched })} />
-      <ErrorMessage name={props.name} render={msg => <div className="invalid-feedback">{msg}</div>} />
+      <ErrorMessage name={props.name} render={msg => <span className="text-danger">{msg}</span>} />
     </div>
   );
 };

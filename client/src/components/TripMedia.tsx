@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, Media } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 function TripMedia ({ trip, group, otherGroup }: any) {
@@ -8,7 +7,7 @@ function TripMedia ({ trip, group, otherGroup }: any) {
   const href = group ? `/${group}/${trip.id}` : undefined;
 
   return (
-    <Media as='li'>
+    <li className="media">
       <img
         alt={user}
         className='mr-3 rounded-circle'
@@ -16,18 +15,18 @@ function TripMedia ({ trip, group, otherGroup }: any) {
         width={80}
         height={80}
       />
-      <Media.Body>
+      <div className="media-body">
         <h5 className='mt-0 mb-1'>{user && user.first_name} {user && user.last_name}</h5>
         {trip.pick_up_address} to {trip.drop_off_address}<br />
         {trip.status}
         {
           href &&
           <Link to={href}>
-            <Button variant='primary' block>Detail</Button>
+            <button className="btn-lg btn-primary w-100 fs-5">Detail</button>
           </Link>
         }
-      </Media.Body>
-    </Media>
+      </div>
+    </li>
   );
 }
 

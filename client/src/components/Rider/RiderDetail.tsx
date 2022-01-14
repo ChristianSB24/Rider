@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from 'react';
-import {Card, Col, Row} from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom';
 
 import TripMedia from '../TripMedia';
@@ -35,20 +34,20 @@ function RiderDetail({ match }: any) {
     }
 
     return (
-        <Row>
-            <Col lg={12}>
+        <div className="row">
+            <div className="col-lg-12">
                 <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item"><Link to="/rider">Dashboard</Link></li>
                     <li className="breadcrumb-item active" aria-current="page">Trip</li>
                 </ol>
             </nav>
-                <Card className='mb-3' data-cy='trip-card'>
-                    <Card.Header>Trip</Card.Header>
-                    <Card.Body>{tripMedia}</Card.Body>
-                </Card>
-            </Col>
-        </Row>
+                <div className='card mb-3' data-cy='trip-card'>
+                    <div className="card-header">Trip</div>
+                    <div className="card-body">{tripMedia}</div>
+                </div>
+            </div>
+        </div>
     );
 }
 

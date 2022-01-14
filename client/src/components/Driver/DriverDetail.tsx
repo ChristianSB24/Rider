@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import {Button, Card, Col, Row} from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom'
 
 import TripMedia from '../TripMedia';
@@ -48,49 +47,46 @@ function DriverDetail() {
     }
 
     return (
-        <Row>
-            <Col lg={12}>
+        <div className="row">
+            <div className="col-lg-12">
                 <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item"><Link to="/driver">Dashboard</Link></li>
                         <li className="breadcrumb-item active" aria-current="page">Trip</li>
                     </ol>
                 </nav>
-                <Card className='mb-3' data-cy='trip-card'>
-                    <Card.Header>Trip</Card.Header>
-                    <Card.Body>{tripMedia}</Card.Body>
-                    <Card.Footer>
+                <div className='card mb-3' data-cy='trip-card'>
+                    <div className="card-header">Trip</div>
+                    <div className="card-body">{tripMedia}</div>
+                    <div className="card-footer">
                         {
                             trip !== null && trip.status === 'REQUESTED' && (
-                                <Button
+                                <button
+                                    className="btn-lg btn-primary w-100 fs-5"
                                     data-cy='status-button'
-                                    block
-                                    variant='primary'
                                     onClick={() => updateTripStatus('STARTED')}
                                 >Drive to pick up
-                                </Button>
+                                </button>
                             )
                         }
                         {
                             trip !== null && trip.status === 'STARTED' && (
-                                <Button
+                                <button
+                                    className="btn-lg btn-primary w-100 fs-5"
                                     data-cy='status-button'
-                                    block
-                                    variant='primary'
                                     onClick={() => updateTripStatus('IN_PROGRESS')}
                                 >Drive to drop off
-                                </Button>
+                                </button>
                             )
                         }
                         {
                             trip !== null && trip.status === 'IN_PROGRESS' && (
-                                <Button
+                                <button
+                                    className="btn-lg btn-primary w-100 fs-5"
                                     data-cy='status-button'
-                                    block
-                                    variant='primary'
                                     onClick={() => updateTripStatus('COMPLETED')}
                                 >Complete trip
-                                </Button>
+                                </button>
                             )
                         }
                         {
@@ -98,10 +94,10 @@ function DriverDetail() {
                                 <span className='text-center'>Completed</span>
                             )
                         }
-                    </Card.Footer>
-                </Card>
-            </Col>
-        </Row>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }
 
