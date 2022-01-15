@@ -1,5 +1,5 @@
 import React from 'react';
-import validationClassName from '../utils/validationClassName'
+import validationClassName from '../../utils/validationClassName'
 import { ErrorMessage, useField } from 'formik'
 
 interface textValues {

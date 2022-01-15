@@ -4,7 +4,7 @@ import { Formik, Form } from 'formik';
 import * as yup from 'yup'
 
 
-import { AccountContext } from '../auth/Authorization'
+import { AccountContext } from '../../auth/Authorization'
 import ValidatedTextField from '../FormComponents/ValidatedTextField';
 import logo from './logo.png'
 

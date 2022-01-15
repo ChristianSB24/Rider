@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom'
 
 import TripMedia from '../common/TripMedia';
-import { getUser } from '../services/AuthService';
-import { getTrip, updateTrip } from '../services/TripService';
+import { getUser } from '../../services/AuthService';
+import { getTrip, updateTrip } from '../../services/TripService';
 
 // function DriverDetail({ match }: { match: { isExact: boolean, params: {id: string}, path: string, url: string } }) {
 function DriverDetail() {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import _ from 'lodash';
 
-import { RequireAuth } from '../auth/Authorization'
+import { RequireAuth } from '../../auth/Authorization'
 import { DriverLayout } from '../Driver/DriverLayout';
 import { RiderLayout } from '../Rider/RiderLayout';
 import { LandingPage } from '../LandingPage/LandingPage';

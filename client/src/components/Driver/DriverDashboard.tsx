@@ -4,8 +4,8 @@ import { webSocket } from 'rxjs/webSocket';
 import { toast } from 'react-toastify';
 
 import TripCard from '../common/TripCard';
-import { connect, getTrips, messages } from '../services/TripService';
-import { getAccessToken } from '../services/AuthService'
+import { connect, getTrips, messages } from '../../services/TripService';
+import { getAccessToken } from '../../services/AuthService'
 
 function DriverDashboard() {
     const [trips, setTrips] = useState<any>([]);

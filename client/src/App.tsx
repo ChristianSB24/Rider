@@ -4,10 +4,10 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import { AccountContext } from './auth/Authorization'
-import SignUp from './common/SignUp';
-import LogIn from './common/LogIn';
-import { NotFound } from './common/NotFound';
-import PageLayout from './Layout/PageLayout';
+import SignUp from './components/common/SignUp';
+import LogIn from './components/common/LogIn';
+import { NotFound } from './components/common/NotFound';
+import PageLayout from './components/Layout/PageLayout';
 
 import 'bootstrap';
 import './scss/app.scss'

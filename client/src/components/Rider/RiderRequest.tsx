@@ -4,8 +4,8 @@ import { Navigate, Link } from 'react-router-dom';
 import * as yup from 'yup'
 
 import Map from '../common/Map'
-import { getUser } from '../services/AuthService';
-import { createTrip } from '../services/TripService';
+import { getUser } from '../../services/AuthService';
+import { createTrip } from '../../services/TripService';
 import ValidatedTextField from '../FormComponents/ValidatedTextField';
 
 function RiderRequest() {
