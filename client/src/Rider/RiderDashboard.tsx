@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import TripCard from '../common/TripCard';
 import { Link } from 'react-router-dom';
+import { webSocket } from 'rxjs/webSocket';
+import { toast } from 'react-toastify';
+
+import TripCard from '../common/TripCard';
 import { connect, getTrips, messages } from '../services/TripService';
+import { getAccessToken } from '../services/AuthService'
 
 function RiderDashboard(props: any) {
     const [trips, setTrips] = useState<any>([]);
@@ -19,19 +23,19 @@ function RiderDashboard(props: any) {
     }, []);
 
     useEffect(() => {
-        connect();
-        const subscription = messages.subscribe((message: any) => {
-            setTrips((prevTrips: any) => [
-                ...prevTrips.filter((trip: any) => trip.id !== message.data.id),
-                message.data
-            ]);
+        const token = getAccessToken();
+        const ws = webSocket(`ws://localhost:8003/taxi/?token=${token}`);
+        const subscription = ws.subscribe((message: any) => {
+          setTrips((prevTrips: any) => [
+            ...prevTrips.filter((trip: any) => trip.id !== message.data.id),
+            message.data
+          ]);
+          updateToast(message.data);
         });
         return () => {
-            if (subscription) {
-                subscription.unsubscribe();
-            }
+          subscription.unsubscribe();
         }
-    }, [setTrips]);
+      }, []);
 
     const getCurrentTrips = () => {
         return trips.filter((trip: any) => {
@@ -47,6 +51,16 @@ function RiderDashboard(props: any) {
             return trip.status === 'COMPLETED';
         });
     };
+
+    const updateToast = (trip: any) => {
+        if (trip.status === 'STARTED') {
+          toast.info(`Driver ${trip.driver.username} is coming to pick you up.`);
+        } else if (trip.status === 'IN_PROGRESS') {
+          toast.info(`Driver ${trip.driver.username} is headed to your destination.`);
+        } else if (trip.status === 'COMPLETED') {
+          toast.info(`Driver ${trip.driver.username} has dropped you off.`);
+        }
+      };
 
     return (
         <>
