@@ -5,8 +5,8 @@ import * as yup from 'yup'
 
 
 import { AccountContext } from '../auth/Authorization'
-import ValidatedTextField from './FormComponents/ValidatedTextField';
-import logo from '../logo.png'
+import ValidatedTextField from '../FormComponents/ValidatedTextField';
+import logo from './logo.png'
 
 function LogIn() {
     let [open, setOpen] = useState(false)

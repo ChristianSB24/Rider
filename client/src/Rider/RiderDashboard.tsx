@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import TripCard from '../common/TripCard';
 import { Link } from 'react-router-dom';
+import { connect, getTrips, messages } from '../services/TripService';
 
-import TripCard from '../TripCard';
-import { connect, getTrips, messages } from '../../services/TripService';
-
-function DriverDashboard() {
+function RiderDashboard(props: any) {
     const [trips, setTrips] = useState<any>([]);
 
     useEffect(() => {
         const loadTrips = async () => {
-            const { response, isError } = await getTrips();
+            const { response, isError }: any = await getTrips();
             if (isError) {
                 setTrips([]);
             } else {
@@ -36,21 +35,18 @@ function DriverDashboard() {
 
     const getCurrentTrips = () => {
         return trips.filter((trip: any) => {
-            return trip.driver !== null && trip.status !== 'COMPLETED';
+            return (
+                trip.driver !== null &&
+                trip.status !== 'REQUESTED' &&
+                trip.status !== 'COMPLETED'
+            );
         });
-    }
-
-    const getRequestedTrips = () => {
-        return trips.filter((trip: any) => {
-            return trip.status === 'REQUESTED';
-        });
-    }
-
+    };
     const getCompletedTrips = () => {
         return trips.filter((trip: any) => {
             return trip.status === 'COMPLETED';
         });
-    }
+    };
 
     return (
         <>
@@ -63,25 +59,17 @@ function DriverDashboard() {
             <TripCard
                 title='Current Trip'
                 trips={getCurrentTrips()}
-                group='driver'
-                otherGroup='rider'
+                group='rider'
+                otherGroup='driver'
             />
-
-            <TripCard
-                title='Requested Trips'
-                trips={getRequestedTrips()}
-                group='driver'
-                otherGroup='rider'
-            />
-
             <TripCard
                 title='Recent Trips'
                 trips={getCompletedTrips()}
-                group='driver'
-                otherGroup='rider'
+                group='rider'
+                otherGroup='driver'
             />
         </>
     );
 }
 
-export default DriverDashboard;
+export default RiderDashboard;

@@ -3,9 +3,9 @@ import { Routes, Route, Link } from 'react-router-dom';
 import _ from 'lodash';
 
 import { RequireAuth } from '../auth/Authorization'
-import { DriverLayout } from './Driver/DriverLayout';
-import { RiderLayout } from './Rider/RiderLayout';
-import { LandingPage } from './LandingPage';
+import { DriverLayout } from '../Driver/DriverLayout';
+import { RiderLayout } from '../Rider/RiderLayout';
+import { LandingPage } from '../LandingPage/LandingPage';
 
 const PageLayout = ({ auth }: any) => {
     return (

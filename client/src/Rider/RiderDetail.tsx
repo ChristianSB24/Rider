@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import TripMedia from '../TripMedia';
-import { getTrip } from '../../services/TripService';
+import TripMedia from '../common/TripMedia';
+import { getTrip } from '../services/TripService';
 
 function RiderDetail({ match }: any) {
     const [trip, setTrip] = useState(null);

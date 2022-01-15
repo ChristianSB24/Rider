@@ -1,0 +1,17 @@
+.form-control {
+  border: 2px solid #eeeeee;
+  &:focus {
+    background-color: #f6f6f6;
+    border: 2px solid #000000;
+  }
+}
+
+.logo {
+  min-width: 200px;
+}
+
+.imag {
+  background: url(../common/logo.png) no-repeat scroll center top transparent;
+  width: 100px;
+  height: 100px;
+}

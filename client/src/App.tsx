@@ -3,10 +3,10 @@ import _ from 'lodash'
 import { Route, Routes, Navigate } from 'react-router-dom';
 
 import { AccountContext } from './auth/Authorization'
-import SignUp from './components/SignUp';
-import LogIn from './components/LogIn';
-import { NotFound } from './components/NotFound';
-import PageLayout from './components/PageLayout';
+import SignUp from './common/SignUp';
+import LogIn from './common/LogIn';
+import { NotFound } from './common/NotFound';
+import PageLayout from './Layout/PageLayout';
 
 function App() {
   const auth = useContext(AccountContext)

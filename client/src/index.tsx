@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom"
 import axios from 'axios';
 import 'bootstrap';
-import './scss/custom.scss'
+import './scss/app.scss'
 import App from './App'
 import { AccountProvider } from './auth/Authorization'
 import { HashRouter } from 'react-router-dom';

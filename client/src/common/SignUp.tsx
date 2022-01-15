@@ -4,10 +4,10 @@ import { Formik, Form } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup'
 
-import ValidatedTextField from './FormComponents/ValidatedTextField'
-import TextField from './FormComponents/TextField'
-import FileField from './FormComponents/FileField'
-import Select from './FormComponents/Select'
+import ValidatedTextField from '../FormComponents/ValidatedTextField'
+import TextField from '../FormComponents/TextField'
+import FileField from '../FormComponents/FileField'
+import Select from '../FormComponents/Select'
 
 
 const SignUp = () => {
