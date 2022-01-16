@@ -9,7 +9,7 @@ import ValidatedTextField from '../FormComponents/ValidatedTextField';
 import logo from './logo.png'
 
 function LogIn() {
-    let [open, setOpen] = useState(false)
+    let [isError, setIsError] = useState(false)
     const auth: any = useContext(AccountContext)
 
     let validation = yup.object({
@@ -18,6 +18,16 @@ function LogIn() {
         password: yup.string()
             .required('Password is required.')
     })
+
+    const onSubmit = async ({ username, password }: any) => {
+        try {
+            await auth.logIn(username, password);
+        }
+        catch(error: any) {
+            setIsError(error)
+        }
+    }
+
     return (
         <div className="d-flex center-alignment flex-column justify-content-center align-items-center px-2">
             <nav aria-label="breadcrumb">
@@ -31,32 +41,33 @@ function LogIn() {
                 validateOnChange={false}
                 validateOnBlur={false}
                 validationSchema={validation}
-                onSubmit={({ username, password }) => {
-                    auth.logIn({ username, password }).then((res: any) => res.err === true && setOpen(true))
-                }}
+                // onSubmit={({ username, password }) => {
+                //     auth.logIn({ username, password }).then((res: any) => res.err === true && setOpen(true))
+                // }}
+                onSubmit={onSubmit}
             >
                 {({ setFieldValue, setFieldError }) => (
-                <>
-                {open && <div className="alert alert-danger d-flex align-items-center w-100" role="alert">
-                    <i className="bi bi-info-circle"></i> &nbsp;&nbsp;
-                    <div>
-                        Your password and email do not match. Please try again or Reset Your Password.
-                    </div>
-                </div>}
-                <img src={logo} alt="rider logo" className="pb-4 logos" />
-                <Form className="w-100">
-                    <ValidatedTextField name="username" type="text" placeholder="Username" onChange={(event: any) => {
-                      setFieldError("username", '')
-                      setFieldValue("username", event.target.value)
-                    }}/>
-                    <ValidatedTextField name="password" type="password" placeholder="Password" onChange={(event: any) => {
-                      setFieldError("password", '')
-                      setFieldValue("password", event.target.value)
-                    }}/>
-                    <button type="submit" className="btn-lg btn-primary w-100 fs-5">Submit</button>
-                </Form>
-                <Link to="/account/forgotpassword" className="align-self-start py-2 text-decoration-none link-info fs-6">Forgot Password?</Link>
-                </>
+                    <>
+                        {isError !== false && <div className="alert alert-danger d-flex align-items-center w-100" role="alert">
+                            <i className="bi bi-info-circle"></i> &nbsp;&nbsp;
+                            <div>
+                                {isError}
+                            </div>
+                        </div>}
+                        <img src={logo} alt="rider logo" className="pb-4 logos" />
+                        <Form className="w-100">
+                            <ValidatedTextField name="username" type="text" placeholder="Username" onChange={(event: any) => {
+                                setFieldError("username", '')
+                                setFieldValue("username", event.target.value)
+                            }} />
+                            <ValidatedTextField name="password" type="password" placeholder="Password" onChange={(event: any) => {
+                                setFieldError("password", '')
+                                setFieldValue("password", event.target.value)
+                            }} />
+                            <button type="submit" className="btn-lg btn-primary w-100 fs-5">Submit</button>
+                        </Form>
+                        <Link to="/account/forgotpassword" className="align-self-start py-2 text-decoration-none link-info fs-6">Forgot Password?</Link>
+                    </>
                 )}
             </Formik>
         </div>

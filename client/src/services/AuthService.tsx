@@ -12,16 +12,6 @@ export const getUser = (): {exp: number, first_name: string, rider: string, grou
     return undefined;
 };
 
-export const isDriver = () => {
-    const user =getUser(); 
-    return user && user.group === 'driver';
-};
-
-export const isRider = () => {
-    const user = getUser();
-    return user && user.group === 'rider';
-};
-
 export const getAccessToken = () => {
     const auth = JSON.parse(window.localStorage.getItem('taxi.auth') || 'null');
     if (auth) {

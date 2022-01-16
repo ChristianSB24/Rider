@@ -1,19 +1,9 @@
 import React, { useState, createContext } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import axios from 'axios';
-import { Ok, Err, Result } from 'ts-results';
 import _ from 'lodash'
 
-
-interface loginInfo {
-  username: string,
-  password: string,
-}
-
-type Errors = "CANNOT_AUTHORIZE";
-
-
-const AccountContext = createContext({ userInfo: {id: 0, first_name: '', last_name: '', group: '', username: ''}, logIn: ({ username, password }: loginInfo) => { }, logOut: () => { } })
+const AccountContext = createContext({ userInfo: { id: 0, first_name: '', last_name: '', group: '', username: '' }, logIn: (username: string, password: string) => { }, logOut: () => { } })
 
 export const AccountProvider = ({ children }: any) => {
   const [userInfo, setUserInfo]: any = useState(() => {
@@ -26,7 +16,7 @@ export const AccountProvider = ({ children }: any) => {
     } else {
       return {}
     }
-    })
+  })
 
   const navigate = useNavigate()
 
@@ -44,22 +34,21 @@ export const AccountProvider = ({ children }: any) => {
   //   }
   // }
 
-  const logIn = ({ username, password }: loginInfo): Promise<Result<object, Errors>> => {
-    const url = `${process.env.REACT_APP_BASE_URL}/api/log_in/`;
-    return axios.post(url, { username, password })
-      .then(
-        (response) => {
-          window.localStorage.setItem('taxi.auth', JSON.stringify(response.data))
-          const [, payload,] = response.data.access.split('.');
-          const decoded = window.atob(payload);
-          setUserInfo(JSON.parse(decoded))
-          return Ok({ response })
-        })
-      .catch(
-        (error) => {
-          console.error(error);
-          return Err("CANNOT_AUTHORIZE")
-        });
+  const logIn = async (username: string, password: string) => {
+    try {
+      let response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/log_in/`, { username, password })
+      window.localStorage.setItem('taxi.auth', JSON.stringify(response.data))
+      const [, payload,] = response.data.access.split('.');
+      const decoded = window.atob(payload);
+      setUserInfo(JSON.parse(decoded))
+    }
+    catch (error: any) {
+      if (error?.response?.data?.detail) {
+        throw (error.response.data.detail)
+      } else {
+        throw ('Something went wrong with your request. Please try again.')
+      }
+    }
   };
 
   const logOut = () => {
