@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Formik, Form } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
@@ -9,8 +9,19 @@ import TextField from '../FormComponents/TextField'
 import FileField from '../FormComponents/FileField'
 import Select from '../FormComponents/Select'
 
+interface formValues {
+  username: string,
+  firstName: string,
+  lastName: string,
+  password1: string,
+  password2: string,
+  group: string,
+  photo: string
+}
+
 
 const SignUp = () => {
+  const [isError, setIsError] = useState(false)
   let navigate = useNavigate()
 
   let validationSchema = yup.object({
@@ -26,26 +37,30 @@ const SignUp = () => {
       .required('Please confirm password.')
   })
 
-  const onSubmit = async (values: any, actions: any) => {
+  const onSubmit = async (values: formValues, actions: any) => {
     const url = `${process.env.REACT_APP_BASE_URL}/api/sign_up/`;
     const formData = new FormData();
-    for (const prop in values) { formData.append(`${prop}`, values[prop]) }
+    for (const prop in values) { formData.append(`${prop}`, values[prop as keyof formValues]) }
+
     try {
       await axios.post(url, formData);
       navigate("/log-in")
     }
-    catch (response: any) {
-      const data = response.response.data;
-      for (const value in data) {
-        actions.setFieldError(value, data[value].join(' '));
-        if (value === 'non_field_errors') {
-          actions.setFieldError('password1', data[value].join(' '))
-          actions.setFieldError('password2', data[value].join(' '))
+    catch (error: any) {
+      try {
+        const data = error.response.data;
+        for (const value in data) {
+          actions.setFieldError(value, data[value].join(' '));
+          if (value === 'non_field_errors') {
+            actions.setFieldError('password1', data[value].join(' '))
+            actions.setFieldError('password2', data[value].join(' '))
+          }
         }
+      } catch {
+        setIsError(true)
       }
     }
   };
-
 
   return (
     <div className="d-flex center-alignment flex-column justify-content-center align-items-center px-2">
@@ -57,6 +72,12 @@ const SignUp = () => {
               <li className="breadcrumb-item active" aria-current="page">Sign up</li>
             </ol>
           </nav>
+          {isError && <div className="alert alert-danger d-flex align-items-center w-100" role="alert">
+            <i className="bi bi-info-circle"></i> &nbsp;&nbsp;
+            <div>
+              An error has occured. Please try again.
+            </div>
+          </div>}
           <div className='card mb-3'>
             <div className='card-header'>Sign up</div>
             <div className='card-body'>

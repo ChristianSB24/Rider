@@ -44,9 +44,9 @@ export const AccountProvider = ({ children }: any) => {
     }
     catch (error: any) {
       if (error?.response?.data?.detail) {
-        throw (error.response.data.detail)
+        throw new Error(error.response.data.detail)
       } else {
-        throw ('Something went wrong with your request. Please try again.')
+        throw new Error('Something went wrong with your request. Please try again.')
       }
     }
   };
