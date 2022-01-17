@@ -41,7 +41,6 @@ const SignUp = () => {
     const url = `${process.env.REACT_APP_BASE_URL}/api/sign_up/`;
     const formData = new FormData();
     for (const prop in values) { formData.append(`${prop}`, values[prop as keyof formValues]) }
-
     try {
       await axios.post(url, formData);
       navigate("/log-in")

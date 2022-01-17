@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom'
 
 import TripMedia from '../common/TripMedia';
-import { getUser } from '../../services/AuthService';
 import { getTrip, updateTrip } from '../../services/TripService';
+import { AccountContext } from '../../auth/Authorization';
 
-// function DriverDetail({ match }: { match: { isExact: boolean, params: {id: string}, path: string, url: string } }) {
 function DriverDetail() {
     const [trip, setTrip] = useState<any>({});
     const { id } = useParams()
+    const auth = useContext(AccountContext)
 
     const updateTripStatus = (status: string) => {
-        const driver = getUser();
+        const driver = auth.userInfo;
         const updatedTrip = { ...trip, driver, status };
         updateTrip({
             ...updatedTrip,

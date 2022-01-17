@@ -1,11 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import { Formik, Form } from 'formik';
 import * as yup from 'yup'
 
 
 import { AccountContext } from '../../auth/Authorization'
 import ValidatedTextField from '../FormComponents/ValidatedTextField';
+import { fetchTrips } from '../../features/tripsSlice'
 import logo from './logo.png'
 
 interface formValues {
@@ -16,6 +18,7 @@ interface formValues {
 function LogIn() {
     const [errorMessage, setErrorMessage] = useState('')
     const auth = useContext(AccountContext)
+    const dispatch = useDispatch()
 
     let validation = yup.object({
         username: yup.string()
@@ -27,6 +30,7 @@ function LogIn() {
     const onSubmit = async ({ username, password }: formValues) => {
         try {
             await auth.logIn(username, password);
+            dispatch(fetchTrips())
         }
         catch (error: any) {
             setErrorMessage(error.message)

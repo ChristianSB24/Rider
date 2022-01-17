@@ -1,8 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux'
 
+import { selectAllTrips } from '../../features/tripsSlice';
 import TripMedia from './TripMedia';
 
 function TripCard ({ title, trips, group, otherGroup }: any) {
+  const testTrips = useSelector(selectAllTrips)
   let cardBody;
   let mediaList;
 
@@ -11,7 +14,7 @@ function TripCard ({ title, trips, group, otherGroup }: any) {
   } else {
     mediaList = trips.map((trip: any) =>
       <TripMedia
-        trip={trip}
+        trip={testTrips.todos.entities[trip]}
         group={group}
         otherGroup={otherGroup}
         key={trip.id}

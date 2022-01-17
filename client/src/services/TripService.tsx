@@ -48,7 +48,7 @@ export const getTrip = async (id: string | undefined): Promise<{response: AxiosR
   const headers = { Authorization: `Bearer ${token}` };
   try {
     const response = await axios.get<object>(url, { headers });
-    console.log('trip', response)
+    console.log(response.data)
     return { response, isError: false };
   } catch (response: any) {
     return { response, isError: true };
@@ -61,6 +61,7 @@ export const getTrips = async (): Promise<{response: AxiosResponse<object[]>, is
   const headers = { Authorization: `Bearer ${token}` };
   try {
     const response = await axios.get<object[]>(url, { headers });
+    console.log(response.data)
     return { response, isError: false };
   } catch (response: any) {
     return { response, isError: true };
