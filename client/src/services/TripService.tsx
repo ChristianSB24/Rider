@@ -2,6 +2,8 @@ import axios, {AxiosResponse} from 'axios';
 import { share } from 'rxjs/operators'; 
 import { webSocket } from 'rxjs/webSocket';
 
+import getToken from '../utils/getToken'
+
 let _socket: any;
 export let messages: any; 
 
@@ -24,7 +26,7 @@ interface newTrip {
 
 export const connect = () => {
   if (!_socket || _socket.closed) {
-    _socket = webSocket(`ws://localhost:8003/taxi/?token=${JSON.parse(window.localStorage.getItem('taxi.auth') || 'null').access}`);
+    _socket = webSocket(`ws://localhost:8003/taxi/?token=${getToken()}`);
     messages = _socket.pipe(share());
     messages.subscribe((message: object) => console.log(message));
   }
@@ -41,7 +43,7 @@ export const createTrip = (trip: newTrip) => {
 
 export const getTrip = async (id: string | undefined): Promise<{response: AxiosResponse<object>, isError: boolean}> => {
   const url = `${process.env.REACT_APP_BASE_URL}/api/trip/${id}/`;
-  const headers = { Authorization: `Bearer ${JSON.parse(window.localStorage.getItem('taxi.auth') || 'null').access}` };
+  const headers = { Authorization: `Bearer ${getToken()}` };
   try {
     const response = await axios.get<object>(url, { headers });
     console.log(response.data)
@@ -53,7 +55,7 @@ export const getTrip = async (id: string | undefined): Promise<{response: AxiosR
 
 export const getTrips = async (): Promise<{response: AxiosResponse<object[]>, isError: boolean}> => {
   const url = `${process.env.REACT_APP_BASE_URL}/api/trip/`;
-  const headers = { Authorization: `Bearer ${JSON.parse(window.localStorage.getItem('taxi.auth') || 'null').access}` };
+  const headers = { Authorization: `Bearer ${getToken()}` };
   try {
     const response = await axios.get<object[]>(url, { headers });
     console.log(response.data)

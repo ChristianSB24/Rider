@@ -13,7 +13,6 @@ const initialState = tripsAdapter.getInitialState({
 
 // Thunk functions
 export const fetchTrips = createAsyncThunk('trips/fetchTrips', async () => {
-  console.log('here', client)
   const url = `${process.env.REACT_APP_BASE_URL}/api/trip/`;
   const response = await client.get(url)
   console.log(response)
@@ -27,8 +26,8 @@ const tripsSlice = createSlice({
     tripDeleted: tripsAdapter.removeOne,
     completedTripsCleared(state, action) {
       const completedIds = Object.values(state.entities)
-        .filter((trip) => trip.status === "COMPLETED")
-        .map((trip) => trip.id)
+        .filter((trip: any) => trip.status === "COMPLETED")
+        .map((trip: any) => trip.id)
       tripsAdapter.removeMany(state, completedIds)
     },
     addOneTrip: tripsAdapter.addOne
@@ -56,4 +55,4 @@ export default tripsSlice.reducer
 export const {
   selectAll: selectTrips,
   selectById: selectTripById,
-} = tripsAdapter.getSelectors((state) => state.trips)
+} = tripsAdapter.getSelectors((state: any) => state.trips)

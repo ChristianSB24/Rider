@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom';
 import { webSocket } from 'rxjs/webSocket';
@@ -6,15 +6,14 @@ import { toast } from 'react-toastify';
 
 import TripCard from '../common/TripCard';
 import { selectTrips, addOneTrip } from '../../features/tripsSlice'
-import { getAccessToken } from '../../services/AuthService'
+import getToken from '../../utils/getToken';
 
 function DriverDashboard() {
     const trips = useSelector(selectTrips)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        const token = getAccessToken();
-        const ws = webSocket(`ws://localhost:8003/taxi/?token=${token}`);
+        const ws = webSocket(`ws://localhost:8003/taxi/?token=${getToken()}`);
         const subscription = ws.subscribe((message: any) => {
             dispatch(addOneTrip({id: `${message.data.id}`,trip: `${message.data}`}))
             updateToast(message.data);
@@ -22,7 +21,7 @@ function DriverDashboard() {
         return () => {
             subscription.unsubscribe();
         }
-    }, []);
+    }, [dispatch]);
 
     const getCurrentTrips = () => {
         return trips.filter((trip: any) => {

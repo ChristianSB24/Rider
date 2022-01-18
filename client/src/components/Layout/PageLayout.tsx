@@ -1,13 +1,21 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import { useDispatch } from 'react-redux';
 import { Routes, Route, Link } from 'react-router-dom';
 import _ from 'lodash';
 
+import { fetchTrips } from '../../features/tripsSlice';
 import { RequireAuth } from '../../auth/Authorization'
 import { DriverLayout } from '../Driver/DriverLayout';
 import { RiderLayout } from '../Rider/RiderLayout';
 import { LandingPage } from '../LandingPage/LandingPage';
 
 const PageLayout = ({ auth }: any) => {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(fetchTrips())
+    }, [dispatch])
+    
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
