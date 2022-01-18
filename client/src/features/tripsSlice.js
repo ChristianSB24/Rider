@@ -1,6 +1,5 @@
 import {
   createSlice,
-  createSelector,
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit'
@@ -14,6 +13,7 @@ const initialState = tripsAdapter.getInitialState({
 
 // Thunk functions
 export const fetchTrips = createAsyncThunk('trips/fetchTrips', async () => {
+  console.log('here', client)
   const url = `${process.env.REACT_APP_BASE_URL}/api/trip/`;
   const response = await client.get(url)
   console.log(response)
@@ -31,6 +31,7 @@ const tripsSlice = createSlice({
         .map((trip) => trip.id)
       tripsAdapter.removeMany(state, completedIds)
     },
+    addOneTrip: tripsAdapter.addOne
   },
   extraReducers: (builder) => {
     builder
@@ -47,8 +48,12 @@ const tripsSlice = createSlice({
 export const {
   completedTripsCleared,
   tripDeleted,
+  addOneTrip,
 } = tripsSlice.actions
 
 export default tripsSlice.reducer
 
-export const selectAllTrips = state => state
+export const {
+  selectAll: selectTrips,
+  selectById: selectTripById,
+} = tripsAdapter.getSelectors((state) => state.trips)

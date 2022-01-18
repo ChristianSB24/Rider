@@ -2,34 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { webSocket } from 'rxjs/webSocket';
 import { toast } from 'react-toastify';
+import { useSelector, useDispatch } from 'react-redux'
 
 import TripCard from '../common/TripCard';
-import { getTrips } from '../../services/TripService';
 import { getAccessToken } from '../../services/AuthService'
+import { selectTrips, addOneTrip } from '../../features/tripsSlice'
 
 function RiderDashboard(props: any) {
-    const [trips, setTrips] = useState<any>([]);
-
-    useEffect(() => {
-        const loadTrips = async () => {
-            const { response, isError }: any = await getTrips();
-            if (isError) {
-                setTrips([]);
-            } else {
-                setTrips(response.data);
-            }
-        }
-        loadTrips();
-    }, []);
+    const trips = useSelector(selectTrips)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const token = getAccessToken();
         const ws = webSocket(`ws://localhost:8003/taxi/?token=${token}`);
         const subscription = ws.subscribe((message: any) => {
-          setTrips((prevTrips: any) => [
-            ...prevTrips.filter((trip: any) => trip.id !== message.data.id),
-            message.data
-          ]);
+          dispatch(addOneTrip({id: `${message.id}`, trip: `${message.data}`}))
           updateToast(message.data);
         });
         return () => {

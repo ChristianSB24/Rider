@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
+
+import { fetchTrips } from '../../features/tripsSlice';
 import { DashboardButton } from './DashboardButton';
 
 export const LandingPage = ({ userInfo }: any) => {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(fetchTrips())
+    }, [])
+
+
     return (
         <>
             <h1>Taxi</h1>
