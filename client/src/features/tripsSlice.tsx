@@ -3,7 +3,7 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit'
-import client from '../http-common'
+import { client } from '../http-common'
 
 const tripsAdapter = createEntityAdapter()
 
@@ -15,7 +15,6 @@ const initialState = tripsAdapter.getInitialState({
 export const fetchTrips = createAsyncThunk('trips/fetchTrips', async () => {
   const url = `${process.env.REACT_APP_BASE_URL}/api/trip/`;
   const response = await client.get(url)
-  console.log(response)
   return response.data
 })
 

@@ -2,8 +2,9 @@ import React, { useState, createContext } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import _ from 'lodash'
+import { axiosClientBuilder } from '../http-common';
 
-const AccountContext = createContext({ userInfo: { id: 0, first_name: '', last_name: '', group: '', username: '' }, logIn: (username: string, password: string) => { }, logOut: () => { } })
+const AccountContext = createContext({ userInfo: { id: 0, first_name: '', last_name: '', group: '', username: '' },  logIn: (username: string, password: string) => { }, logOut: () => { } })
 
 export const AccountProvider = ({ children }: any) => {
   const [userInfo, setUserInfo]: any = useState(() => {
@@ -40,6 +41,7 @@ export const AccountProvider = ({ children }: any) => {
       const [, payload,] = response.data.access.split('.');
       const decoded = window.atob(payload);
       setUserInfo(JSON.parse(decoded))
+      axiosClientBuilder()
     }
     catch (error: any) {
       if (error?.response?.data?.detail) {

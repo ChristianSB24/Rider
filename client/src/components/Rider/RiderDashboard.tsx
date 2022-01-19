@@ -8,7 +8,7 @@ import TripCard from '../common/TripCard';
 import { selectTrips, addOneTrip } from '../../features/tripsSlice'
 import getToken from '../../utils/getToken';
 
-function RiderDashboard(props: any) {
+function RiderDashboard() {
     const trips = useSelector(selectTrips)
     const dispatch = useDispatch()
 

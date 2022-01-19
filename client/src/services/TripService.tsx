@@ -46,7 +46,6 @@ export const getTrip = async (id: string | undefined): Promise<{response: AxiosR
   const headers = { Authorization: `Bearer ${getToken()}` };
   try {
     const response = await axios.get<object>(url, { headers });
-    console.log(response.data)
     return { response, isError: false };
   } catch (response: any) {
     return { response, isError: true };
