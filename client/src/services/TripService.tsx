@@ -2,20 +2,16 @@ import axios, {AxiosResponse} from 'axios';
 import { share } from 'rxjs/operators'; 
 import { webSocket } from 'rxjs/webSocket';
 
+import client from '../http-common';
 import getToken from '../utils/getToken'
 
 let _socket: any;
 export let messages: any; 
 
 interface Trip {
-  // id: string, 
   driver: number | undefined, 
   rider: number, 
-  // created: string, 
-  // updated: string, 
   status: string, 
-  // pick_up_address: string, 
-  // drop_off_address: string
 }
 
 interface newTrip {
@@ -43,9 +39,8 @@ export const createTrip = (trip: newTrip) => {
 
 export const getTrip = async (id: string | undefined): Promise<{response: AxiosResponse<object>, isError: boolean}> => {
   const url = `${process.env.REACT_APP_BASE_URL}/api/trip/${id}/`;
-  const headers = { Authorization: `Bearer ${getToken()}` };
   try {
-    const response = await axios.get<object>(url, { headers });
+    const response = await client.get<object>(url);
     return { response, isError: false };
   } catch (response: any) {
     return { response, isError: true };
@@ -54,9 +49,8 @@ export const getTrip = async (id: string | undefined): Promise<{response: AxiosR
 
 export const getTrips = async (): Promise<{response: AxiosResponse<object[]>, isError: boolean}> => {
   const url = `${process.env.REACT_APP_BASE_URL}/api/trip/`;
-  const headers = { Authorization: `Bearer ${getToken()}` };
   try {
-    const response = await axios.get<object[]>(url, { headers });
+    const response = await axios.get<object[]>(url);
     console.log(response.data)
     return { response, isError: false };
   } catch (response: any) {

@@ -1,12 +1,17 @@
 import axios from "axios";
 
-export const axiosClientBuilder = () => {
-  let token = JSON.parse(window.localStorage.getItem('taxi.auth') || 'null').access
-  const client = axios.create({
-    baseURL: `${process.env.REACT_APP_BASE_URL}`,
-    headers: { Authorization: `Bearer ${token}` }
-  })
-  return { client }
-}
+const client = axios.create();
 
-export const { client } = axiosClientBuilder()
+client.interceptors.request.use(
+  (config) => {
+    const token = JSON.parse(window.localStorage.getItem('taxi.auth') || 'null')
+    config.baseURL = `${process.env.REACT_APP_BASE_URL}`
+    config.headers.Authorization = token ? `Bearer ${token.access}` : ''
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+export default client

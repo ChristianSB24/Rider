@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 function TripMedia ({ trip, group, otherGroup }: any) {
   const user = trip[otherGroup];
   const photoUrl = user && user.photo ? new URL(user.photo, process.env.REACT_APP_BASE_URL).href : new URL('https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?cs=srgb&dl=pexels-mike-170811.jpg&fm=jpg').href;
-  const href = group ? `/${group}/${trip.id}` : undefined;
+  const href = `/${group}/${trip.id}`
 
   return (
     <li className="media">

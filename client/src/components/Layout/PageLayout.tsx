@@ -15,7 +15,6 @@ const PageLayout = ({ auth }: any) => {
     useEffect(() => {
         dispatch(fetchTrips())
     }, [dispatch])
-    
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
