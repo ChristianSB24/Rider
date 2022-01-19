@@ -11,11 +11,12 @@ function RiderDetail({ match }: any) {
 
     useEffect(() => {
         const loadTrip = async (id: any) => {
-            const { response, isError }: any = await getTrip(id);
-            if (isError) {
-                setTrip(null);
-            } else {
-                setTrip(response.data);
+            try {
+                const response: any = await getTrip(id);
+                setTrip(response.data)
+            } catch (error: any) {
+                setTrip(null)
+                console.error(error)
             }
         }
         loadTrip(id);
@@ -37,11 +38,11 @@ function RiderDetail({ match }: any) {
         <div className="row">
             <div className="col-lg-12">
                 <nav aria-label="breadcrumb">
-                <ol className="breadcrumb">
-                    <li className="breadcrumb-item"><Link to="/rider">Dashboard</Link></li>
-                    <li className="breadcrumb-item active" aria-current="page">Trip</li>
-                </ol>
-            </nav>
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item"><Link to="/rider">Dashboard</Link></li>
+                        <li className="breadcrumb-item active" aria-current="page">Trip</li>
+                    </ol>
+                </nav>
                 <div className='card mb-3' data-cy='trip-card'>
                     <div className="card-header">Trip</div>
                     <div className="card-body">{tripMedia}</div>

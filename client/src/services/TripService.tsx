@@ -37,24 +37,13 @@ export const createTrip = (trip: newTrip) => {
   _socket.next(message);
 };
 
-export const getTrip = async (id: string | undefined): Promise<{response: AxiosResponse<object>, isError: boolean}> => {
+export const getTrip = async (id: string | undefined): Promise<AxiosResponse> => {
   const url = `${process.env.REACT_APP_BASE_URL}/api/trip/${id}/`;
   try {
     const response = await client.get<object>(url);
-    return { response, isError: false };
-  } catch (response: any) {
-    return { response, isError: true };
-  }
-};
-
-export const getTrips = async (): Promise<{response: AxiosResponse<object[]>, isError: boolean}> => {
-  const url = `${process.env.REACT_APP_BASE_URL}/api/trip/`;
-  try {
-    const response = await axios.get<object[]>(url);
-    console.log(response.data)
-    return { response, isError: false };
-  } catch (response: any) {
-    return { response, isError: true };
+    return response
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 
