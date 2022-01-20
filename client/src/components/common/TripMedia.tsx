@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { deleteTrip } from '../../services/TripService'
 
 function TripMedia ({ trip, group, otherGroup }: any) {
   console.log(group)
@@ -21,12 +22,12 @@ function TripMedia ({ trip, group, otherGroup }: any) {
         <h5 className='mt-0 mb-1'>{user && user.first_name} {user && user.last_name}</h5>
         {trip.pick_up_address} to {trip.drop_off_address}<br />
         {trip.status}
-        {
-          href &&
+        {href &&
           <Link to={href}>
             <button className="btn-lg btn-primary w-100 fs-5">Detail</button>
           </Link>
         }
+        <button className="btn-lg btn-primary" onClick={() => deleteTrip(trip.id, trip)}>Delete</button>
       </div>
     </li>
   );

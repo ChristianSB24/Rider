@@ -17,6 +17,7 @@ export const AccountProvider = ({ children }: any) => {
       return {}
     }
   })
+  console.log(userInfo)
 
   const navigate = useNavigate()
 

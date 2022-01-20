@@ -44,14 +44,13 @@ class LogInSerializer(TokenObtainPairSerializer):
         for key, value in user_data.items():
             if key != 'id':
                 token[key] = value
-        print(token)
         return token
 
 class TripSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trip
         fields = '__all__'
-        read_only_fields = ('id', 'created', 'updated',)
+        read_only_fields = ('created', 'updated')
 
 class NestedTripSerializer(serializers.ModelSerializer):
     driver = UserSerializer()
@@ -60,4 +59,12 @@ class NestedTripSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trip
         fields = '__all__'
+        depth = 1
+    
+class DeleteTripSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Trip
+        fields = '__all__'
+        exlude=['rider', 'driver']
         depth = 1
