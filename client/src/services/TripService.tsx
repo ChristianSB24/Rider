@@ -51,7 +51,6 @@ export const deleteTrip = async (id: string | undefined, tripData: any): Promise
   console.log(tripData)
   const url = `${process.env.REACT_APP_BASE_URL}/api/trip/${id}/delete/`;
   try {
-    // const response = await client.delete<object>(url, {data: {...tripData, rider: tripData.rider.id, driver: tripData.driver.id}});
     const response = await client.delete<object>(url, {data: tripData});
 
     return response
