@@ -1,4 +1,3 @@
-import { toInteger } from 'lodash';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -7,8 +6,6 @@ import { removeOneTrip } from '../../features/tripsSlice';
 import { deleteTrip } from '../../services/TripService'
 
 function TripMedia ({ trip, group, otherGroup }: any) {
-  console.log(group)
-  console.log(trip)
   const user = trip[otherGroup];
   const photoUrl = user && user.photo ? new URL(user.photo, process.env.REACT_APP_BASE_URL).href : new URL('https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?cs=srgb&dl=pexels-mike-170811.jpg&fm=jpg').href;
   const href = group ? `/${group}/${trip.id}` : undefined;
@@ -37,7 +34,7 @@ function TripMedia ({ trip, group, otherGroup }: any) {
             <button className="btn-lg btn-primary w-100 fs-5">Detail</button>
           </Link>
         }
-        {trip.status === "COMPLETED" && <button className="btn-lg btn-primary" onClick={() => handleTripDelete(trip.id, trip)}>Delete</button>}
+        {trip.status === 'COMPLETED' && <button className="btn-lg btn-primary" onClick={() => handleTripDelete(trip.id, trip)}>Delete</button>}
       </div>
     </li>
   );

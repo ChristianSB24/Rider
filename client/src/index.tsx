@@ -9,8 +9,8 @@ import { AccountProvider } from './auth/Authorization'
 import store from './app/store'
 import reportWebVitals from './reportWebVitals';
 
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+// axios.defaults.xsrfCookieName = 'csrftoken';
+// axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 ReactDOM.render(
   <HashRouter>
