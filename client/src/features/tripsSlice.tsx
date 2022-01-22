@@ -15,9 +15,7 @@ const initialState = tripsAdapter.getInitialState({
 // Thunk functions
 export const fetchTrips = createAsyncThunk('trips/fetchTrips', async () => {
   const url = `${process.env.REACT_APP_BASE_URL}/api/trip/`;
-  console.log(url)
   const response = await client.get(url)
-  console.log(response)
   return response.data
 })
 

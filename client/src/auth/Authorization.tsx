@@ -2,7 +2,6 @@ import React, { useState, createContext } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import _ from 'lodash'
-import client from '../http-common';
 
 const AccountContext = createContext({ userInfo: { id: 0, first_name: '', last_name: '', group: '', username: '' },  logIn: (username: string, password: string) => { }, logOut: () => { } })
 
@@ -17,7 +16,6 @@ export const AccountProvider = ({ children }: any) => {
       return {}
     }
   })
-  console.log(userInfo)
 
   const navigate = useNavigate()
 

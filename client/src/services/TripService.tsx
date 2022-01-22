@@ -1,4 +1,4 @@
-import axios, {AxiosResponse} from 'axios';
+import {AxiosResponse} from 'axios';
 import { share } from 'rxjs/operators'; 
 import { webSocket } from 'rxjs/webSocket';
 
