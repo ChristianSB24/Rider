@@ -13,4 +13,5 @@ const store = configureStore({
     getDefaultMiddleware().concat(tripApi.middleware),
 })
 
+// export default setupListeners(store.dispatch)
 export default store

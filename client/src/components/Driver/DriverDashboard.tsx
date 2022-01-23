@@ -6,25 +6,28 @@ import { toast } from 'react-toastify';
 
 import TripCard from '../common/TripCard';
 import { useGetTripsQuery } from '../../features/tripSliceRTKQuery';
-import { selectTrips, addOneTrip } from '../../features/tripsSlice'
+import { addOneTrip } from '../../features/tripsSlice'
 import getToken from '../../utils/getToken';
 
 function DriverDashboard() {
-    const { data, error, isLoading } = useGetTripsQuery()
-    console.log('data', data)
-    const trips = useSelector(selectTrips)
+    const { data: trips, error, isLoading } = useGetTripsQuery()
     const dispatch = useDispatch()
+    console.log('trips', trips)
 
-    useEffect(() => {
-        const ws = webSocket(`ws://localhost:8003/taxi/?token=${getToken()}`);
-        const subscription = ws.subscribe((message: any) => {
-            dispatch(addOneTrip({id: `${message.data.id}`,trip: `${message.data}`}))
-            updateToast(message.data);
-        });
-        return () => {
-            subscription.unsubscribe();
-        }
-    }, [dispatch]);
+    // useEffect(() => {
+    //     const ws = webSocket(`ws://localhost:8003/taxi/?token=${getToken()}`);
+    //     const subscription = ws.subscribe((message: any) => {
+    //         dispatch(addOneTrip({id: `${message.data.id}`,trip: `${message.data}`}))
+    //         updateToast(message.data);
+    //     });
+    //     return () => {
+    //         subscription.unsubscribe();
+    //     }
+    // }, [dispatch]);
+
+    if (isLoading) {
+        return <h1>Loading</h1>
+    }
 
     const getCurrentTrips = () => {
         return trips.filter((trip: any) => {
