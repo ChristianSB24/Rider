@@ -5,10 +5,13 @@ import { webSocket } from 'rxjs/webSocket';
 import { toast } from 'react-toastify';
 
 import TripCard from '../common/TripCard';
+import { useGetTripsQuery } from '../../features/tripSliceRTKQuery';
 import { selectTrips, addOneTrip } from '../../features/tripsSlice'
 import getToken from '../../utils/getToken';
 
 function DriverDashboard() {
+    const { data, error, isLoading } = useGetTripsQuery()
+    console.log('data', data)
     const trips = useSelector(selectTrips)
     const dispatch = useDispatch()
 

@@ -26,7 +26,7 @@ def loginUser(request):
     #The serializer will verify if the user exists or not and if the data sent was valid.
     if serializer.is_valid(raise_exception=True):
         token = serializer.validated_data
-        #If the data is valid the serializer will create a token that we then send back to the client side that stores the users data.
+        #If the data is valid the serializer will create a token that we then send back to the client that stores the users data.
         return(Response(token, status=200))
 
 
@@ -61,6 +61,8 @@ def getTrip(request, trip_id):
     if not qs.exists():
         return Response(status=404)
     #If it does then serialize the trip data and send back to the user.
+    #We need to specify qs.first() because qs is an array. We will get an error if we don't pick out an element from that array.
+    #So we pick out one element and send that to be serialized and then we send the data to the user.
     serializer = NestedTripSerializer(qs.first())
     return Response(serializer.data, status=200)
 
