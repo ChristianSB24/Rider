@@ -12,13 +12,6 @@ const initialState = tripsAdapter.getInitialState({
   status: 'idle',
 })
 
-// Thunk functions
-export const fetchTrips = createAsyncThunk('trips/fetchTrips', async () => {
-  const url = `${process.env.REACT_APP_BASE_URL}/api/trip/`;
-  const response = await client.get(url)
-  return response.data
-})
-
 const tripsSlice = createSlice({
   name: 'trips',
   initialState,
@@ -29,24 +22,12 @@ const tripsSlice = createSlice({
         .map((trip: any) => trip.id)
       tripsAdapter.removeMany(state, completedIds)
     },
-    addOneTrip: tripsAdapter.addOne,
     removeOneTrip: tripsAdapter.removeOne,
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchTrips.pending, (state, action) => {
-        state.status = 'loading'
-      })
-      .addCase(fetchTrips.fulfilled, (state, action) => {
-        tripsAdapter.setAll(state, action.payload)
-        state.status = 'idle'
-      })
   },
 })
 
 export const {
   completedTripsCleared,
-  addOneTrip,
   removeOneTrip,
 } = tripsSlice.actions
 
