@@ -36,22 +36,21 @@ export const tripApi = createApi({
                 const ws: any = webSocket(`ws://localhost:8003/taxi/?token=${getToken()}`)
                 try {
                     await cacheDataLoaded;
-
                     ws.subscribe((message: any) => {
+                        console.log('message', message)
                         updateCachedData((draft: any) => {
                             updateToast(message.data)
                             draft.push(message.data)
                         })
                     });
-
-                } catch {
-                    // if cacheEntryRemoved resolved before cacheDataLoaded,
-                    // cacheDataLoaded throws
-                }
+                } catch {}
                 await cacheEntryRemoved
                 ws.unsubscribe();
             }
         }),
+        // deleteTrips: builder.mutation<Message[], Channel>({
+        //     query: (id) => ({ url: `/api/trip/${id}/delete`, method: 'DELETE'}),
+        // }),
     }),
 });
 

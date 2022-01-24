@@ -15,7 +15,7 @@ function TripMedia ({ trip, group, otherGroup }: any) {
     deleteTrip({
       ...trip, 
         rider: trip.rider.id,
-        driver: trip.driver.id
+        driver: trip.driver?.id
       })
     dispatch(removeOneTrip(tripId))
   }
@@ -38,7 +38,7 @@ function TripMedia ({ trip, group, otherGroup }: any) {
             <button className="btn-lg btn-primary w-100 fs-5">Detail</button>
           </Link>
         }
-        {trip.status === 'COMPLETED' && group === 'rider' && <button className="btn-lg btn-primary" onClick={() => handleTripDelete(trip.id, trip)}>Delete</button>}
+        {group === 'rider' && <button className="btn-lg btn-primary" onClick={() => handleTripDelete(trip.id, trip)}>Delete</button>}
       </div>
     </li>
   );
