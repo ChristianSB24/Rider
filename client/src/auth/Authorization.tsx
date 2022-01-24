@@ -1,10 +1,7 @@
 import React, { useState, createContext } from 'react'
-import { useDispatch } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import _ from 'lodash'
-
-import { fetchTrips } from '../features/tripsSlice';
 
 const AccountContext = createContext({ userInfo: { id: 0, first_name: '', last_name: '', group: '', username: '' },  logIn: (username: string, password: string) => { }, logOut: () => { } })
 
@@ -21,8 +18,6 @@ export const AccountProvider = ({ children }: any) => {
   })
 
   const navigate = useNavigate()
-
-  const dispatch = useDispatch()
 
   // No longer necessary but clever enough to keep
   // If there is a page refresh the AccountProvider will render first since it is at the top of the dom. 
@@ -45,7 +40,6 @@ export const AccountProvider = ({ children }: any) => {
       const [, payload,] = response.data.access.split('.');
       const decoded = window.atob(payload);
       setUserInfo(JSON.parse(decoded))
-      dispatch(fetchTrips())
     }
     catch (error: any) {
       if (error?.response?.data?.detail) {

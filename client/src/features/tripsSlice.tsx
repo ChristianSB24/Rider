@@ -1,6 +1,5 @@
 import {
   createSlice,
-  createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit'
 import client from '../http-common'

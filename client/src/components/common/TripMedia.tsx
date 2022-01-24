@@ -11,8 +11,12 @@ function TripMedia ({ trip, group, otherGroup }: any) {
   const href = group ? `/${group}/${trip.id}` : undefined;
   const dispatch = useDispatch()
 
-  const handleTripDelete = (tripId:string, trip:object) => {
-    deleteTrip(tripId, trip)
+  const handleTripDelete = (tripId:string, trip:any) => {
+    deleteTrip({
+      ...trip, 
+        rider: trip.rider.id,
+        driver: trip.driver.id
+      })
     dispatch(removeOneTrip(tripId))
   }
 

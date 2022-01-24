@@ -37,6 +37,24 @@ export const createTrip = (trip: newTrip) => {
   _socket.next(message);
 };
 
+export const deleteTrip = (trip: newTrip) => {
+  connect();
+  const message = {
+    type: 'delete.trip',
+    data: trip
+  };
+  _socket.next(message);
+};
+
+export const updateTrip = (trip: Trip) => {
+  connect();
+  const message = {
+    type: 'update.trip',
+    data: trip
+  };
+  _socket.next(message);
+};
+
 export const getTrip = async (id: string | undefined): Promise<AxiosResponse> => {
   const url = `${process.env.REACT_APP_BASE_URL}/api/trip/${id}/`;
   try {
@@ -47,7 +65,7 @@ export const getTrip = async (id: string | undefined): Promise<AxiosResponse> =>
   }
 };
 
-export const deleteTrip = async (id: string | undefined, tripData: any): Promise<AxiosResponse> => {
+export const deleteTripHttp = async (id: string | undefined, tripData: any): Promise<AxiosResponse> => {
   const url = `${process.env.REACT_APP_BASE_URL}/api/trip/${id}/delete/`;
   try {
     const response = await client.delete<object>(url, {data: tripData});
@@ -57,12 +75,3 @@ export const deleteTrip = async (id: string | undefined, tripData: any): Promise
     throw new Error(error);
   }
 };
-
-export const updateTrip = (trip: Trip) => {
-    connect();
-    const message = {
-      type: 'update.trip',
-      data: trip
-    };
-    _socket.next(message);
-  };

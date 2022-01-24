@@ -2,7 +2,7 @@ from django.db.models import Q
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
+from django.contrib.auth import get_user_model
 
 
 from .models import Trip, User
@@ -12,12 +12,12 @@ from .serializers import LogInSerializer, NestedTripSerializer, DeleteTripSerial
 
 @api_view(['POST'])
 def signUpUser(request):
-    #Serialize the request data that was sent.
     serializer = UserSerializer(data=request.data)
-    #The serializer will verify if the user already exists and if the 2 passwords sent matched in addition to if the data was valid.
     if serializer.is_valid(raise_exception=True):
-        #If the data is valid then create the account and send back a 200 status.
+        serializer.save()
         return(Response(status=200))
+    return(Response(status=400))
+
 
 @api_view(['POST'])
 def loginUser(request):
@@ -28,6 +28,7 @@ def loginUser(request):
         token = serializer.validated_data
         #If the data is valid the serializer will create a token that we then send back to the client that stores the users data.
         return(Response(token, status=200))
+    return(Response(status=400))
 
 
 @permission_classes([IsAuthenticated])
@@ -50,6 +51,7 @@ def getTrips(request):
         #Serialize the data and send back.
         serializer = NestedTripSerializer(qs, many=True)
         return(Response(serializer.data, status=200))
+    return(Response(status=400))
 
 
 @permission_classes([IsAuthenticated])
@@ -87,4 +89,5 @@ def deleteTrip(request, trip_id, *args, **kwargs):
             return(Response({"Cannot remove uncompleted trips"}, status=403))
         #Delete the trip and send a 200 response
         qs.delete()
-        return Response({"Trip removed"}, status=200)
+        return(Response({"Trip removed"}, status=200))
+    return(Response(status=400))

@@ -1,0 +1,1 @@
+If using WSL 2 then download the docker desktop applicaiton. 

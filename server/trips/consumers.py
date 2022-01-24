@@ -15,6 +15,24 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
         return serializer.create(serializer.validated_data)
 
     @database_sync_to_async
+    def _update_trip(self, data):
+        instance = Trip.objects.get(id=data.get('id'))
+        serializer = TripSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        return serializer.update(instance, serializer.validated_data)
+
+    @database_sync_to_async
+    def _delete_trip(self, data):
+        print('data', data)
+        instance = Trip.objects.get(id=data.get('id'))
+        print('instance', instance)
+        serializer = TripSerializer(data=data)
+        print('serializer', serializer)
+        serializer.is_valid(raise_exception=True)
+        print('Does get here')
+        return instance.delete()
+
+    @database_sync_to_async
     def _get_trip_data(self, trip):
         return NestedTripSerializer(trip).data
 
@@ -47,7 +65,6 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
                     channel=self.channel_name
                 )
 
-            # new
             for trip_id in await self._get_trip_ids(user):
                 await self.channel_layer.group_add(
                     group=trip_id,
@@ -65,6 +82,16 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
           'type': 'echo.message',
           'data': trip_data,
         })
+
+    # async def delete_trip(self, message):
+    #     data = message.get('data')
+    #     trip = await self._delete_trip(data) # May need to change this section to send back a 'is deleted' response.
+    #     trip_data = await self._get_trip_data(trip)
+
+    #     await self.send_json({
+    #         'type': 'delete.trip',
+    #         'data': trip_data
+    #     })
 
     async def disconnect(self, code):
         user = self.scope['user']
@@ -98,6 +125,8 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
             await self.echo_message(content)
         elif message_type == 'update.trip':
             await self.update_trip(content)
+        elif message_type == 'delete.trip':
+            await self.delete_trip(content)
 
     async def update_trip(self, message):
         data = message.get('data')
@@ -125,13 +154,6 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
             'data': trip_data
         })
 
-    @database_sync_to_async
-    def _update_trip(self, data):
-        instance = Trip.objects.get(id=data.get('id'))
-        serializer = TripSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        return serializer.update(instance, serializer.validated_data)
-
     async def create_trip(self, message):
         data = message.get('data')
         trip = await self._create_trip(data)
@@ -144,7 +166,7 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
         })
 
         # Add rider to trip group.
-        await self.channel_layer.group_add( # new
+        await self.channel_layer.group_add(
             group=f'{trip.id}',
             channel=self.channel_name
         )
