@@ -5,11 +5,16 @@ import * as yup from 'yup'
 
 import Map from '../common/Map'
 import { AccountContext } from '../../auth/Authorization';
-import { createTrip } from '../../services/TripService';
+// import { createTrip } from '../../services/TripService';
 import ValidatedTextField from '../FormComponents/ValidatedTextField';
+import { useCreateTripMutation } from '../../features/tripSliceRTKQuery'
 
 function RiderRequest() {
     const [isSubmitted, setSubmitted] = useState(false);
+    const [createTrip, {isLoading}] = useCreateTripMutation();
+    if(isLoading) {
+        console.log('loading')
+    }
     const auth = useContext(AccountContext)
 
     const [lat, setLat] = useState(38.897957);
@@ -34,11 +39,16 @@ function RiderRequest() {
     const onSubmit = (values: { pickUpAddress: string, dropOffAddress: string }) => {
         const rider = auth.userInfo;
         if (typeof rider !== 'undefined') {
+            // createTrip({
+            //     pick_up_address: values.pickUpAddress,
+            //     drop_off_address: values.dropOffAddress,
+            //     rider: rider.id
+            // });
             createTrip({
                 pick_up_address: values.pickUpAddress,
                 drop_off_address: values.dropOffAddress,
                 rider: rider.id
-            });
+            })
             setSubmitted(true);
         }
     };
