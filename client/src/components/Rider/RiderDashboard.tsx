@@ -5,11 +5,13 @@ import TripCard from '../common/TripCard';
 import { useGetTripsQuery } from '../../features/tripSliceRTKQuery';
 
 function RiderDashboard() {
-  const { data: trips, error, isLoading } = useGetTripsQuery()
+  const { data: trips, isLoading } = useGetTripsQuery()
 
   if (isLoading) {
     return <h1>Loading</h1>
   }
+
+  console.log('trips', trips)
 
   const getRequestedTrips = () => {
     return trips.filter((trip: any) => {

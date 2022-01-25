@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 import TripCard from '../common/TripCard';
 import { useGetTripsQuery } from '../../features/tripSliceRTKQuery';
 
 function DriverDashboard() {
-    const { data: trips, error, isLoading } = useGetTripsQuery()
+    const { data: trips, isLoading } = useGetTripsQuery()
     console.log('trips', trips)
 
     if (isLoading) {

@@ -34,6 +34,7 @@ export const createTrip = (trip: newTrip) => {
     type: 'create.trip',
     data: trip
   };
+  console.log('message', message)
   _socket.next(message);
 };
 
@@ -43,6 +44,7 @@ export const deleteTrip = (trip: newTrip) => {
     type: 'delete.trip',
     data: trip
   };
+  console.log('message delete', message)
   _socket.next(message);
 };
 

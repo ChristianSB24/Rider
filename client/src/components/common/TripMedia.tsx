@@ -12,6 +12,7 @@ function TripMedia ({ trip, group, otherGroup }: any) {
   const dispatch = useDispatch()
 
   const handleTripDelete = (tripId:string, trip:any) => {
+    console.log('driver.id', trip.driver?.id)
     deleteTrip({
       ...trip, 
         rider: trip.rider.id,

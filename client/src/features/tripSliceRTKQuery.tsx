@@ -15,6 +15,7 @@ export interface Message {
 }
 
 const updateToast = (trip: any) => {
+    //Need to specify when it is being deleted to send custom notification
     if (trip.driver === null) {
         return toast.info(`Rider ${trip.rider.username} has requested a trip.`)
     }
@@ -37,15 +38,26 @@ export const tripApi = createApi({
                 try {
                     await cacheDataLoaded;
                     ws.subscribe((message: any) => {
-                        console.log('message', message)
                         updateCachedData((draft: any) => {
                             updateToast(message.data)
-                            draft.push(message.data)
+                            if (message.action === 'update') {
+                                const trip = draft.find((trip: any) => trip.id === message.data.id)
+                                trip.status = message.data.status
+                            }
+                            else if (message.action === 'delete') {
+                                const trip = draft.find((trip: any) => trip.id === message.data.id) 
+                                const indexOfElement = draft.indexOf(trip)
+                                draft.splice(indexOfElement, 1);
+                            }
+                            else {
+                                draft.push(message.data)
+                            }
                         })
                     });
                 } catch {}
                 await cacheEntryRemoved
                 ws.unsubscribe();
+                console.log('after cacheEntryRemoved')
             }
         }),
         // deleteTrips: builder.mutation<Message[], Channel>({

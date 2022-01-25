@@ -17,8 +17,16 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
     @database_sync_to_async
     def _delete_trip(self, data):
         instance = Trip.objects.get(id=data.get('id'))
-        print('instance', instance)
-        return instance.delete()
+        id = instance
+        instance.delete()
+        return id
+
+    @database_sync_to_async
+    def _update_trip(self, data):
+        instance = Trip.objects.get(id=data.get('id'))
+        serializer = TripSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        return serializer.update(instance, serializer.validated_data)
 
     @database_sync_to_async
     def _get_trip_data(self, trip):
@@ -53,7 +61,6 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
                     channel=self.channel_name
                 )
 
-            # new
             for trip_id in await self._get_trip_ids(user):
                 await self.channel_layer.group_add(
                     group=trip_id,
@@ -61,16 +68,6 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
                 )
 
             await self.accept()
-
-    async def create_trip(self, message):
-        data = message.get('data')
-        trip = await self._create_trip(data)
-        trip_data = await self._get_trip_data(trip)
-
-        await self.send_json({
-          'type': 'echo.message',
-          'data': trip_data,
-        })
 
     async def disconnect(self, code):
         user = self.scope['user']
@@ -84,7 +81,6 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
                     channel=self.channel_name
                 )
 
-            # new
             for trip_id in await self._get_trip_ids(user):
                 await self.channel_layer.group_discard(
                     group=trip_id,
@@ -98,6 +94,7 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
         await self.send_json(message)
 
     async def receive_json(self, content, **kwargs):
+        print('content', content)
         message_type = content.get('type')
         if message_type == 'create.trip':
             await self.create_trip(content)
@@ -120,6 +117,7 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
             message={
                 'type': 'echo.message',
                 'data': trip_data,
+                'action': 'update'
             }
         )
 
@@ -134,21 +132,29 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
             'data': trip_data
         })
 
-    @database_sync_to_async
-    def _update_trip(self, data):
-        instance = Trip.objects.get(id=data.get('id'))
-        serializer = TripSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        return serializer.update(instance, serializer.validated_data)
-
     async def delete_trip(self, message):
         data = message.get('data')
         trip = await self._delete_trip(data) # May need to change this section to send back a 'is deleted' response.
-        # trip_data = await self._get_trip_data(trip)
+        trip_data = await self._get_trip_data(trip)
+
+        await self.channel_layer.group_send(
+            group='drivers', 
+            message={
+            'type': 'echo.message',
+            'data': trip_data,
+            'action': 'delete'
+            },
+        )
+
+        await self.channel_layer.group_add( 
+            group=f'{trip.id}',
+            channel=self.channel_name
+        )
+
 
         await self.send_json({
-            'type': 'delete.trip',
-            # 'data': trip_data
+            'type': 'echo.message',
+            'data': trip_data
         })
 
     async def create_trip(self, message):
@@ -157,10 +163,13 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
         trip_data = await self._get_trip_data(trip)
 
         # Send rider requests to all drivers.
-        await self.channel_layer.group_send(group='drivers', message={
+        await self.channel_layer.group_send(
+            group='drivers', 
+            message={
             'type': 'echo.message',
             'data': trip_data
-        })
+            }
+        )
 
         # Add rider to trip group.
         await self.channel_layer.group_add( # new
