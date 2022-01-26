@@ -167,7 +167,8 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
             group='drivers', 
             message={
             'type': 'echo.message',
-            'data': trip_data
+            'data': trip_data,
+            'group': 'driver'
             }
         )
 
@@ -180,6 +181,7 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
         await self.send_json({
             'type': 'echo.message',
             'data': trip_data,
+            'group': 'rider',
         })
 
    

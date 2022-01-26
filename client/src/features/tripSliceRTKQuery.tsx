@@ -33,8 +33,9 @@ let messages: any;
 
 const connect = () => {
     if (!_socket || _socket.closed) {
-        return webSocket(`ws://localhost:8003/taxi/?token=${getToken()}`);
+        _socket = webSocket(`ws://localhost:8003/taxi/?token=${getToken()}`);
 }};
+connect()
 
 export const tripApi = createApi({
     baseQuery: axiosBaseQuery(),
@@ -42,7 +43,6 @@ export const tripApi = createApi({
         createTrip: builder.mutation<any, any>({
             queryFn: async (tripContent: string) => {
                 return new Promise(resolve => {
-                    _socket = connect()
                     messages = _socket.pipe(share())
                     messages.subscribe((message: any) => {return (
                         console.log('message', message), 
@@ -58,10 +58,10 @@ export const tripApi = createApi({
             async onQueryStarted(args, { dispatch, queryFulfilled }) {
                 try {
                   const { data: newTrip } = await queryFulfilled
+                  console.log('newTrip', newTrip)
                   const patchResult = dispatch(
                     tripApi.util.updateQueryData('getTrips', undefined, (draft: any) => {
-                        console.log('newTrip', newTrip)
-                      draft.push(newTrip)
+                        draft.push(newTrip)
                     })
                   )
                   console.log('patchResult', patchResult)
@@ -71,12 +71,12 @@ export const tripApi = createApi({
         getTrips: builder.query<any, any>({
             query: () => ({ url: '/api/trip/', method: 'GET' }),
             async onCacheEntryAdded(arg, { updateCachedData, cacheDataLoaded, cacheEntryRemoved }) {
-                const ws: any = webSocket(`ws://localhost:8003/taxi/?token=${getToken()}`)
                 try {
                     await cacheDataLoaded;
-                    ws.subscribe((message: any) => {
+                    _socket.subscribe((message: any) => {
                         updateCachedData((draft: any) => {
                             updateToast(message.data)
+                            console.log('message in getTrips', message)
                             if (message.action === 'update') {
                                 const trip = draft.find((trip: any) => trip.id === message.data.id)
                                 trip.status = message.data.status
@@ -87,13 +87,15 @@ export const tripApi = createApi({
                                 draft.splice(indexOfElement, 1);
                             }
                             else {
-                                draft.push(message.data)
+                                if(message.group === 'driver') {
+                                    draft.push(message.data)
+                                }
                             }
                         })
                     });
                 } catch { }
                 await cacheEntryRemoved
-                ws.unsubscribe();
+                _socket.unsubscribe();
                 console.log('after cacheEntryRemoved')
             }
         }),
@@ -105,31 +107,15 @@ export const tripApi = createApi({
 
 export const { useGetTripsQuery, useCreateTripMutation }: any = tripApi
 
-// queryFn: async (tripContent: string) => {
-//     return new Promise(resolve => {
-//         _socket = connect()
-//         messages = _socket.pipe(share())
-//         messages.subscribe((message: any) => {return (
-//             console.log('message', message), 
-//             resolve({data: message.data})
-//         )})
-//         const message = {
-//             type: 'create.trip',
-//             data: tripContent
-//         };
-//         _socket.next(message)
-//     })
-// },
-// }),
-
-// queryFn: async (tripContent: string) => {
-//     _socket = connect()
-//     messages = _socket.pipe(share())
-//     messages.subscribe((message: any) => console.log('message', message))
-//     const message = {
-//         type: 'create.trip',
-//         data: tripContent
-//     };
-//     _socket.next(message)
-// },
-// }),
+// if(draft.length !== 0) {
+//     for( const x in draft) {
+//         console.log('x', x)
+//         if(draft[x].id !== message.data.id) {
+//             console.log('draft[x]', draft[x])
+//             draft.push(message.data)
+//             break
+//         }
+//     }
+// } else {
+//     draft.push(message.data)
+// }

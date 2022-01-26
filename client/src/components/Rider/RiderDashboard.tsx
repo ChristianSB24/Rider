@@ -22,9 +22,10 @@ function RiderDashboard() {
   const getCurrentTrips = () => {
     return trips.filter((trip: any) => {
       return (
-        trip.driver !== null &&
-        trip.status !== 'REQUESTED' &&
-        trip.status !== 'COMPLETED'
+        // trip.driver !== null &&
+        // trip.status !== 'REQUESTED' &&
+        // trip.status !== 'COMPLETED'
+        trip.status === 'STARTED' || trip.status === 'IN_PROGRESS'
       );
     });
   };
