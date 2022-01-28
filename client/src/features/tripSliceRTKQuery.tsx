@@ -28,8 +28,14 @@ const updateToast = (trip: any) => {
 
 let ReceiveSub: any
 
-console.log('right before socket connection')
+console.log('getToken()', getToken())
 let _socket = webSocket(`ws://localhost:8003/taxi/?token=${getToken()}`);
+
+const connect = () => {
+    if (!_socket || _socket.closed) {
+        console.log('inside connect function')
+        _socket = webSocket(`ws://localhost:8003/taxi/?token=${getToken()}`);
+}};
 
 let Initiate = _socket.multiplex(
   () => ({subscribe: 'Initiate'}),
@@ -37,11 +43,11 @@ let Initiate = _socket.multiplex(
   (message:any) => message.type === 'initiate.message'
 );
 
-let Receive = _socket.multiplex(
-  () => ({subscribe: 'Reciever'}),
-  () => ({unsubscribe: 'Reciever'}),
-  (message:any) => message.type === 'receive.message'
-);
+// let Receive = _socket.multiplex(
+//   () => ({subscribe: 'Reciever'}),
+//   () => ({unsubscribe: 'Reciever'}),
+//   (message:any) => message.type === 'receive.message'
+// );
 
 export const tripApi = createApi({
     baseQuery: axiosBaseQuery(),
@@ -110,6 +116,14 @@ export const tripApi = createApi({
         getTrips: builder.query<any, any>({
             query: () => ({ url: '/api/trip/', method: 'GET' }),
             async onCacheEntryAdded(arg, { updateCachedData, cacheDataLoaded, cacheEntryRemoved }) {
+                console.log('onCacheEntryAdded')
+                // connect()
+                let _socket:any = webSocket(`ws://localhost:8003/taxi/?token=${getToken()}`);
+                let Receive = _socket.multiplex(
+                    () => ({subscribe: 'Reciever'}),
+                    () => ({unsubscribe: 'Reciever'}),
+                    (message:any) => message.type === 'receive.message'
+                  );
                 try {
                     await cacheDataLoaded;
                     ReceiveSub = Receive.subscribe((message: any) => {
@@ -142,4 +156,4 @@ export const tripApi = createApi({
     }),
 });
 
-export const { useGetTripsQuery, useCreateTripMutation, useDeleteTripMutation, useUpdateTripMutation }: any = tripApi
+export const { useGetTripsQuery, useCreateTripMutation, useDeleteTripMutation, useUpdateTripMutation, util}: any = tripApi
