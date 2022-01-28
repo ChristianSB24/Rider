@@ -5,8 +5,9 @@ import TripCard from '../common/TripCard';
 import { useGetTripsQuery } from '../../features/tripSliceRTKQuery';
 
 function DriverDashboard() {
-    const { data: trips, isLoading } = useGetTripsQuery()
+    const { data: trips, isLoading, error } = useGetTripsQuery()
     console.log('trips', trips)
+    console.log('error', error)
 
     if (isLoading) {
         return <h1>Loading</h1>

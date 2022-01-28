@@ -50,6 +50,7 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         user = self.scope['user']
+        print('user', user)
         if user.is_anonymous:
             await self.close()
         else:
@@ -97,8 +98,6 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
         message_type = content.get('type')
         if message_type == 'create.trip':
             await self.create_trip(content)
-        elif message_type == 'receive.message':
-            await self.receive_message(content)
         elif message_type == 'update.trip':
             await self.update_trip(content)
         elif message_type == 'delete.trip':
@@ -110,18 +109,17 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
     async def update_trip(self, message):
         data = message.get('data')
         trip = await self._update_trip(data)
-        trip_id = f'{trip.id}'
         trip_data = await self._get_trip_data(trip)
 
         # Add driver to the trip group.
-        # await self.channel_layer.group_add(
-        #     group=trip_id,
-        #     channel=self.channel_name
-        # )
+        await self.channel_layer.group_add(
+            group=f'{trip.id}',
+            channel=self.channel_name
+        )
 
         # Send update to rider.
         await self.channel_layer.group_send(
-            group=trip_id,
+            group=f'{trip.id}',
             message={
                 'type': 'receive.message',
                 'data': trip_data,
@@ -132,7 +130,7 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
         await self.send_json({
             'type': 'initiate.message',
             'data': trip_data,
-            'action':'update',
+            'action':'update', 
         })
 
     async def delete_trip(self, message):
@@ -181,7 +179,6 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
         )
 
         await self.send_json({
-            # 'type': 'echo.message',
             'type': 'initiate.message',
             'data': trip_data,
             'action':'create',

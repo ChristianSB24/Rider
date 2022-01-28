@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { removeOneTrip } from '../../features/tripsSlice';
-import { deleteTrip } from '../../services/TripService'
 import { useDeleteTripMutation } from '../../features/tripSliceRTKQuery'
 
 
@@ -12,15 +11,10 @@ function TripMedia ({ trip, group, otherGroup }: any) {
   const photoUrl = user && user.photo ? new URL(user.photo, process.env.REACT_APP_BASE_URL).href : new URL('https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?cs=srgb&dl=pexels-mike-170811.jpg&fm=jpg').href;
   const href = group ? `/${group}/${trip.id}` : undefined;
   const dispatch = useDispatch()
-  const [deleteTrip, {isLoading}] = useDeleteTripMutation();
+  const [deleteTrip] = useDeleteTripMutation();
 
   const handleTripDelete = (tripId:string, trip:any) => {
     console.log('driver.id', trip.driver?.id)
-    // deleteTrip({
-    //   ...trip, 
-    //     rider: trip.rider.id,
-    //     driver: trip.driver?.id
-    //   })
     deleteTrip({
       ...trip,
       rider: trip.rider.id,

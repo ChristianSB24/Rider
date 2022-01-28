@@ -5,7 +5,6 @@ import * as yup from 'yup'
 
 import Map from '../common/Map'
 import { AccountContext } from '../../auth/Authorization';
-// import { createTrip } from '../../services/TripService';
 import ValidatedTextField from '../FormComponents/ValidatedTextField';
 import { useCreateTripMutation } from '../../features/tripSliceRTKQuery'
 
