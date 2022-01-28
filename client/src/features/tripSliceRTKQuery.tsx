@@ -30,12 +30,30 @@ const updateToast = (trip: any) => {
 
 let _socket: any;
 let messages: any;
+let observableInitiater: any
+let observableReciever: any
 
-const connect = () => {
-    if (!_socket || _socket.closed) {
-        _socket = webSocket(`ws://localhost:8003/taxi/?token=${getToken()}`);
-}};
-connect()
+// const connect:any = ():any => {
+//     if (!_socket || _socket.closed) {
+        // _socket = webSocket(`ws://localhost:8003/taxi/?token=${getToken()}`);
+// }};
+// connect()
+
+_socket = webSocket(`ws://localhost:8003/taxi/?token=${getToken()}`);
+
+
+
+observableInitiater = _socket.multiplex(
+  () => ({subscribe: 'Initiater'}),
+  () => ({unsubscribe: 'Initiater'}),
+  (message:any) => message.type === 'initiate.message'
+);
+
+observableReciever = _socket.multiplex(
+  () => ({subscribe: 'Reciever'}),
+  () => ({unsubscribe: 'Reciever'}),
+  (message:any) => message.type === 'receive.message'
+);
 
 export const tripApi = createApi({
     baseQuery: axiosBaseQuery(),
@@ -43,9 +61,7 @@ export const tripApi = createApi({
         createTrip: builder.mutation<any, any>({
             queryFn: async (tripContent: string) => {
                 return new Promise(resolve => {
-                    messages = _socket.pipe(share())
-                    messages.subscribe((message: any) => {return (
-                        console.log('message', message), 
+                        observableInitiater.subscribe((message: any) => {return (
                         resolve({data: message.data})
                     )})
                     const message = {
@@ -58,26 +74,78 @@ export const tripApi = createApi({
             async onQueryStarted(args, { dispatch, queryFulfilled }) {
                 try {
                   const { data: newTrip } = await queryFulfilled
-                  console.log('newTrip', newTrip)
+                  console.log('in create')
                   const patchResult = dispatch(
                     tripApi.util.updateQueryData('getTrips', undefined, (draft: any) => {
                         draft.push(newTrip)
                     })
                   )
-                  console.log('patchResult', patchResult)
                 } catch {}
               },
+        }),
+        deleteTrip: builder.mutation<any, any>({
+            queryFn: async (tripContent: string) => {
+                return new Promise(resolve => {
+                    observableInitiater.subscribe((message: any) => {return (
+                        resolve({data: message.data})
+                    )})
+                    const message = {type: 'delete.trip', data: tripContent}
+                    _socket.next(message)
+                })
+            },
+            async onQueryStarted({...tripContent}, { dispatch, queryFulfilled }) {
+                  const patchResult = dispatch(
+                    tripApi.util.updateQueryData('getTrips', undefined, (draft: any) => {
+                        console.log('in delete')
+                        const trip = draft.find((trip: any) => trip.id === tripContent.id)
+                        const indexOfElement = draft.indexOf(trip)
+                        draft.splice(indexOfElement, 1);
+                    })
+                  )
+                  console.log('patchResult', patchResult)
+                  try {
+                    await queryFulfilled
+                  } catch {
+                    patchResult.undo()
+                  }
+              }
+        }),
+        updateTrip: builder.mutation<any, any>({
+            queryFn: async (tripContent: string) => {
+                return new Promise(resolve => {
+                    observableInitiater.subscribe((message: any) => {return (
+                        resolve({data: message.data})
+                    )})
+                    const message = {type: 'update.trip', data: tripContent}
+                    _socket.next(message)
+                })
+            },
+            async onQueryStarted({...tripContent}, { dispatch, queryFulfilled }) {
+                  const patchResult = dispatch(
+                    tripApi.util.updateQueryData('getTrips', undefined, (draft: any) => {
+                        console.log('in here updating')
+                        const trip = draft.find((trip: any) => trip.id === tripContent.id)
+                        trip.status = tripContent.status
+                    })
+                  )
+                  try {
+                    await queryFulfilled
+                  } catch {
+                    patchResult.undo()
+                  }
+              }
         }),
         getTrips: builder.query<any, any>({
             query: () => ({ url: '/api/trip/', method: 'GET' }),
             async onCacheEntryAdded(arg, { updateCachedData, cacheDataLoaded, cacheEntryRemoved }) {
                 try {
                     await cacheDataLoaded;
-                    _socket.subscribe((message: any) => {
+                    observableReciever.subscribe((message: any) => {
                         updateCachedData((draft: any) => {
-                            updateToast(message.data)
                             console.log('message in getTrips', message)
+                            updateToast(message.data)
                             if (message.action === 'update') {
+                                console.log('message.group', message.group)
                                 const trip = draft.find((trip: any) => trip.id === message.data.id)
                                 trip.status = message.data.status
                             }
@@ -86,10 +154,8 @@ export const tripApi = createApi({
                                 const indexOfElement = draft.indexOf(trip)
                                 draft.splice(indexOfElement, 1);
                             }
-                            else {
-                                if(message.group === 'driver') {
-                                    draft.push(message.data)
-                                }
+                            else if (message.action === 'create') {
+                                draft.push(message.data)
                             }
                         })
                     });
@@ -99,23 +165,7 @@ export const tripApi = createApi({
                 console.log('after cacheEntryRemoved')
             }
         }),
-    // deleteTrips: builder.mutation<Message[], Channel>({
-    //     query: (id) => ({ url: `/api/trip/${id}/delete`, method: 'DELETE'}),
-    // }),
-}),
+    }),
 });
 
-export const { useGetTripsQuery, useCreateTripMutation }: any = tripApi
-
-// if(draft.length !== 0) {
-//     for( const x in draft) {
-//         console.log('x', x)
-//         if(draft[x].id !== message.data.id) {
-//             console.log('draft[x]', draft[x])
-//             draft.push(message.data)
-//             break
-//         }
-//     }
-// } else {
-//     draft.push(message.data)
-// }
+export const { useGetTripsQuery, useCreateTripMutation, useDeleteTripMutation, useUpdateTripMutation }: any = tripApi

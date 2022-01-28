@@ -39,11 +39,6 @@ function RiderRequest() {
     const onSubmit = (values: { pickUpAddress: string, dropOffAddress: string }) => {
         const rider = auth.userInfo;
         if (typeof rider !== 'undefined') {
-            // createTrip({
-            //     pick_up_address: values.pickUpAddress,
-            //     drop_off_address: values.dropOffAddress,
-            //     rider: rider.id
-            // });
             createTrip({
                 pick_up_address: values.pickUpAddress,
                 drop_off_address: values.dropOffAddress,

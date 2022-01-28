@@ -14,7 +14,7 @@ function DriverDashboard() {
 
     const getCurrentTrips = () => {
         return trips.filter((trip: any) => {
-            return trip.driver !== null && trip.status !== 'COMPLETED';
+            return trip.status === 'STARTED' || trip.status === 'IN_PROGRESS';
         });
     }
 

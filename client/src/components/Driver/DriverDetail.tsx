@@ -4,11 +4,14 @@ import { Link, useParams } from 'react-router-dom'
 import TripMedia from '../common/TripMedia';
 import { getTrip, updateTrip } from '../../services/TripService';
 import { AccountContext } from '../../auth/Authorization';
+import { useUpdateTripMutation } from '../../features/tripSliceRTKQuery'
+
 
 function DriverDetail() {
     const [trip, setTrip] = useState<any>({});
     const { id } = useParams()
     const auth = useContext(AccountContext)
+    const [updateTrip, {isLoading}] = useUpdateTripMutation();
 
     const updateTripStatus = (status: string) => {
         const driver = auth.userInfo;
