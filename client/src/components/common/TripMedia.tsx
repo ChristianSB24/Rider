@@ -10,12 +10,13 @@ function TripMedia ({ trip, group, otherGroup }: any) {
   const href = group ? `/${group}/${trip.id}` : undefined;
   const [deleteTrip] = useDeleteTripMutation();
 
-  const handleTripDelete = (tripId:string, trip:any) => {
+  const handleTripDelete = (trip:any) => {
     console.log('driver.id', trip.driver?.id)
+    const driverId = trip?.driver?.id ? trip?.driver?.id : null
     deleteTrip({
       ...trip,
+      driver: driverId,
       rider: trip.rider.id,
-      driver: trip.driver?.id
     })
   }
 
@@ -37,7 +38,7 @@ function TripMedia ({ trip, group, otherGroup }: any) {
             <button className="btn-lg btn-primary w-100 fs-5">Detail</button>
           </Link>
         }
-        {group === 'rider' && <button className="btn-lg btn-primary" onClick={() => handleTripDelete(trip.id, trip)}>Delete</button>}
+        {group === 'rider' && <button className="btn-lg btn-primary" onClick={() => handleTripDelete(trip)}>Delete</button>}
       </div>
     </li>
   );

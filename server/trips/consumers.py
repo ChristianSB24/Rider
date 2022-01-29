@@ -13,12 +13,10 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
         serializer.is_valid(raise_exception=True)
         return serializer.create(serializer.validated_data)
 
+    
     @database_sync_to_async
     def _delete_trip(self, data):
-        instance = Trip.objects.get(id=data.get('id'))
-        id = instance
-        instance.delete()
-        return id
+        Trip.objects.get(id=data.get('id')).delete()
 
     @database_sync_to_async
     def _update_trip(self, data):
@@ -134,28 +132,22 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
         })
 
     async def delete_trip(self, message):
-        print('message', message)
         data = message.get('data')
-        trip = await self._delete_trip(data)
-        trip_data = await self._get_trip_data(trip)
-
-        await self.channel_layer.group_add( 
-            group=f'{trip.id}',
-            channel=self.channel_name
-        )
+        trip_id = data.get('id')
+        await self._delete_trip(data)
 
         await self.channel_layer.group_send(
             group='drivers', 
             message={
             'type': 'receive.message',
-            'data': trip_data,
+            'data':trip_id,
             'action': 'delete',
             },
         )
 
         await self.send_json({
             'type': 'initiate.message',
-            'data': trip_data,
+            'data':trip_id
         })
 
     async def create_trip(self, message):

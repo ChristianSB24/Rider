@@ -86,6 +86,7 @@ export const tripApi = createApi({
             async onQueryStarted({...tripContent}, { dispatch, queryFulfilled }) {
                   const patchResult = dispatch(
                     tripApi.util.updateQueryData('getTrips', undefined, (draft: any) => {
+                        console.log('tripcontent', tripContent)
                         const trip = draft.find((trip: any) => trip.id === tripContent.id)
                         const indexOfElement = draft.indexOf(trip)
                         draft.splice(indexOfElement, 1);
@@ -139,8 +140,9 @@ export const tripApi = createApi({
                                 riderToast(message)
                             }
                             else if (message.action === 'delete') {
-                                const trip = draft.find((trip: any) => trip.id === message.data.id)
+                                const trip = draft.find((trip: any) => trip.id === message.data)
                                 const indexOfElement = draft.indexOf(trip)
+                                console.log('message.data.id', message.data)
                                 draft.splice(indexOfElement, 1);
                                 driverToast(message)
                             }
