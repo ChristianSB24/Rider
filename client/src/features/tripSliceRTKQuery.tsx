@@ -108,20 +108,6 @@ export const tripApi = createApi({
                     _socket.next(message)
                 })
             },
-            async onQueryStarted({...tripContent}, { dispatch, queryFulfilled }) {
-                  const patchResult = dispatch(
-                    tripApi.util.updateQueryData('getTrips', undefined, (draft: any) => {
-                        console.log('tripContent', tripContent)
-                        const trip = draft.find((trip: any) => trip.id === tripContent.id)
-                        trip.status = tripContent.status
-                    })
-                  )
-                  try {
-                    await queryFulfilled
-                  } catch {
-                    patchResult.undo()
-                  }
-              }
         }),
         getTrips: builder.query<any, any>({
             query: () => ({ url: '/api/trip/', method: 'GET' }),

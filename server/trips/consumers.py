@@ -125,16 +125,17 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
             }
         )
 
-        await self.send_json({
-            'type': 'initiate.message',
-            'data': trip_data,
-            'action':'update', 
-        })
+        # await self.send_json({
+        #     'type': 'initiate.message',
+        #     'data': trip_data,
+        #     'action':'update', 
+        # })
 
     async def delete_trip(self, message):
         data = message.get('data')
         trip_id = data.get('id')
         await self._delete_trip(data)
+        print('trip_id', trip_id)
 
         await self.channel_layer.group_send(
             group='drivers', 
