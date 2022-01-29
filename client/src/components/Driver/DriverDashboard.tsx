@@ -1,16 +1,29 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 import TripCard from '../common/TripCard';
 import { useGetTripsQuery } from '../../features/tripSliceRTKQuery';
+import ExpirationLogin from '../common/ExpirationLogin';
 
 function DriverDashboard() {
     const { data: trips, isLoading, error } = useGetTripsQuery()
     console.log('trips', trips)
     console.log('error', error)
+    console.log('isLoading', isLoading)
 
     if (isLoading) {
         return <h1>Loading</h1>
+    }
+
+    if (error) {
+        if (error.status === 401) {
+            return (
+                <ExpirationLogin />
+            )
+        }
+        else {
+            <Navigate to='/' />
+        }
     }
 
     const getCurrentTrips = () => {
@@ -40,15 +53,15 @@ function DriverDashboard() {
                 </ol>
             </nav>
             <TripCard
-                title='Current Trip'
-                trips={getCurrentTrips()}
+                title='Requested Trips'
+                trips={getRequestedTrips()}
                 group='driver'
                 otherGroup='rider'
             />
 
             <TripCard
-                title='Requested Trips'
-                trips={getRequestedTrips()}
+                title='Current Trip'
+                trips={getCurrentTrips()}
                 group='driver'
                 otherGroup='rider'
             />

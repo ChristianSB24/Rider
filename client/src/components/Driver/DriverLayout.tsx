@@ -6,13 +6,13 @@ import DriverDashboard from './DriverDashboard'
 
 export const DriverLayout = () => {
     return (
-        <div className='row'>
-            <div className='col-lg-12'>
+        // <div className='row'>
+        //     <div className='col-lg-12'>
                 <Routes>
                     <Route index element={<DriverDashboard />} />
                     <Route path=':id' element={<DriverDetail />} />
                 </Routes>
-            </div>
-        </div>
+        //     </div>
+        // </div>
     )
 }

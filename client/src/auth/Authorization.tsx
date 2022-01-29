@@ -4,7 +4,7 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import _ from 'lodash'
 
-import { util } from '../features/tripSliceRTKQuery';
+import { util, connect, _socket } from '../features/tripSliceRTKQuery';
 
 const AccountContext = createContext({ userInfo: { id: 0, first_name: '', last_name: '', group: '', username: '' },  logIn: (username: string, password: string) => { }, logOut: () => { } })
 
@@ -45,6 +45,8 @@ export const AccountProvider = ({ children }: any) => {
       const [, payload,] = response.data.access.split('.');
       const decoded = window.atob(payload);
       setUserInfo(JSON.parse(decoded))
+      connect()
+      navigate('/')
     }
     catch (error: any) {
       if (error?.response?.data?.detail) {
@@ -60,6 +62,7 @@ export const AccountProvider = ({ children }: any) => {
     window.localStorage.removeItem('taxi.auth');
     setUserInfo({})
     dispatch(util.resetApiState())
+    _socket?.unsubscribe()
     navigate('/')
   };
 

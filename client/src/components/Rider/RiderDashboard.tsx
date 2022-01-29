@@ -1,15 +1,27 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 import TripCard from '../common/TripCard';
 import { useGetTripsQuery } from '../../features/tripSliceRTKQuery';
+import ExpirationLogin from '../common/ExpirationLogin';
 
 function RiderDashboard() {
-  const { data: trips, isLoading } = useGetTripsQuery()
+  const { data: trips, isLoading, error } = useGetTripsQuery()
 
   if (isLoading) {
     return <h1>Loading</h1>
   }
+
+  if (error) {
+    if (error.status === 401) {
+        return (
+            <ExpirationLogin />
+        )
+    }
+    else {
+        <Navigate to='/' />
+    }
+}
 
   console.log('trips', trips)
 
