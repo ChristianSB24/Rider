@@ -50,7 +50,6 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         user = self.scope['user']
-        print('self', self)
         print('user', user)
         if user.is_anonymous:
             await self.close()
@@ -113,10 +112,10 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
         trip_data = await self._get_trip_data(trip)
 
         # Add driver to the trip group.
-        # await self.channel_layer.group_add(
-        #     group=f'{trip.id}',
-        #     channel=self.channel_name
-        # )
+        await self.channel_layer.group_add(
+            group=f'{trip.id}',
+            channel=self.channel_name
+        )
 
         # Send update to rider.
         await self.channel_layer.group_send(
@@ -135,6 +134,7 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
         })
 
     async def delete_trip(self, message):
+        print('message', message)
         data = message.get('data')
         trip = await self._delete_trip(data)
         trip_data = await self._get_trip_data(trip)

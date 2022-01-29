@@ -100,6 +100,7 @@ export const tripApi = createApi({
         }),
         updateTrip: builder.mutation<any, any>({
             queryFn: async (tripContent: string) => {
+                connect()
                 return new Promise(resolve => {
                     Initiate.subscribe((message: any) => resolve({data: message.data}))
                     const message = {type: 'update.trip', data: tripContent}
@@ -132,7 +133,9 @@ export const tripApi = createApi({
                         updateCachedData((draft: any) => {
                             if (message.action === 'update') {
                                 const trip = draft.find((trip: any) => trip.id === message.data.id)
+                                console.log('trip', message.data)
                                 trip.status = message.data.status
+                                trip.driver = message.data.driver
                                 riderToast(message)
                             }
                             else if (message.action === 'delete') {

@@ -15,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const auth = useContext(AccountContext)
+  console.log('auth', auth)
   return (
     <div className="login-content">
         <Routes>

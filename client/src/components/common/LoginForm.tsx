@@ -1,4 +1,5 @@
 import React, {useContext} from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Formik, Form } from 'formik';
 import { Link } from 'react-router-dom'
 import * as yup from 'yup'
@@ -11,8 +12,9 @@ interface formValues {
     password: string,
 }
 
-const LoginForm = ({setErrorMessage = false}: any) => {
+const LoginForm = ({setErrorMessage = false, redirectPath = false}: any) => {
     const auth = useContext(AccountContext)
+    const navigate = useNavigate()
 
     let validation = yup.object({
         username: yup.string()
@@ -24,12 +26,16 @@ const LoginForm = ({setErrorMessage = false}: any) => {
     const onSubmit = async ({ username, password }: formValues) => {
         try {
             await auth.logIn(username, password)
+            if(redirectPath) {
+                console.log('in here', redirectPath)
+                navigate(redirectPath)
+            }
         }
         catch (error: any) {
             if(setErrorMessage) {
                 setErrorMessage(error.message)
             } else {
-                console.error('error', error)
+                console.error('error', error.message)
             }
         }
     }

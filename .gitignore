@@ -5,6 +5,7 @@ env
 static-root/
 staticfiles/
 node_modules/
+TODO.MD
 
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.

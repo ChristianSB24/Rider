@@ -11,7 +11,8 @@ function RiderDashboard() {
   if (isLoading) {
     return <h1>Loading</h1>
   }
-
+//Instead of showing the modal here, display the modal in the main return. Import the functions so that there isn't a compiling error. 
+//Then the navigate will work.
   if (error) {
     if (error.status === 401) {
         return (
