@@ -1,20 +1,21 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom'
 
 import TripMedia from '../common/TripMedia';
 import { getTrip } from '../../services/TripService';
-import { AccountContext } from '../../auth/Authorization';
 import { useUpdateTripMutation } from '../../features/tripSliceRTKQuery'
+import { selectUser } from '../../features/userSlice'
 
 
 function DriverDetail() {
     const [trip, setTrip] = useState<any>({});
     const { id } = useParams()
-    const auth = useContext(AccountContext)
+    const userInfo = useSelector(selectUser)
     const [updateTrip] = useUpdateTripMutation();
 
     const updateTripStatus = (status: string) => {
-        const driver = auth.userInfo;
+        const driver = userInfo;
         const updatedTrip = { ...trip, driver, status };
         updateTrip({
             ...updatedTrip,

@@ -1,21 +1,21 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Formik, Form } from 'formik';
 import { Navigate, Link } from 'react-router-dom';
 import * as yup from 'yup'
 
 import Map from '../common/Map'
-import { AccountContext } from '../../auth/Authorization';
 import ValidatedTextField from '../FormComponents/ValidatedTextField';
 import { useCreateTripMutation } from '../../features/tripSliceRTKQuery'
+import { selectUser } from '../../features/userSlice'
 
 function RiderRequest() {
     const [isSubmitted, setSubmitted] = useState(false);
     const [createTrip, {isLoading}] = useCreateTripMutation();
+    const userInfo = useSelector(selectUser)
     if(isLoading) {
         console.log('loading')
     }
-    const auth = useContext(AccountContext)
-
     const [lat, setLat] = useState(38.897957);
     const [lng, setLng] = useState(-77.036560);
 
@@ -36,7 +36,7 @@ function RiderRequest() {
     })
 
     const onSubmit = (values: { pickUpAddress: string, dropOffAddress: string }) => {
-        const rider = auth.userInfo;
+        const rider = userInfo;
         if (typeof rider !== 'undefined') {
             createTrip({
                 pick_up_address: values.pickUpAddress,

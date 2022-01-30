@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import _ from 'lodash'
 import { useSelector } from 'react-redux'
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-import { AccountContext } from './auth/Authorization'
 import { selectUser } from './features/userSlice';
 import SignUp from './components/common/SignUp';
 import LogIn from './components/common/LogIn';
@@ -16,16 +15,13 @@ import './scss/app.scss'
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const auth = useContext(AccountContext)
-  const authTest = useSelector(selectUser)
-  console.log('authTest', authTest)
-  console.log('auth', auth)
+  const userInfo = useSelector(selectUser)
   return (
     <div className="login-content">
         <Routes>
-          <Route path='/*' element={<PageLayout auth={auth}/>}/>
-          <Route path='/sign-up' element={!_.isEmpty(auth.userInfo) ? <Navigate replace to={'/'} /> : <SignUp />} />
-          <Route path='/log-in' element={!_.isEmpty(auth.userInfo) ? <Navigate replace to={'/'} /> : <LogIn />} />
+          <Route path='/*' element={<PageLayout />}/>
+          <Route path='/sign-up' element={!_.isEmpty(userInfo) ? <Navigate replace to={'/'} /> : <SignUp />} />
+          <Route path='/log-in' element={!_.isEmpty(userInfo) ? <Navigate replace to={'/'} /> : <LogIn />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
         <ToastContainer />

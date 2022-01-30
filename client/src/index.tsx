@@ -4,16 +4,13 @@ import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom';
 
 import App from './App'
-import { AccountProvider } from './auth/Authorization'
 import store from './app/store'
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <BrowserRouter>
     <Provider store={store}>
-      <AccountProvider>
-        <App />
-      </AccountProvider >
+      <App />
     </Provider>
   </BrowserRouter>,
   document.getElementById("root")

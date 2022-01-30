@@ -8,8 +8,6 @@ import LoginForm from './LoginForm'
 const ExpirationLogin = () => {
     const test = useParams()
     const location = useLocation()
-    console.log('location', location)
-    console.log('test', test)
 
     return (
         <div className="modal d-flex" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">

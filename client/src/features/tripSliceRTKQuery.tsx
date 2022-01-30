@@ -24,7 +24,7 @@ const riderToast = (trip: any) => {
 }
 
 const driverToast = (trip: any) => {
-    if (trip.data.driver === null) {
+    if (trip.action === 'create' && trip.data.driver === null) {
         return toast.info(`Rider ${trip.data.rider.username} has requested a trip.`)
     }
     else if (trip.action === 'delete' && (trip.data.status === 'STARTED' || trip.data.status === 'IN_PROGRESS')) {
@@ -39,7 +39,6 @@ let Receive: any
 
 const connect = () => {
     if (!_socket || _socket.closed) {
-        console.log('inside connect function')
         _socket = webSocket(`ws://localhost:8003/taxi/?token=${getToken()}`);
         
         Initiate = _socket.multiplex(
@@ -86,7 +85,6 @@ export const tripApi = createApi({
             async onQueryStarted({...tripContent}, { dispatch, queryFulfilled }) {
                   const patchResult = dispatch(
                     tripApi.util.updateQueryData('getTrips', undefined, (draft: any) => {
-                        console.log('tripcontent', tripContent)
                         const trip = draft.find((trip: any) => trip.id === tripContent.id)
                         const indexOfElement = draft.indexOf(trip)
                         draft.splice(indexOfElement, 1);
@@ -116,20 +114,19 @@ export const tripApi = createApi({
                     await cacheDataLoaded;
                     connect()
                     console.log('getState', getState())
+                    console.log('getState().user', getState().user)
                     ReceiveSub = Receive.subscribe((message: any) => {
-                        console.log('message', message)
                         updateCachedData((draft: any) => {
-                            if (message.action === 'update') {
+                            let driverUsername:any = getState()
+                            if (message.action === 'update' && driverUsername?.user?.user?.group !== 'driver') {
                                 const trip = draft.find((trip: any) => trip.id === message.data.id)
-                                console.log('trip', message.data)
                                 trip.status = message.data.status
                                 trip.driver = message.data.driver
                                 riderToast(message)
                             }
-                            else if (message.action === 'delete') {
-                                const trip = draft.find((trip: any) => trip.id === message.data)
+                            else if (message.action === 'delete' && (message?.data?.driver?.username !== driverUsername?.user?.user?.username || message.sender === 'rider')) {
+                                const trip = draft.find((trip: any) => trip.id === message.data.id)
                                 const indexOfElement = draft.indexOf(trip)
-                                console.log('message.data.id', message.data)
                                 draft.splice(indexOfElement, 1);
                                 driverToast(message)
                             }

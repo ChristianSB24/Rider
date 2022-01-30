@@ -40,7 +40,7 @@ def getTrips(request):
         return(Response(status=200))
     #If they do exist then check if they are a driver or a rider.
     if user.group == 'driver':
-        #If they are a driver then return all the trips where they are the driver and the status of the tirp is REQUESTED.
+        #If they are a driver then return all the trips where they are the driver or the status of the trip is REQUESTED.
         qs = Trip.objects.filter(Q(status=Trip.REQUESTED) | Q(driver=user))
         #Serialize the data and send back to the user.
         serializer = NestedTripSerializer(qs, many=True)

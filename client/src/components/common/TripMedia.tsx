@@ -13,11 +13,7 @@ function TripMedia ({ trip, group, otherGroup }: any) {
   const handleTripDelete = (trip:any) => {
     console.log('driver.id', trip.driver?.id)
     const driverId = trip?.driver?.id ? trip?.driver?.id : null
-    deleteTrip({
-      ...trip,
-      driver: driverId,
-      rider: trip.rider.id,
-    })
+    deleteTrip(trip)
   }
 
   return (

@@ -8,8 +8,6 @@ import ExpirationLogin from '../common/ExpirationLogin';
 function DriverDashboard() {
     const { data: trips, isLoading, error } = useGetTripsQuery()
     console.log('trips', trips)
-    console.log('error', error)
-    console.log('isLoading', isLoading)
 
     if (isLoading) {
         return <h1>Loading</h1>

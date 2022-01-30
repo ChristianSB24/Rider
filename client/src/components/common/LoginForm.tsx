@@ -1,11 +1,14 @@
-import React, {useContext} from 'react'
+import React  from 'react'
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 import { Formik, Form } from 'formik';
 import { Link } from 'react-router-dom'
 import * as yup from 'yup'
+import axios from 'axios'
 
 import ValidatedTextField from '../FormComponents/ValidatedTextField';
-import { AccountContext } from '../../auth/Authorization'
+import { selectUser, setUser } from '../../features/userSlice'
+import { connect } from '../../features/tripSliceRTKQuery';
 
 interface formValues {
     username: string,
@@ -13,8 +16,30 @@ interface formValues {
 }
 
 const LoginForm = ({setErrorMessage = false, redirectPath = false}: any) => {
-    const auth = useContext(AccountContext)
+    const userInfo = useSelector(selectUser)
+    const dispatch = useDispatch()
     const navigate = useNavigate()
+
+    const logIn = async (username: string, password: string) => {
+        try {
+          let response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/log_in/`, { username, password })
+          window.localStorage.setItem('taxi.auth', JSON.stringify(response.data))
+          const [, payload,] = response.data.access.split('.');
+          const decoded = window.atob(payload);
+          // setUserInfo(JSON.parse(decoded))
+          dispatch(setUser(JSON.parse(decoded)))
+          connect()
+          navigate('/')
+        }
+        catch (error: any) {
+          if (error?.response?.data?.detail) {
+            console.log('error', error.response)
+            throw new Error(error.response.data.detail)
+          } else {
+            throw new Error('Something went wrong with your request. Please try again.')
+          }
+        }
+      };
 
     let validation = yup.object({
         username: yup.string()
@@ -25,9 +50,8 @@ const LoginForm = ({setErrorMessage = false, redirectPath = false}: any) => {
 
     const onSubmit = async ({ username, password }: formValues) => {
         try {
-            await auth.logIn(username, password)
+            await logIn(username, password)
             if(redirectPath) {
-                console.log('in here', redirectPath)
                 navigate(redirectPath)
             }
         }
