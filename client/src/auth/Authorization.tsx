@@ -5,6 +5,7 @@ import axios from 'axios';
 import _ from 'lodash'
 
 import { util, connect, _socket } from '../features/tripSliceRTKQuery';
+import { setUser } from '../features/userSlice';
 
 const AccountContext = createContext({ userInfo: { id: 0, first_name: '', last_name: '', group: '', username: '' },  logIn: (username: string, password: string) => { }, logOut: () => { } })
 
@@ -45,6 +46,8 @@ export const AccountProvider = ({ children }: any) => {
       const [, payload,] = response.data.access.split('.');
       const decoded = window.atob(payload);
       setUserInfo(JSON.parse(decoded))
+      console.log(JSON.parse(decoded))
+      dispatch(setUser(JSON.parse(decoded)))
       connect()
       navigate('/')
     }

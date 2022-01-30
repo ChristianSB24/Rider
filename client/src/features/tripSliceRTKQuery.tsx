@@ -111,10 +111,11 @@ export const tripApi = createApi({
         }),
         getTrips: builder.query<any, any>({
             query: () => ({ url: '/api/trip/', method: 'GET' }),
-            async onCacheEntryAdded(arg, { updateCachedData, cacheDataLoaded, cacheEntryRemoved }) {
+            async onCacheEntryAdded(arg, { updateCachedData, cacheDataLoaded, cacheEntryRemoved, getState }) {
                 try {
                     await cacheDataLoaded;
                     connect()
+                    console.log('getState', getState())
                     ReceiveSub = Receive.subscribe((message: any) => {
                         console.log('message', message)
                         updateCachedData((draft: any) => {

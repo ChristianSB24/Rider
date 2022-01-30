@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
 import _ from 'lodash'
+import { useSelector } from 'react-redux'
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import { AccountContext } from './auth/Authorization'
+import { selectUser } from './features/userSlice';
 import SignUp from './components/common/SignUp';
 import LogIn from './components/common/LogIn';
 import { NotFound } from './components/common/NotFound';
@@ -15,6 +17,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const auth = useContext(AccountContext)
+  const authTest = useSelector(selectUser)
+  console.log('authTest', authTest)
   console.log('auth', auth)
   return (
     <div className="login-content">
