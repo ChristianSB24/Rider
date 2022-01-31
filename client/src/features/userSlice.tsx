@@ -27,8 +27,8 @@ export default userSlice.reducer
 
 type stateUser = { user: User }
 
-interface state {
+interface UserState {
   user: stateUser
 }
 
-export const selectUser = (state:state) => state.user.user
+export const selectUser = (state:UserState) => state.user.user

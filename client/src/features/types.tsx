@@ -7,25 +7,42 @@ export interface User {
     username: string
 }
 
-export interface Trip {
+export interface TripWithId {
     created: string,
-    driver?: User | number,
+    driver?: number,
     drop_off_address: string,
     id: string,
     pick_up_address: string,
-    rider: User | number,
+    rider: number,
+    status: string,
+    updated: string
+}
+
+export interface Trip {
+    created: string,
+    driver?: User,
+    drop_off_address: string,
+    id: string,
+    pick_up_address: string,
+    rider: User,
     status: string,
     updated: string
 }
 
 export interface CreateTrip {
     drop_off_address: string,
-    pick_up_addresss: string,
+    pick_up_address: string,
     rider: number,
 }
 
 export interface Message {
-    action: string,
+    action?: string,
     data: Trip,
     type: string,
+    sender?: string,
+}
+
+export interface WebSocketMessage {
+    type: string,
+    data:CreateTrip | Trip | TripWithId | Message
 }

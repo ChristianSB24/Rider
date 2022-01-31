@@ -4,6 +4,7 @@ import { Link, Navigate } from 'react-router-dom';
 import TripCard from '../common/TripCard';
 import { useGetTripsQuery } from '../../features/tripSliceRTKQuery';
 import ExpirationLogin from '../common/ExpirationLogin';
+import { getRequestedTrips, getCurrentTrips, getCompletedTrips } from '../../utils/getTripsFromCache'
 
 function DriverDashboard() {
     const { data: trips, isLoading, error } = useGetTripsQuery()
@@ -15,7 +16,8 @@ function DriverDashboard() {
     console.log('trips', trips)
 
     if (error) {
-        if (error.status === 401) {
+        const hasErrStatus = (error as { status: number }).status;
+        if (hasErrStatus === 401) {
             return (
                 <ExpirationLogin />
             )
@@ -23,24 +25,6 @@ function DriverDashboard() {
         else {
             <Navigate to='/' />
         }
-    }
-
-    const getCurrentTrips = () => {
-        return trips.filter((trip: any) => {
-            return trip.status === 'STARTED' || trip.status === 'IN_PROGRESS';
-        });
-    }
-
-    const getRequestedTrips = () => {
-        return trips.filter((trip: any) => {
-            return trip.status === 'REQUESTED';
-        });
-    }
-
-    const getCompletedTrips = () => {
-        return trips.filter((trip: any) => {
-            return trip.status === 'COMPLETED';
-        });
     }
 
     return (
@@ -53,21 +37,21 @@ function DriverDashboard() {
             </nav>
             <TripCard
                 title='Requested Trips'
-                trips={getRequestedTrips()}
+                trips={getRequestedTrips(trips)}
                 group='driver'
                 otherGroup='rider'
             />
 
             <TripCard
                 title='Current Trip'
-                trips={getCurrentTrips()}
+                trips={getCurrentTrips(trips)}
                 group='driver'
                 otherGroup='rider'
             />
 
             <TripCard
                 title='Recent Trips'
-                trips={getCompletedTrips()}
+                trips={getCompletedTrips(trips)}
                 group='driver'
                 otherGroup='rider'
             />

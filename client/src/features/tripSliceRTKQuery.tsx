@@ -1,29 +1,28 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
-import { webSocket } from 'rxjs/webSocket';
+import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 
 import { axiosBaseQuery } from '../http-common';
 import getToken from '../utils/getToken'
 import { StoreState } from '../app/store'
-import { Trip, CreateTrip, Message } from './types'
+import { Trip, TripWithId, CreateTrip, Message, WebSocketMessage } from './types'
 import { RootState } from '@reduxjs/toolkit/dist/query/core/apiState';
+import { Observable, Subscription } from 'rxjs';
 
 type GetStateType = StoreState & RootState<any, any, string>
 
 
-const riderToast = (trip: any) => {
-    console.log('trip rider', trip)
+const riderToast = (trip: Message) => {
     if (trip.data.status === 'STARTED') {
-        return toast.info(`Driver ${trip.data.driver.username} is coming to pick you up.`);
+        return toast.info(`Driver ${trip?.data?.driver?.username} is coming to pick you up.`);
     } else if (trip.data.status === 'IN_PROGRESS') {
-        return toast.info(`Driver ${trip.data.driver.username} is headed to your destination.`);
+        return toast.info(`Driver ${trip?.data?.driver?.username} is headed to your destination.`);
     } else if (trip.data.status === 'COMPLETED' && trip.action !== 'delete') {
-        return toast.info(`Driver ${trip.data.driver.username} has dropped you off.`);
+        return toast.info(`Driver ${trip?.data?.driver?.username} has dropped you off.`);
     }
 }
 
-const driverToast = (trip: any) => {
-    console.log('trip driver', trip)
+const driverToast = (trip: Message) => {
     if (trip.action === 'create' && trip.data.driver === null) {
         return toast.info(`Rider ${trip.data.rider.username} has requested a trip.`)
     }
@@ -32,10 +31,10 @@ const driverToast = (trip: any) => {
     }
 }
 
-let ReceiveSub: any
-let _socket:any
-let Initiate:any
-let Receive: any
+let ReceiveSub: Subscription
+let _socket:WebSocketSubject<WebSocketMessage>
+let Initiate:Observable<Message>
+let Receive: Observable<Message>
 
 const connect = () => {
     if (!_socket || _socket.closed) {
@@ -44,13 +43,13 @@ const connect = () => {
         Initiate = _socket.multiplex(
             () => ({subscribe: 'Initiate'}),
             () => ({unsubscribe: 'Initiate'}),
-            (message:any) => message.type === 'initiate.message'
+            (message) => message.type === 'initiate.message'
         )
 
         Receive = _socket.multiplex(
             () => ({subscribe: 'Reciever'}),
             () => ({unsubscribe: 'Reciever'}),
-            (message:any) => message.type === 'receive.message'
+            (message) => message.type === 'receive.message'
         )
     }
 };
@@ -60,7 +59,7 @@ export const tripApi = createApi({
     endpoints: (builder) => ({
         createTrip: builder.mutation<Trip, CreateTrip>({
             queryFn: async (tripContent) => {
-                return new Promise(resolve => {Initiate.subscribe((message: any) =>
+                return new Promise(resolve => {Initiate.subscribe((message: Message) =>
                     resolve({data: message.data}))
                     const message = {type: 'create.trip', data: tripContent};
                     _socket.next(message)
@@ -78,7 +77,7 @@ export const tripApi = createApi({
         }),
         deleteTrip: builder.mutation<Trip, Trip>({
             queryFn: async (tripContent) => {
-                return new Promise(resolve => {Initiate.subscribe((message: any) => resolve({data: message.data}))
+                return new Promise(resolve => {Initiate.subscribe((message: Message) => resolve({data: message.data}))
                     const message = {type: 'delete.trip', data: tripContent}
                     _socket.next(message)
                 })
@@ -100,11 +99,11 @@ export const tripApi = createApi({
                   }
               }
         }),
-        updateTrip: builder.mutation<Trip, Trip>({
+        updateTrip: builder.mutation<Trip, TripWithId>({
             queryFn: async (tripContent) => {
                 connect()
                 return new Promise(resolve => {
-                    Initiate.subscribe((message: any) => resolve({data: message.data}))
+                    Initiate.subscribe((message: Message) => resolve({data: message.data}))
                     const message = {type: 'update.trip', data: tripContent}
                     _socket.next(message)
                 })
@@ -116,13 +115,14 @@ export const tripApi = createApi({
                 try {
                     await cacheDataLoaded;
                     connect()
-                    ReceiveSub = Receive.subscribe((message: any) => {
+                    ReceiveSub = Receive.subscribe((message: Message) => {
                         updateCachedData((draft) => {
                             //Had to create a new type 'GetStateType' because the default RootState<any, any, string> did not seem to 
                             //have the properties I needed accessible. I combined RootState with the exported store state.
                             //Possibly bad practice or possibly a bug within RTK Query. 
                             let driverUsername = getState() as GetStateType
                             console.log(driverUsername)
+                            console.log('message', message)
                             if (message.action === 'update' && driverUsername.user.user.group !== 'driver') {
                                 const trip = draft.find((trip: Trip) => trip.id === message.data.id)
                                 if(trip) {
@@ -131,7 +131,7 @@ export const tripApi = createApi({
                                     riderToast(message)
                                 }
                             }
-                            else if (message.action === 'delete' && (message.data.driver.username !== driverUsername.user.user.username || message.sender === 'rider')) {
+                            else if (message.action === 'delete' && (message?.data?.driver?.username !== driverUsername.user.user.username || message.sender === 'rider')) {
                                 const trip = draft.find((trip: Trip) => trip.id === message.data.id)
                                 if(trip) {
                                     const indexOfElement = draft.indexOf(trip)
@@ -155,5 +155,5 @@ export const tripApi = createApi({
     }),
 });
 
-export const { useGetTripsQuery, useCreateTripMutation, useDeleteTripMutation, useUpdateTripMutation, util}: any = tripApi
+export const { useGetTripsQuery, useCreateTripMutation, useDeleteTripMutation, useUpdateTripMutation, util} = tripApi
 export { connect, _socket } 
