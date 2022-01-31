@@ -12,6 +12,7 @@ function DriverDashboard() {
     if (isLoading) {
         return <h1>Loading</h1>
     }
+    console.log('trips', trips)
 
     if (error) {
         if (error.status === 401) {

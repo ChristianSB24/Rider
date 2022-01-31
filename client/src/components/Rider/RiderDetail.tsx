@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import TripMedia from '../common/TripMedia';
 import { getTrip } from '../../services/TripService';
 
-function RiderDetail({ match }: any) {
+function RiderDetail() {
     const [trip, setTrip] = useState(null);
     const { id } = useParams()
 

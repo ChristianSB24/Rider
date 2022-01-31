@@ -1,12 +1,11 @@
 import React from 'react'
-import { useParams, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 
 import LoginForm from './LoginForm'
 
 
 const ExpirationLogin = () => {
-    const test = useParams()
     const location = useLocation()
 
     return (

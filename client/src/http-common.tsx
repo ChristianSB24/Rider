@@ -21,7 +21,7 @@ client.interceptors.request.use(
   }
 );
 
-//Every request made through RTK Query uses this function. Each endpoint has a query function. 
+//Every request made through RTK Query uses this function. Unless I use a custom query function. Each endpoint has a query function. 
 //Whatever that query function returns is passed into this function.
 //For the getTrips endpoint, the url and method is passed into here. The data parameter is optional
 const axiosBaseQuery = 
@@ -38,9 +38,7 @@ const axiosBaseQuery =
     } catch (axiosError) {
       //The RTKQ docs set the type for the error. There are special types for a variety of axios attributes.
       let err = axiosError as AxiosError
-      return {
-        error: { status: err.response?.status, data: err.response?.data },
-      }
+      return {error: { status: err.response?.status, data: err.response?.data }}
     }
   }
 

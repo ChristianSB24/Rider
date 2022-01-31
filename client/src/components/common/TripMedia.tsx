@@ -11,8 +11,6 @@ function TripMedia ({ trip, group, otherGroup }: any) {
   const [deleteTrip] = useDeleteTripMutation();
 
   const handleTripDelete = (trip:any) => {
-    console.log('driver.id', trip.driver?.id)
-    const driverId = trip?.driver?.id ? trip?.driver?.id : null
     deleteTrip(trip)
   }
 

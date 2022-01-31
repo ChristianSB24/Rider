@@ -4,16 +4,15 @@ import { webSocket } from 'rxjs/webSocket';
 
 import { axiosBaseQuery } from '../http-common';
 import getToken from '../utils/getToken'
+import { StoreState } from '../app/store'
+import { Trip, CreateTrip, Message } from './types'
+import { RootState } from '@reduxjs/toolkit/dist/query/core/apiState';
 
-export type Channel = 'redux' | 'general'
+type GetStateType = StoreState & RootState<any, any, string>
 
-export interface Message {
-    id: number
-    userName: string
-    text: string
-}
 
 const riderToast = (trip: any) => {
+    console.log('trip rider', trip)
     if (trip.data.status === 'STARTED') {
         return toast.info(`Driver ${trip.data.driver.username} is coming to pick you up.`);
     } else if (trip.data.status === 'IN_PROGRESS') {
@@ -24,6 +23,7 @@ const riderToast = (trip: any) => {
 }
 
 const driverToast = (trip: any) => {
+    console.log('trip driver', trip)
     if (trip.action === 'create' && trip.data.driver === null) {
         return toast.info(`Rider ${trip.data.rider.username} has requested a trip.`)
     }
@@ -58,9 +58,10 @@ const connect = () => {
 export const tripApi = createApi({
     baseQuery: axiosBaseQuery(),
     endpoints: (builder) => ({
-        createTrip: builder.mutation<any, any>({
-            queryFn: async (tripContent: string) => {
-                return new Promise(resolve => {Initiate.subscribe((message: any) => resolve({data: message.data}))
+        createTrip: builder.mutation<Trip, CreateTrip>({
+            queryFn: async (tripContent) => {
+                return new Promise(resolve => {Initiate.subscribe((message: any) =>
+                    resolve({data: message.data}))
                     const message = {type: 'create.trip', data: tripContent};
                     _socket.next(message)
                 })
@@ -68,15 +69,15 @@ export const tripApi = createApi({
             async onQueryStarted({...tripContent}, { dispatch, queryFulfilled }) {
                 try {
                   const { data: newTrip } = await queryFulfilled
-                  dispatch(tripApi.util.updateQueryData('getTrips', undefined, (draft: any) => {
+                  dispatch(tripApi.util.updateQueryData('getTrips', undefined, (draft) => {
                         draft.push(newTrip)
                     })
                   )
                 } catch {}
               },
         }),
-        deleteTrip: builder.mutation<any, any>({
-            queryFn: async (tripContent: string) => {
+        deleteTrip: builder.mutation<Trip, Trip>({
+            queryFn: async (tripContent) => {
                 return new Promise(resolve => {Initiate.subscribe((message: any) => resolve({data: message.data}))
                     const message = {type: 'delete.trip', data: tripContent}
                     _socket.next(message)
@@ -84,10 +85,12 @@ export const tripApi = createApi({
             },
             async onQueryStarted({...tripContent}, { dispatch, queryFulfilled }) {
                   const patchResult = dispatch(
-                    tripApi.util.updateQueryData('getTrips', undefined, (draft: any) => {
-                        const trip = draft.find((trip: any) => trip.id === tripContent.id)
-                        const indexOfElement = draft.indexOf(trip)
-                        draft.splice(indexOfElement, 1);
+                    tripApi.util.updateQueryData('getTrips', undefined, (draft) => {
+                        const trip = draft.find((trip: Trip) => trip.id === tripContent.id)
+                        if(trip) {
+                            const indexOfElement = draft.indexOf(trip)
+                            draft.splice(indexOfElement, 1);
+                        }
                     })
                   )
                   try {
@@ -97,8 +100,8 @@ export const tripApi = createApi({
                   }
               }
         }),
-        updateTrip: builder.mutation<any, any>({
-            queryFn: async (tripContent: string) => {
+        updateTrip: builder.mutation<Trip, Trip>({
+            queryFn: async (tripContent) => {
                 connect()
                 return new Promise(resolve => {
                     Initiate.subscribe((message: any) => resolve({data: message.data}))
@@ -107,28 +110,34 @@ export const tripApi = createApi({
                 })
             },
         }),
-        getTrips: builder.query<any, any>({
+        getTrips: builder.query<Trip[], void>({
             query: () => ({ url: '/api/trip/', method: 'GET' }),
             async onCacheEntryAdded(arg, { updateCachedData, cacheDataLoaded, cacheEntryRemoved, getState }) {
                 try {
                     await cacheDataLoaded;
                     connect()
-                    console.log('getState', getState())
-                    console.log('getState().user', getState().user)
                     ReceiveSub = Receive.subscribe((message: any) => {
-                        updateCachedData((draft: any) => {
-                            let driverUsername:any = getState()
-                            if (message.action === 'update' && driverUsername?.user?.user?.group !== 'driver') {
-                                const trip = draft.find((trip: any) => trip.id === message.data.id)
-                                trip.status = message.data.status
-                                trip.driver = message.data.driver
-                                riderToast(message)
+                        updateCachedData((draft) => {
+                            //Had to create a new type 'GetStateType' because the default RootState<any, any, string> did not seem to 
+                            //have the properties I needed accessible. I combined RootState with the exported store state.
+                            //Possibly bad practice or possibly a bug within RTK Query. 
+                            let driverUsername = getState() as GetStateType
+                            console.log(driverUsername)
+                            if (message.action === 'update' && driverUsername.user.user.group !== 'driver') {
+                                const trip = draft.find((trip: Trip) => trip.id === message.data.id)
+                                if(trip) {
+                                    trip.status = message.data.status
+                                    trip.driver = message.data.driver
+                                    riderToast(message)
+                                }
                             }
-                            else if (message.action === 'delete' && (message?.data?.driver?.username !== driverUsername?.user?.user?.username || message.sender === 'rider')) {
-                                const trip = draft.find((trip: any) => trip.id === message.data.id)
-                                const indexOfElement = draft.indexOf(trip)
-                                draft.splice(indexOfElement, 1);
-                                driverToast(message)
+                            else if (message.action === 'delete' && (message.data.driver.username !== driverUsername.user.user.username || message.sender === 'rider')) {
+                                const trip = draft.find((trip: Trip) => trip.id === message.data.id)
+                                if(trip) {
+                                    const indexOfElement = draft.indexOf(trip)
+                                    draft.splice(indexOfElement, 1);
+                                    driverToast(message)
+                                }
                             }
                             else if (message.action === 'create') {
                                 draft.push(message.data)
@@ -138,10 +147,8 @@ export const tripApi = createApi({
                     });
                 } catch(error: any){
                     console.error('error', error)
-                    console.log('error.response in try catch', error.response)
                  }
                 await cacheEntryRemoved
-                console.log('in cacheEntryRemoved', ReceiveSub)
                 ReceiveSub.unsubscribe();
             }
         }),

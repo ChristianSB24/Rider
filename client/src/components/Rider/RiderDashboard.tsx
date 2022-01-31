@@ -24,8 +24,6 @@ function RiderDashboard() {
     }
 }
 
-  console.log('trips', trips)
-
   const getRequestedTrips = () => {
     return trips.filter((trip: any) => {
       return trip.status === 'REQUESTED';

@@ -1,5 +1,5 @@
 import React  from 'react'
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 import { Formik, Form } from 'formik';
 import { Link } from 'react-router-dom'
@@ -7,7 +7,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 
 import ValidatedTextField from '../FormComponents/ValidatedTextField';
-import { selectUser, setUser } from '../../features/userSlice'
+import { setUser } from '../../features/userSlice'
 import { connect } from '../../features/tripSliceRTKQuery';
 
 interface formValues {
@@ -16,7 +16,6 @@ interface formValues {
 }
 
 const LoginForm = ({setErrorMessage = false, redirectPath = false}: any) => {
-    const userInfo = useSelector(selectUser)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -26,7 +25,6 @@ const LoginForm = ({setErrorMessage = false, redirectPath = false}: any) => {
           window.localStorage.setItem('taxi.auth', JSON.stringify(response.data))
           const [, payload,] = response.data.access.split('.');
           const decoded = window.atob(payload);
-          // setUserInfo(JSON.parse(decoded))
           dispatch(setUser(JSON.parse(decoded)))
           connect()
           navigate('/')
