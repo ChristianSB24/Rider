@@ -3,18 +3,29 @@ import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom'
 
 import TripMedia from '../common/TripMedia';
-import { getTrip } from '../../services/TripService';
-import { useUpdateTripMutation } from '../../features/tripSliceRTKQuery'
+import { useUpdateTripMutation, useGetTripsQuery } from '../../features/tripSliceRTKQuery'
 import { selectUser } from '../../features/userSlice'
+import { Trip } from '../../features/types';
 
 
 function DriverDetail() {
-    const [trip, setTrip] = useState<any>({});
+    const user = {first_name: '', group: '', id: 0, last_name: '', photo: '', username: ''}
+    const [trip, setTrip] = useState<Trip>({created: '', driver: undefined, drop_off_address: '', id: '', pick_up_address: '', rider: user, status: '', updated: ''})
     const { id } = useParams()
     const userInfo = useSelector(selectUser)
+    const {data: trips, isLoading, error} = useGetTripsQuery()
     const [updateTrip] = useUpdateTripMutation();
 
-    const updateTripStatus = (status: string) => {
+    useEffect(() => {
+        if(trips) {
+            let triptest = trips.find((trip: Trip) => trip.id === id)
+            if(triptest) {
+                setTrip(triptest)
+            }
+        }
+    }, [isLoading])
+
+    const updateTripStatus = (status: string, trip: Trip) => {
         const driver = userInfo;
         const updatedTrip = { ...trip, driver, status };
         updateTrip({
@@ -22,21 +33,8 @@ function DriverDetail() {
             driver: updatedTrip?.driver?.id,
             rider: updatedTrip.rider.id
         });
-        setTrip(updatedTrip);
+        setTrip({...trip, status})
     };
-
-    useEffect(() => {
-        const loadTrip = async (id: string | undefined) => {
-            try {
-                const response = await getTrip(id)
-                setTrip(response.data)
-            } catch(error:any) {
-                setTrip({})
-                console.error(error)
-            }
-        }
-        loadTrip(id);
-    }, [id]);
 
     let tripMedia;
 
@@ -69,7 +67,7 @@ function DriverDetail() {
                                 <button
                                     className="btn-lg btn-primary w-100 fs-5"
                                     data-cy='status-button'
-                                    onClick={() => updateTripStatus('STARTED')}
+                                    onClick={() => updateTripStatus('STARTED', trip)}
                                 >Drive to pick up
                                 </button>
                             )
@@ -79,7 +77,7 @@ function DriverDetail() {
                                 <button
                                     className="btn-lg btn-primary w-100 fs-5"
                                     data-cy='status-button'
-                                    onClick={() => updateTripStatus('IN_PROGRESS')}
+                                    onClick={() => updateTripStatus('IN_PROGRESS', trip)}
                                 >Drive to drop off
                                 </button>
                             )
@@ -89,7 +87,7 @@ function DriverDetail() {
                                 <button
                                     className="btn-lg btn-primary w-100 fs-5"
                                     data-cy='status-button'
-                                    onClick={() => updateTripStatus('COMPLETED')}
+                                    onClick={() => updateTripStatus('COMPLETED', trip)}
                                 >Complete trip
                                 </button>
                             )

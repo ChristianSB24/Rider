@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query/react'
 
-import userReducer from '../features/userSlice'
+import accountReducer from '../features/userSlice'
 import { tripApi } from '../features/tripSliceRTKQuery'
 
 const store = configureStore({
   reducer: {
-    user: userReducer,
+    account: accountReducer,
     [tripApi.reducerPath]: tripApi.reducer
   },
   middleware: (getDefaultMiddleware) =>

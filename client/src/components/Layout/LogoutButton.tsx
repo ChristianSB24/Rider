@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { removeUser } from '../../features/userSlice';
+import { removeUser, removeAuthenticated } from '../../features/userSlice';
 import { util, _socket } from '../../features/tripSliceRTKQuery';
 
 const LogoutButton = () => {
@@ -12,6 +12,7 @@ const LogoutButton = () => {
     const logOut = () => {
         window.localStorage.removeItem('taxi.auth');
         dispatch(removeUser())
+        dispatch(removeAuthenticated())
         dispatch(util.resetApiState())
         _socket?.unsubscribe()
         navigate('/')

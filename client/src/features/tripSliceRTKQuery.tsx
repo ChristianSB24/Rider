@@ -123,15 +123,19 @@ export const tripApi = createApi({
                             let driverUsername = getState() as GetStateType
                             console.log(driverUsername)
                             console.log('message', message)
-                            if (message.action === 'update' && driverUsername.user.user.group !== 'driver') {
+                            if (message.action === 'update') {
                                 const trip = draft.find((trip: Trip) => trip.id === message.data.id)
                                 if(trip) {
                                     trip.status = message.data.status
                                     trip.driver = message.data.driver
-                                    riderToast(message)
+                                    if(driverUsername.account.user.group === 'driver') {
+                                        driverToast(message)
+                                    } else {
+                                        riderToast(message)
+                                    }
                                 }
                             }
-                            else if (message.action === 'delete' && (message?.data?.driver?.username !== driverUsername.user.user.username || message.sender === 'rider')) {
+                            else if (message.action === 'delete' && (message?.data?.driver?.username !== driverUsername.account.user.username || message.sender === 'rider')) {
                                 const trip = draft.find((trip: Trip) => trip.id === message.data.id)
                                 if(trip) {
                                     const indexOfElement = draft.indexOf(trip)

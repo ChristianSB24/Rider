@@ -3,24 +3,24 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import TripMedia from '../common/TripMedia';
-import { getTrip } from '../../services/TripService';
+import { useGetTripsQuery } from '../../features/tripSliceRTKQuery';
+import { Trip } from '../../features/types'
 
 function RiderDetail() {
-    const [trip, setTrip] = useState(null);
+    const { data: trips, isLoading } = useGetTripsQuery()
+    const user = {first_name: '', group: '', id: 0, last_name: '', photo: '', username: ''}
+    const [trip, setTrip] = useState<Trip>({created: '', driver: undefined, drop_off_address: '', id: '', pick_up_address: '', rider: user, status: '', updated: ''})
     const { id } = useParams()
 
     useEffect(() => {
-        const loadTrip = async (id: any) => {
-            try {
-                const response: any = await getTrip(id);
-                setTrip(response.data)
-            } catch (error: any) {
-                setTrip(null)
-                console.error(error)
+        if(trips) {
+            let triptest = trips.find((trip: Trip) => trip.id === id)
+            if(triptest) {
+                setTrip(triptest)
             }
         }
-        loadTrip(id);
-    }, [id]);
+    }, [isLoading])
+
     let tripMedia;
 
     if (trip === null) {

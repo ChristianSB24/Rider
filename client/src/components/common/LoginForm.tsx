@@ -7,7 +7,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 
 import ValidatedTextField from '../FormComponents/ValidatedTextField';
-import { setUser } from '../../features/userSlice'
+import { setUser, setAuthenticated } from '../../features/userSlice'
 import { connect } from '../../features/tripSliceRTKQuery';
 
 interface formValues {
@@ -26,6 +26,7 @@ const LoginForm = ({setErrorMessage = false, redirectPath = false}: any) => {
           const [, payload,] = response.data.access.split('.');
           const decoded = window.atob(payload);
           dispatch(setUser(JSON.parse(decoded)))
+          dispatch(setAuthenticated())
           connect()
           navigate('/')
         }
