@@ -7,7 +7,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 
 import ValidatedTextField from '../FormComponents/ValidatedTextField';
-import { setUser, setAuthenticated } from '../../features/userSlice'
+import { setUser, setAuthenticated, setExpiration } from '../../features/userSlice'
 import { connect } from '../../features/tripSliceRTKQuery';
 
 interface formValues {
@@ -27,6 +27,9 @@ const LoginForm = ({setErrorMessage = false, redirectPath = false}: any) => {
           const decoded = window.atob(payload);
           dispatch(setUser(JSON.parse(decoded)))
           dispatch(setAuthenticated())
+          dispatch(setExpiration())
+          let expirationTime = new Date().getTime() + 300000
+          window.localStorage.setItem('token.expiration', JSON.stringify(expirationTime))
           connect()
           navigate('/')
         }

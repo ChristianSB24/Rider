@@ -11,6 +11,7 @@ const LogoutButton = () => {
 
     const logOut = () => {
         window.localStorage.removeItem('taxi.auth');
+        window.localStorage.removeItem('token.expiration')
         dispatch(removeUser())
         dispatch(removeAuthenticated())
         dispatch(util.resetApiState())

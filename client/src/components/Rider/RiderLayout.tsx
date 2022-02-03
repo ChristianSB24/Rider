@@ -6,6 +6,7 @@ import RiderRequest from './RiderRequest';
 import RiderDashboard from './RiderDashboard'
 
 export const RiderLayout = () => {
+    console.log('inside RiderLayout')
     return (
         <div className='row'>
             <div className='col-lg-12'>

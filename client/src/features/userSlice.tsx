@@ -11,37 +11,60 @@ if (accessToken) {
   authenticated = true
 }
 
+let currentTime = new Date().getTime()
+let expirationTime = JSON.parse(window.localStorage.getItem('token.expiration') || 'null')
+let difference = expirationTime - currentTime
+
 console.log('authenticated', authenticated)
 
 const accountSlice = createSlice({
   name: 'account',
   initialState: {
     user: auth,
-    authenticated: authenticated
+    authenticated: authenticated,
+    expiration: difference
   },
   reducers: {
     setUser(state, action) {state.user = action.payload},
     setAuthenticated(state) {state.authenticated = true},
     removeUser(state) {state.user = auth},
     removeAuthenticated(state) {state.authenticated = false},
+    setExpiration(state) {state.expiration = 300000},
+    decrementExpiration(state) {state.expiration -= 1000},
+    removeExpiration(state) {state.expiration = 0}
   },
 })
 
-export const {setUser, removeUser, setAuthenticated, removeAuthenticated} = accountSlice.actions
+export const {
+  setUser, 
+  removeUser, 
+  setAuthenticated, 
+  removeAuthenticated, 
+  setExpiration, 
+  decrementExpiration,
+  removeExpiration
+} = accountSlice.actions
 
 export default accountSlice.reducer
 
-type stateUser = { user: User }
+type StateUser = { user: User }
 
 type StateAuthenticated = { authenticated: boolean }
 
+type StateExpiration = { expiration: number}
+
 interface UserState {
-  account: stateUser
+  account: StateUser
 }
 
 interface AuthenticatedState {
   account: StateAuthenticated
 }
 
+interface Expiration {
+  account: StateExpiration
+}
+
 export const selectUser = (state:UserState) => state.account.user
 export const selectAuthenticated = (state:AuthenticatedState) => state.account.authenticated
+export const selectExpiration = (state:Expiration) => state.account.expiration
