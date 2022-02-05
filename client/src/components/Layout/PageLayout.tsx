@@ -16,7 +16,7 @@ const PageLayout = () => {
     console.log('inside pagelayout')
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <nav className="navbar navbar-expand-lg navbar-light bg-light position-fixed top-0 d-flex justify-content-between w-100">
                 <Link to='/' className="navbar-brand">Taxi</Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
@@ -35,7 +35,7 @@ const PageLayout = () => {
                     </ul>
                 </div>
             </nav>
-            <div className="d-flex center-alignment flex-column justify-content-center align-items-center px-2">
+            <div className="d-flex position-relative flex-column justify-content-center align-items-center px-2">
                 <GlobalModal>
                     <Routes>
                         <Route index element={<LandingPage />} />

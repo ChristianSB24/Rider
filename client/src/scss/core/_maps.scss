@@ -1,7 +1,9 @@
 //Adding custom colors to theme-colors
 $custom-colors: (
+  "success-secondary":$success-secondary,
   "danger-light": $danger-light,
   "danger-lightest": $danger-lightest,
+  "white":$white,
 );
 
 $theme-colors: map-merge($theme-colors, $custom-colors);

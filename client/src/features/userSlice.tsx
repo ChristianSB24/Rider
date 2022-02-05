@@ -27,7 +27,7 @@ const accountSlice = createSlice({
     setAuthenticated(state) {state.authenticated = true},
     removeUser(state) {state.user = auth},
     removeAuthenticated(state) {state.authenticated = false},
-    setExpiration(state) {state.expiration = 600},
+    setExpiration(state) {state.expiration = 1800},
     decrementExpiration(state) {state.expiration -= 1},
     removeExpiration(state) {state.expiration = 0}
   },

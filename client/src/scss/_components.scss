@@ -19,3 +19,18 @@
 .modal-text-size {
   font-size: 2rem;
 }
+
+.dashboard-main-img {
+  border-radius:10px;
+  max-width:95%;
+  height:auto;
+}
+
+.card-img-overlay {
+  position:absolute;
+  top:0;
+  right:unset;
+  left:0;
+  bottom:0;
+  padding:1rem;
+}

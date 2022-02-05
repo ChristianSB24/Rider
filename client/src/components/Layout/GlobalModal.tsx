@@ -21,7 +21,7 @@ const CountDown = () => {
           window.localStorage.setItem('taxi.auth', JSON.stringify(taxiAuthObject), )
           dispatch(setAuthenticated())
           dispatch(setExpiration())
-          let expirationTime = new Date().getTime() + 300000
+          let expirationTime = new Date().getTime() +1800000
           window.localStorage.setItem('token.expiration', JSON.stringify(expirationTime))
         } catch (error: any) {
           throw new Error(error);
@@ -44,7 +44,7 @@ const CountDown = () => {
                 <div className="modal-content">
                     <div className="modal-header bg-primary text-white py-2">
                         <h5 className="modal-title" id="staticBackdropLabel">Session Timeout</h5>
-                        <a type="button" onClick={() => logOut()}><i className="bi bi-x fs-1"></i></a>
+                        <button className="bg-primary text-white border-0" onClick={() => logOut()}><i className="bi bi-x fs-1"></i></button>
                     </div>
                     <div className="modal-body d-flex flex-column align-items-baseline">
                         <div className='d-flex flex-row align-items-center'>
@@ -69,7 +69,6 @@ const CountDown = () => {
 }
 
 const SessionExpired = () => {
-    const time = useSelector(selectExpiration)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -95,7 +94,7 @@ const SessionExpired = () => {
                             </h2>
                         <h5 className="flex-grow-1" id="staticBackdropLabel">Session Expired</h5>
                         </div>
-                        <a type="button" onClick={() => logOut()}><i className="bi bi-x fs-1"></i></a>
+                        <button className="bg-primary text-white border-0" onClick={() => logOut()}><i className="bi bi-x fs-1"></i></button>
                     </div>
                     <div className="modal-body">
                         <p>Your session has expired.</p>

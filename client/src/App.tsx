@@ -17,7 +17,7 @@ function App() {
   const auth = useSelector(selectAuthenticated)
   console.log('auth', auth)
   return (
-    <div className="login-content">
+    <div className="rider-container">
         <Routes>
           <Route path='/*' element={<PageLayout />}/>
           <Route path='/sign-up' element={auth ? <Navigate replace to={'/'} /> : <SignUp />} />

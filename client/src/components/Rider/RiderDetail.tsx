@@ -7,7 +7,7 @@ import { useGetTripsQuery } from '../../features/tripSliceRTKQuery';
 import { Trip } from '../../features/types'
 
 function RiderDetail() {
-    const { data: trips, isLoading } = useGetTripsQuery()
+    const { data: trips } = useGetTripsQuery()
     const user = {first_name: '', group: '', id: 0, last_name: '', photo: '', username: ''}
     const [trip, setTrip] = useState<Trip>({created: '', driver: undefined, drop_off_address: '', id: '', pick_up_address: '', rider: user, status: '', updated: ''})
     const { id } = useParams()
@@ -19,7 +19,7 @@ function RiderDetail() {
                 setTrip(triptest)
             }
         }
-    }, [isLoading])
+    }, [trips, id])
 
     let tripMedia;
 

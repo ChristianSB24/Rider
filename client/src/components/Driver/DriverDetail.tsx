@@ -13,7 +13,7 @@ function DriverDetail() {
     const [trip, setTrip] = useState<Trip>({created: '', driver: undefined, drop_off_address: '', id: '', pick_up_address: '', rider: user, status: '', updated: ''})
     const { id } = useParams()
     const userInfo = useSelector(selectUser)
-    const {data: trips, isLoading, error} = useGetTripsQuery()
+    const {data: trips} = useGetTripsQuery()
     const [updateTrip] = useUpdateTripMutation();
 
     useEffect(() => {
@@ -23,7 +23,7 @@ function DriverDetail() {
                 setTrip(triptest)
             }
         }
-    }, [isLoading])
+    }, [id, trips])
 
     const updateTripStatus = (status: string, trip: Trip) => {
         const driver = userInfo;
