@@ -28,7 +28,7 @@ const LoginForm = ({setErrorMessage = false, redirectPath = false}: any) => {
           dispatch(setUser(JSON.parse(decoded)))
           dispatch(setAuthenticated())
           dispatch(setExpiration())
-          let expirationTime = new Date().getTime() + 300000
+          let expirationTime = new Date().getTime() + 600000
           window.localStorage.setItem('token.expiration', JSON.stringify(expirationTime))
           connect()
           navigate('/')

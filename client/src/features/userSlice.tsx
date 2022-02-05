@@ -13,9 +13,7 @@ if (accessToken) {
 
 let currentTime = new Date().getTime()
 let expirationTime = JSON.parse(window.localStorage.getItem('token.expiration') || 'null')
-let difference = expirationTime - currentTime
-
-console.log('authenticated', authenticated)
+let difference = Math.floor(((expirationTime - currentTime)/1000))
 
 const accountSlice = createSlice({
   name: 'account',
@@ -29,8 +27,8 @@ const accountSlice = createSlice({
     setAuthenticated(state) {state.authenticated = true},
     removeUser(state) {state.user = auth},
     removeAuthenticated(state) {state.authenticated = false},
-    setExpiration(state) {state.expiration = 300000},
-    decrementExpiration(state) {state.expiration -= 1000},
+    setExpiration(state) {state.expiration = 600},
+    decrementExpiration(state) {state.expiration -= 1},
     removeExpiration(state) {state.expiration = 0}
   },
 })
