@@ -9,6 +9,8 @@ import { RiderLayout } from '../Rider/RiderLayout';
 import { LandingPage } from '../LandingPage/LandingPage';
 import LogoutButton from './LogoutButton';
 import { GlobalModal } from './GlobalModal';
+import RiderAccountIcon from './RiderAccountIcon.png'
+import RiderAccount from './user-128.png'
 
 const PageLayout = () => {
     const userInfo = useSelector(selectUser)
@@ -16,26 +18,10 @@ const PageLayout = () => {
     console.log('inside pagelayout')
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light position-fixed top-0 d-flex justify-content-between w-100">
-                <Link to='/' className="navbar-brand">Taxi</Link>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <ul className="navbar-nav">
-                        {userInfo?.group === 'rider' &&
-                            <li className='me-auto navbar-nav'>
-                                <Link to='/rider/request'>Request a trip</Link>
-                            </li>}
-                        {auth &&
-                            <li className='me-auto nav-item'>
-                                <LogoutButton />
-                            </li>
-                        }
-                    </ul>
-                </div>
+            <nav className="nav position-fixed top-0 d-flex justify-content-end w-100 dashboard-container bg-white py-3">
+                <Link className="rounded-circle text-grey bg-grey-secondary p-1 nav-icon-wrapper shadow" to='/'><img className="nav-icon rounded-circle" src={RiderAccount} /></Link>
             </nav>
-            <div className="d-flex position-relative flex-column justify-content-center align-items-center px-2">
+            <div className="d-flex position-relative flex-column justify-content-center align-items-center dashboard-container mt-3">
                 <GlobalModal>
                     <Routes>
                         <Route index element={<LandingPage />} />

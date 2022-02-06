@@ -22,8 +22,23 @@
 
 .dashboard-main-img {
   border-radius:10px;
-  max-width:95%;
+  max-width:100%;
   height:auto;
+}
+
+.nav-icon {
+  max-width:100%;
+  height:auto;
+}
+
+.nav-icon-wrapper {
+  width:10%;
+  height:auto;
+}
+
+.dashboard-buttons {
+  border-radius:10px;
+  width:30%
 }
 
 .card-img-overlay {
@@ -33,4 +48,20 @@
   left:0;
   bottom:0;
   padding:1rem;
+}
+
+.t1 {
+  font-size:6vw;
+}
+
+.t2 {
+  font-size:5vw;
+}
+
+.t3 {
+  font-size:4vw;
+}
+
+.t4 {
+  font-size:3vw
 }

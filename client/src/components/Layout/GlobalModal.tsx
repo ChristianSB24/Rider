@@ -21,7 +21,7 @@ const CountDown = () => {
           window.localStorage.setItem('taxi.auth', JSON.stringify(taxiAuthObject), )
           dispatch(setAuthenticated())
           dispatch(setExpiration())
-          let expirationTime = new Date().getTime() +1800000
+          let expirationTime = new Date().getTime() + 1800000
           window.localStorage.setItem('token.expiration', JSON.stringify(expirationTime))
         } catch (error: any) {
           throw new Error(error);

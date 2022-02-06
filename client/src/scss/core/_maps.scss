@@ -4,6 +4,8 @@ $custom-colors: (
   "danger-light": $danger-light,
   "danger-lightest": $danger-lightest,
   "white":$white,
+  "grey":$grey,
+  "grey-secondary":$grey-secondary,
 );
 
 $theme-colors: map-merge($theme-colors, $custom-colors);

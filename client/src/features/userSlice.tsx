@@ -14,6 +14,7 @@ if (accessToken) {
 let currentTime = new Date().getTime()
 let expirationTime = JSON.parse(window.localStorage.getItem('token.expiration') || 'null')
 let difference = Math.floor(((expirationTime - currentTime)/1000))
+console.log('difference', difference)
 
 const accountSlice = createSlice({
   name: 'account',

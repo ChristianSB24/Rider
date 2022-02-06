@@ -8,6 +8,10 @@
   left: 0;
 }
 
+.nav {
+  z-index:1030;
+}
+
 .login-content {
   position: absolute;
   top: 0;
@@ -16,11 +20,16 @@
   right: 0;
 }
 
+.dashboard-container {
+  padding-left:3.5%;
+  padding-right:3.5%;
+}
+
 .rider-container {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding-top:60px;
+  padding-top:15%;
 }
 
 body {
