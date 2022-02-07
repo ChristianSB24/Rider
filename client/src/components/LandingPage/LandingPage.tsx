@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactElement } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -9,13 +9,11 @@ import RiderCarIcon from './RiderCarIcon.png'
 import RiderFoodIcon from './RiderFoodIcon.png'
 import RiderPackageIcon from './RiderPackageIcon.png'
 import Map from '../common/Map';
-import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import { MyMapComponent } from './Map2';
 
 
 export const LandingPage = () => {
     const auth = useSelector(selectAuthenticated)
-    const [clicks, setClicks] = React.useState<google.maps.LatLng[]>([]);
     const [zoom, setZoom] = React.useState(12); // initial zoom
     const [lat, setLat] = useState(38.897957);
     const [lng, setLng] = useState(-77.036560);    
@@ -28,45 +26,6 @@ export const LandingPage = () => {
             });
         }
     }, []);
-
-    const onClick = (e: google.maps.MapMouseEvent) => {
-        // avoid directly mutating state
-        setClicks([...clicks, e.latLng!]);
-    };
-
-    const onIdle = (m: google.maps.Map) => {
-        console.log("onIdle");
-        setZoom(m.getZoom()!);
-    };
-
-    const render = (status: Status) => {
-        return <h1>{status}</h1>;
-    };
-
-    const Marker: React.FC<google.maps.MarkerOptions> = (options) => {
-        const [marker, setMarker] = React.useState<google.maps.Marker>();
-
-        React.useEffect(() => {
-            if (!marker) {
-                setMarker(new google.maps.Marker());
-            }
-
-            // remove marker from map on unmount
-            return () => {
-                if (marker) {
-                    marker.setMap(null);
-                }
-            };
-        }, [marker]);
-
-        React.useEffect(() => {
-            if (marker) {
-                marker.setOptions(options);
-            }
-        }, [marker, options]);
-
-        return null;
-    };
     return (
         <>
             {auth ? (
@@ -90,33 +49,6 @@ export const LandingPage = () => {
                         </div>
                     </div>
                     <Map lat={lat} lng={lng} zoom={zoom} pickUpAddress={''} dropOffAddress={''}/>
-                    {/* <Wrapper
-                        apiKey={`${process.env.REACT_APP_GOOGLE_MAPS_KEY}`}
-                        render={render}
-                    >
-                        <MyMapComponent
-                            center={{lat:lat, lng:lng}}
-                            onClick={onClick}
-                            onIdle={onIdle}
-                            zoom={zoom}
-                            // style={{ flexGrow: "1", height: "100%" }}
-                            style={{
-                                borderRadius:"10px",
-                                padding: "1rem",
-                                width:"100%",
-                                height:"175px",
-                                overflow: "auto",
-                            }}
-
-                        >
-                            {clicks.map((latLng, i) => (
-                                <Marker key={i} position={latLng} />
-                            ))}
-                            <Marker label='A' position={{lat: lat, lng:lng}}/>
-                        </MyMapComponent>
-                    </Wrapper> */}
-
-                    {/* <img src={`{https://maps.googleapis.com/maps/api/staticmap?key=${process.env.REACT_APP_GOOGLE_MAPS_KEY}&center=47.64323325562978,-122.30942034476693&zoom=13&format=png&maptype=roadmap&style=feature:administrative%7Celement:geometry%7Cvisibility:off&style=feature:administrative.neighborhood%7Cvisibility:off&style=feature:poi%7Cvisibility:off&style=feature:road%7Celement:labels%7Cvisibility:off&style=feature:road%7Celement:labels.icon%7Cvisibility:off&style=feature:road.arterial%7Celement:labels%7Cvisibility:off&style=feature:road.highway%7Celement:labels%7Cvisibility:off&style=feature:road.local%7Cvisibility:off&style=feature:transit%7Cvisibility:off&style=feature:water%7Celement:labels.text%7Cvisibility:off&size=480x360}`}/> */}
                     <h1>Taxi</h1>
                     <DashboardButton />
                 </>

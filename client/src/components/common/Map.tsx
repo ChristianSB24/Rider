@@ -5,8 +5,6 @@ import {
   DirectionsService,
   GoogleMap,
   LoadScript,
-  Marker,
-  Polygon,
 } from '@react-google-maps/api';
 
 interface MapSelection {
@@ -23,8 +21,8 @@ function Map(props: MapSelection) {
   const [radius, setRadius] = useState<any>(122)
 
   const onZoomChanged = () => {
-    if(map?.zoom) {
-      setRadius(.12/(Math.pow(2, map.zoom - 22)))
+    if (map?.zoom) {
+      setRadius(.12 / (Math.pow(2, map.zoom - 22)))
     }
   }
 
@@ -39,13 +37,6 @@ function Map(props: MapSelection) {
     }
   };
 
-  const paths = [
-    { lat: 25.774, lng: -80.19 },
-    { lat: 18.466, lng: -66.118 },
-    { lat: 32.321, lng: -64.757 },
-    { lat: 25.774, lng: -80.19 }
-  ]
-
   return (
     <LoadScript
       googleMapsApiKey={`${process.env.REACT_APP_GOOGLE_MAPS_KEY}`}
@@ -53,7 +44,8 @@ function Map(props: MapSelection) {
     >
       <GoogleMap
         clickableIcons={false}
-        onLoad={map => { setMap(map)
+        onLoad={map => {
+          setMap(map)
         }}
         onZoomChanged={onZoomChanged}
         options={{ mapId: "ceaf38b32a54a2cb", disableDefaultUI: true }}
@@ -108,15 +100,8 @@ function Map(props: MapSelection) {
                   lng: props.lng
                 }}
                 radius={radius}
-                options={{ fillColor: '#4A89F3', strokeColor: '#4A89F3', strokeWeight: 2, fillOpacity: 1, strokeOpacity:1 }}
+                options={{ fillColor: '#4A89F3', strokeColor: '#4A89F3', strokeWeight: 2, fillOpacity: 1, strokeOpacity: 1 }}
               />
-              {/* <Marker
-              position={{
-                lat: props.lat,
-                lng: props.lng
-              }}
-            >
-            </Marker> */}
             </>
           )
         }
