@@ -36,6 +36,11 @@
   height:auto;
 }
 
+.star-wrapper {
+  width:9vw;
+  height:9vw;
+}
+
 .dashboard-buttons {
   border-radius:10px;
   width:30%
@@ -59,9 +64,21 @@
 }
 
 .t3 {
-  font-size:4vw;
+  font-size:4.5vw;
 }
 
 .t4 {
+  font-size:4vw;
+}
+
+.t5 {
+  font-size:3.5vw;
+}
+
+.t6 {
   font-size:3vw
+}
+
+.fw-600 {
+  font-weight:600;
 }
