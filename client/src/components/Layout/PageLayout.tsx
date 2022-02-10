@@ -17,7 +17,7 @@ const PageLayout = () => {
     const auth = useSelector(selectAuthenticated)
     console.log('inside pagelayout')
     return (
-        <>
+        <div className="rider-container">
             <nav className="nav position-fixed top-0 d-flex justify-content-end w-100 dashboard-container bg-white py-3">
                 <Link className="rounded-circle text-grey bg-grey-secondary p-1 nav-icon-wrapper shadow" to='/'><img className="nav-icon rounded-circle" src={RiderAccount} /></Link>
             </nav>
@@ -30,7 +30,7 @@ const PageLayout = () => {
                     </Routes>
                 </GlobalModal>
             </div>
-        </>
+        </div>
     )
 }
 

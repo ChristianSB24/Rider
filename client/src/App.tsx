@@ -12,20 +12,22 @@ import PageLayout from './components/Layout/PageLayout';
 import 'bootstrap';
 import './scss/app.scss'
 import 'react-toastify/dist/ReactToastify.css';
+import RiderMap from './components/Rider/RiderMap';
 
 function App() {
   const auth = useSelector(selectAuthenticated)
   console.log('auth', auth)
   return (
-    <div className="rider-container">
+    <>
         <Routes>
           <Route path='/*' element={<PageLayout />}/>
+          <Route path='/map' element={<RiderMap />}/>
           <Route path='/sign-up' element={auth ? <Navigate replace to={'/'} /> : <SignUp />} />
           <Route path='/log-in' element={auth ? <Navigate replace to={'/'} /> : <LogIn />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
         <ToastContainer />
-    </div>
+    </>
   );
 }
 

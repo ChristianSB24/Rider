@@ -5,9 +5,11 @@ import {
   DirectionsService,
   GoogleMap,
   LoadScript,
+  Marker,
 } from '@react-google-maps/api';
 
 interface MapSelection {
+  className?: object,
   lat: number,
   lng: number,
   zoom: number,
@@ -18,13 +20,6 @@ interface MapSelection {
 function Map(props: MapSelection) {
   const [response, setResponse] = useState(null);
   const [map, setMap] = useState<any>({})
-  const [radius, setRadius] = useState<any>(122)
-
-  const onZoomChanged = () => {
-    if (map?.zoom) {
-      setRadius(.12 / (Math.pow(2, map.zoom - 22)))
-    }
-  }
 
   const hasTwoAddresses = (
     props.pickUpAddress !== '' &&
@@ -44,21 +39,12 @@ function Map(props: MapSelection) {
     >
       <GoogleMap
         clickableIcons={false}
-        onLoad={map => {
-          setMap(map)
-        }}
-        onZoomChanged={onZoomChanged}
         options={{ mapId: "ceaf38b32a54a2cb", disableDefaultUI: true }}
         center={{
           lat: props.lat,
           lng: props.lng
         }}
-        mapContainerStyle={{
-          borderRadius: '10px',
-          width: '100%',
-          height: '200px',
-          marginBottom: '10px'
-        }}
+        mapContainerStyle={props.className}
         zoom={props.zoom}
       >
         {
@@ -86,21 +72,12 @@ function Map(props: MapSelection) {
         {
           !hasTwoAddresses && (
             <>
-              <Circle
-                center={{
+              <Marker
+                position={{
                   lat: props.lat,
                   lng: props.lng
                 }}
-                radius={50}
-                options={{ fillColor: '#4285F4', strokeColor: '#ffffff', strokeWeight: 2, fillOpacity: 0.35, }}
-              />
-              <Circle
-                center={{
-                  lat: props.lat,
-                  lng: props.lng
-                }}
-                radius={radius}
-                options={{ fillColor: '#4A89F3', strokeColor: '#4A89F3', strokeWeight: 2, fillOpacity: 1, strokeOpacity: 1 }}
+                icon='https://www.robotwoods.com/dev/misc/bluecircle.png'
               />
             </>
           )

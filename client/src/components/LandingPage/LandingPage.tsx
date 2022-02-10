@@ -67,11 +67,20 @@ export const LandingPage = () => {
                         </div>
                     </div>
                     <div className="align-self-start t3 mb-4 ps-1 fw-600 ">Around you</div>
-                    <Map lat={lat} lng={lng} zoom={zoom} pickUpAddress={''} dropOffAddress={''}/>
-                    <h1>Taxi</h1>
-                    <DashboardButton />
+                    <Link 
+                        to="/map" 
+                        className="w-100"
+                    >
+                        <Map 
+                            lat={lat} 
+                            lng={lng} 
+                            zoom={zoom} 
+                            pickUpAddress={''} 
+                            dropOffAddress={''} 
+                            className={{borderRadius: '10px', width: '100%', height: '200px', marginBottom: '10px'}}
+                        />
+                    </Link>
                 </>
-
             ) :
                 <>
                     <Link id='signUp' className='btn btn-primary' to='/sign-up'>Sign up</Link>
