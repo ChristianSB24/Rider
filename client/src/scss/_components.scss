@@ -60,9 +60,18 @@
   font-size:15vw
 }
 
-.map-input {
+.map-button {
+  z-index:1;
   bottom:0;
 }
+
+.map-input {
+  z-index:1;
+  margin:0 auto 0 auto;
+  top:0;
+}
+
+
 
 .t0 {
   font-size:7vw;
